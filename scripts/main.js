@@ -1,10 +1,11 @@
 window.onload = function()
 {
-Game.init( document.body, 600, 600 );
+Game.init( document.body, 1000, 600 );
 
 
 var manifest = [
-        { id: 'test', path: 'test/fields_of_misery.jpg' }
+        { id: 'act_1', path: 'images/act_1.jpg' },
+        { id: 'cave_entrance', path: 'images/cave_entrance.png' }
     ];
 
 
@@ -104,9 +105,21 @@ document.body.addEventListener( 'mouseup', function( event )
 Main.start = function()
 {
 var map = new Game.Bitmap({
-        image: Game.Preload.get( 'test' )
+        image: Game.Preload.get( 'act_1' )
     });
 CONTAINER.addChild( map );
+
+
+var cave = new Game.Bitmap({
+        image: Game.Preload.get( 'cave_entrance' )
+    });
+CONTAINER.addChild( cave );
+
+
+cave.addEventListener( 'click', function( data )
+    {
+    console.log( 'clicked!' );
+    });
 };
 
 
