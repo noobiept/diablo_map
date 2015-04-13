@@ -90,11 +90,15 @@ declare module Game {
          */
         logic(deltaTime: any): void;
         /**
-         * Check if the x/y position intersects with this element. If so then dispatch the event.
+         * Check if the element is within the given x/y position.
          *
          * @abstract
          */
-        intersect(x: number, y: number, event: Event): boolean;
+        intersect(x: number, y: number): Element;
+        mouseClickEvents(x: any, y: any, event: any): boolean;
+        dispatchMouseOverEvent(): void;
+        dispatchMouseOutEvent(): void;
+        dispatchMouseClickEvent(event: MouseEvent): void;
         /**
          * @returns Rotation in radians.
          */
@@ -136,6 +140,8 @@ declare module Game {
      * Events:
      *
      * - `click` -- `listener( data: { event: MouseEvent; } );`
+     * - `mouseover` -- `listener( data: { element: Element; } );`
+     * - `mouseout` -- `listener( data: { element: Element; } );`
      *
      * Examples -- `clone`, `minesweeper`, `multiple_canvas`, `preload`
      */
@@ -147,7 +153,7 @@ declare module Game {
         _half_height: number;
         constructor(args: BitmapArgs);
         drawElement(ctx: any): void;
-        intersect(x: any, y: any, event: any): boolean;
+        intersect(x: number, y: number): Bitmap;
         clone(): Bitmap;
         image: HTMLImageElement;
     }
@@ -173,6 +179,8 @@ declare module Game {
      * Events:
      *
      * - `click` -- `listener( data: { event: MouseEvent; } );`
+     * - `mouseover` -- `listener( data: { element: Element; } );`
+     * - `mouseout` -- `listener( data: { element: Element; } );`
      *
      * Examples -- `basic_example`, `clone`, `minesweeper`
      */
@@ -208,14 +216,10 @@ declare module Game {
          */
         drawElement(ctx: CanvasRenderingContext2D): void;
         /**
-         * Check if a mouse event intersects with any of the elements that are part of this container.
-         *
-         * @param x The x position.
-         * @param y The y position.
-         * @param event The triggered mouse event.
-         * @return If an element did intersect.
+         * Check if the given x/y position intersects with any of this container's children.
          */
-        intersect(x: number, y: number, event: MouseEvent): boolean;
+        intersect(x: number, y: number): Element;
+        mouseClickEvents(x: any, y: any, event: any): boolean;
         /**
          * Calculate the width/height of the container (based on the dimensions of the children elements).
          */
@@ -350,6 +354,10 @@ declare module Game {
          */
         removeElement(args: any): boolean;
         /**
+         * Get an element that is in given x/y position.
+         */
+        getElement(x: number, y: number): Element;
+        /**
          * Call the logic of the elements added to this canvas (normally on the game loop).
          *
          * @param deltaTime Time elapsed since the last update.
@@ -364,7 +372,7 @@ declare module Game {
          *
          * @param event The mouse event triggered.
          */
-        mouseEvents(event: MouseEvent): void;
+        mouseClickEvents(event: MouseEvent): void;
         /**
          * Change the canvas dimensions (width/height).
          *
@@ -428,6 +436,8 @@ declare module Game {
      * Events:
      *
      * - `click` -- `listener( data: { event: MouseEvent; } );`
+     * - `mouseover` -- `listener( data: { element: Element; } );`
+     * - `mouseout` -- `listener( data: { element: Element; } );`
      *
      * Examples -- `basic_example`, `clone`, `custom_element`
      */
@@ -437,7 +447,7 @@ declare module Game {
         constructor(args: CircleArgs);
         radius: number;
         drawElement(ctx: CanvasRenderingContext2D): void;
-        intersect(x: number, y: number, event: MouseEvent): boolean;
+        intersect(x: number, y: number): Circle;
         clone(): Circle;
     }
 }
@@ -1122,6 +1132,12 @@ declare module Game {
      *         // or play a specific animation
      *     sprite.play( 'animationName' );
      *
+     * Events:
+     *
+     * - `click` -- `listener( data: { event: MouseEvent; } );`
+     * - `mouseover` -- `listener( data: { element: Element; } );`
+     * - `mouseout` -- `listener( data: { element: Element; } );`
+     *
      * Examples -- `clone`, `sprite`
      */
     class Sprite extends Bitmap {
@@ -1172,6 +1188,7 @@ declare module Game {
         textAlign?: string;
         textBaseline?: string;
         fill?: boolean;
+        color?: string;
     }
     /**
      * Basic Usage:
@@ -1183,12 +1200,19 @@ declare module Game {
      *         });
      *     Game.addElement( text );
      *
+     * Events:
+     *
+     * - `click` -- `listener( data: { event: MouseEvent; } );`
+     * - `mouseover` -- `listener( data: { element: Element; } );`
+     * - `mouseout` -- `listener( data: { element: Element; } );`
+     *
      * Examples -- `2048`, `clone`, `collision_detection`, `game_loop_callbacks`, `preload`, `snake`
      */
     class Text extends Element {
         textAlign: string;
         textBaseline: string;
         fill: boolean;
+        color: string;
         _text: string;
         _font_family: string;
         _font_size: number;
@@ -1202,6 +1226,7 @@ declare module Game {
          * @param ctx The canvas rendering context.
          */
         drawElement(ctx: CanvasRenderingContext2D): void;
+        intersect(x: number, y: number): Text;
         /**
          * @return The current text.
          */
@@ -1410,8 +1435,10 @@ declare module Game {
      * Events:
      *
      * - `click` -- `listener( data: { event: MouseEvent; } );`
+     * - `mouseover` -- `listener( data: { element: Element; } );`
+     * - `mouseout` -- `listener( data: { element: Element; } );`
      *
-     * Examples -- `basic_example`, `bullets`, `clone`, `collision_detection`, `custom_element`, `game_of_life`, `grid`, `multiple_canvas`, `preload`, `snake`, `tween`
+     * Examples -- `basic_example`, `bullets`, `clone`, `collision_detection`, `custom_element`, `game_of_life`, `grid`, `mouse_move`, `multiple_canvas`, `preload`, `snake`, `tween`
      */
     class Rectangle extends Element {
         color: string;
@@ -1425,7 +1452,7 @@ declare module Game {
          * @param ctx The canvas rendering context.
          */
         drawElement(ctx: CanvasRenderingContext2D): void;
-        intersect(x: number, y: number, event: MouseEvent): boolean;
+        intersect(x: number, y: number): Rectangle;
         clone(): Rectangle;
     }
 }
@@ -1467,6 +1494,16 @@ declare module Game {
      * Stops the game loop (that means there's no redrawn of the canvas, callbacks in the game loop being called, tween loop, etc).
      */
     function stopGameLoop(): void;
+    /**
+     * Activate the mouse move events: `mouseout` and `mouseover`.
+     *
+     * @param interval Interval (in milliseconds) between calls of the function that checks for these events.
+     */
+    function activateMouseMoveEvents(interval: number): void;
+    /**
+     * Disable the mouse move events: `mouseout` and `mouseover`.
+     */
+    function disableMouseMoveEvents(): void;
     /**
      * Get a canvas object (Game.Canvas). When called without an argument it returns the first one.
      *
@@ -1557,6 +1594,9 @@ declare module Game {
      *
      * Events:
      *
+     * - `click` -- `listener( data: { event: MouseEvent; } );`
+     * - `mouseover` -- `listener( data: { element: Element; } );`
+     * - `mouseout` -- `listener( data: { element: Element; } );`
      * - `collision` -- `listener( data: { element: Unit; collidedWith: Unit; } );`
      *
      * Examples -- `2048`, `basic_example`, `bullets`, `collision_detection`, `custom_element`

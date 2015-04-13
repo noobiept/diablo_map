@@ -34,6 +34,9 @@ var CONTAINER;
 
 Main.init = function()
 {
+Game.activateMouseMoveEvents( 100 );
+
+
     // add the top-level container (for all the elements)
 CONTAINER = new Game.Container();
 
@@ -110,16 +113,11 @@ var map = new Game.Bitmap({
 CONTAINER.addChild( map );
 
 
-var cave = new Game.Bitmap({
-        image: Game.Preload.get( 'cave_entrance' )
+var label = new Label({
+        image: Game.Preload.get( 'cave_entrance' ),
+        text: 'Cave entrance'
     });
-CONTAINER.addChild( cave );
-
-
-cave.addEventListener( 'click', function( data )
-    {
-    console.log( 'clicked!' );
-    });
+CONTAINER.addChild( label );
 };
 
 
