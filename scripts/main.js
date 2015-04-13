@@ -14,7 +14,7 @@ var preload = new Game.Preload({ save_global: true });
 preload.addEventListener( 'complete', function()
     {
     Main.init();
-    Main.start();
+    Main.load( 'act_1' );
     });
 preload.loadManifest( manifest );
 };
@@ -105,19 +105,31 @@ document.body.addEventListener( 'mouseup', function( event )
 };
 
 
-Main.start = function()
+Main.load = function( mapName )
 {
+var mapInfo = INFO[ mapName ];
+
 var map = new Game.Bitmap({
-        image: Game.Preload.get( 'act_1' )
+        image: Game.Preload.get( mapInfo.image )
     });
 CONTAINER.addChild( map );
 
+var labels = mapInfo.labels;
+var length = labels.length;
 
-var label = new Label({
-        image: Game.Preload.get( 'cave_entrance' ),
-        text: 'Cave entrance'
-    });
-CONTAINER.addChild( label );
+for (var a = 0 ; a < length ; a++)
+    {
+    var labelInfo = labels[ a ];
+
+    var label = new Label({
+            x: labelInfo.x,
+            y: labelInfo.y,
+            image: Game.Preload.get( labelInfo.image ),
+            text: labelInfo.text
+        });
+
+    CONTAINER.addChild( label );
+    }
 };
 
 
