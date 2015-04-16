@@ -32,17 +32,29 @@ function Main()
 }
 
 var CONTAINER;
+var AREA_NAME;
 
 
 Main.init = function()
 {
 Game.activateMouseMoveEvents( 100 );
 
-
     // add the top-level container (for all the elements)
 CONTAINER = new Game.Container();
 
 Game.addElement( CONTAINER );
+
+
+    // add the area name element
+var canvas = Game.getCanvas();
+
+AREA_NAME = new Game.Text({
+        textAlign: 'end',
+        color: 'white'
+    });
+AREA_NAME.x = canvas.getWidth();
+Game.addElement( AREA_NAME );
+
 
 
     // set up the key events for navigating the map
@@ -130,12 +142,15 @@ else
     }
 
 
-
-
+    // load the map image
 var map = new Game.Bitmap({
         image: Game.Preload.get( mapInfo.image )
     });
 CONTAINER.addChild( map );
+
+
+AREA_NAME.text = mapInfo.text;
+
 
     // cave entrances
 var caveEntrances = mapInfo.cave_entrances;

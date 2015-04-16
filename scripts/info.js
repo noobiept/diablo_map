@@ -1,6 +1,7 @@
 var INFO = {
     act_1: {
         image: 'act_1',
+        text: 'Act 1',
 
             // entrances position in act1 image
         damp_cellar: {
@@ -51,6 +52,7 @@ var INFO = {
     },
     damp_cellar: {
         image: 'damp_cellar',
+        text: 'Damp Cellar',
 
         old_tristram_road: {
             text: 'Old Tristram Road', x: 39, y: -38, dest: 'act_1', position: 'damp_cellar'
