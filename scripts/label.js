@@ -1,21 +1,21 @@
-function Label( args )
+function Label( info )
 {
-Game.Container.call( this, args );
+Game.Container.call( this );
 
 var text = new Game.Text({
         y: 20,
-        text: args.text,
+        text: info.text,
         textAlign: 'center',
         color: 'white'
     });
 text.visible = false;
 
 var image = new Game.Bitmap({
-        image: args.image
+        image: Game.Preload.get( info.image )
     });
 image.addEventListener( 'click', function( data )
     {
-    Main.load( args.destination );
+    Main.load( info.dest, info.position );
     });
 image.addEventListener( 'mouseover', function( data )
     {
@@ -27,6 +27,8 @@ image.addEventListener( 'mouseout', function( data )
     });
 
 
+this.x = info.x;
+this.y = info.y;
 this.addChild( image, text );
 }
 

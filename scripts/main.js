@@ -107,31 +107,66 @@ document.body.addEventListener( 'mouseup', function( event )
 };
 
 
-Main.load = function( mapName )
+Main.load = function( mapName, mapPosition )
 {
 clear();
 
 var mapInfo = INFO[ mapName ];
+var canvas = Game.getCanvas();
+
+    // center the container in the middle of the canvas
+if ( typeof mapPosition === 'undefined' )
+    {
+    CONTAINER.x = canvas.getWidth() / 2;
+    CONTAINER.y = canvas.getHeight() / 2;
+    }
+
+    // center in the middle of the given x/y position
+else
+    {
+    var positionInfo = mapInfo[ mapPosition ];
+    CONTAINER.x = canvas.getWidth() / 2 - positionInfo.x;
+    CONTAINER.y = canvas.getHeight() / 2 - positionInfo.y;
+    }
+
+
+
 
 var map = new Game.Bitmap({
         image: Game.Preload.get( mapInfo.image )
     });
 CONTAINER.addChild( map );
 
-var labels = mapInfo.labels;
-var length = labels.length;
+    // cave entrances
+var caveEntrances = mapInfo.cave_entrances;
+var length = caveEntrances.length;
+var info;
+var a;
+var id;
+var label;
 
-for (var a = 0 ; a < length ; a++)
+for (a = 0 ; a < length ; a++)
     {
-    var labelInfo = labels[ a ];
+    id = caveEntrances[ a ];
+    info = mapInfo[ id ];
+    info.image = 'cave_entrance';
 
-    var label = new Label({
-            x: labelInfo.x,
-            y: labelInfo.y,
-            image: Game.Preload.get( labelInfo.image ),
-            text: labelInfo.text,
-            destination: labelInfo.destination
-        });
+    label = new Label( info );
+
+    CONTAINER.addChild( label );
+    }
+
+    // cave exits
+var caveExits = mapInfo.cave_exits;
+length = caveExits.length;
+
+for (a = 0 ; a < length ; a++)
+    {
+    id = caveExits[ a ];
+    info = mapInfo[ id ];
+    info.image = 'cave_exit';
+
+    label = new Label( info );
 
     CONTAINER.addChild( label );
     }
@@ -142,12 +177,6 @@ for (var a = 0 ; a < length ; a++)
 function clear()
 {
 CONTAINER.removeAllChildren();
-
-var canvas = Game.getCanvas();
-
-    // center the container
-CONTAINER.x = canvas.getWidth() / 2;
-CONTAINER.y = canvas.getHeight() / 2;
 }
 
 
