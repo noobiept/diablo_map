@@ -15,7 +15,7 @@ var image = new Game.Bitmap({
     });
 image.addEventListener( 'click', function( data )
     {
-    console.log( 'clicked!' );
+    Main.load( args.destination );
     });
 image.addEventListener( 'mouseover', function( data )
     {

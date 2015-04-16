@@ -5,7 +5,9 @@ Game.init( document.body, 1000, 600 );
 
 var manifest = [
         { id: 'act_1', path: 'images/act_1.jpg' },
-        { id: 'cave_entrance', path: 'images/cave_entrance.png' }
+        { id: 'cave_entrance', path: 'images/cave_entrance.png' },
+        { id: 'cave_exit', path: 'images/cave_exit.png' },
+        { id: 'damp_cellar', path: 'images/damp_cellar.jpg' }
     ];
 
 
@@ -14,7 +16,7 @@ var preload = new Game.Preload({ save_global: true });
 preload.addEventListener( 'complete', function()
     {
     Main.init();
-    Main.load( 'act_1' );
+    Main.load( 'damp_cellar' );
     });
 preload.loadManifest( manifest );
 };
@@ -107,6 +109,8 @@ document.body.addEventListener( 'mouseup', function( event )
 
 Main.load = function( mapName )
 {
+clear();
+
 var mapInfo = INFO[ mapName ];
 
 var map = new Game.Bitmap({
@@ -125,12 +129,27 @@ for (var a = 0 ; a < length ; a++)
             x: labelInfo.x,
             y: labelInfo.y,
             image: Game.Preload.get( labelInfo.image ),
-            text: labelInfo.text
+            text: labelInfo.text,
+            destination: labelInfo.destination
         });
 
     CONTAINER.addChild( label );
     }
 };
+
+
+
+function clear()
+{
+CONTAINER.removeAllChildren();
+
+var canvas = Game.getCanvas();
+
+    // center the container
+CONTAINER.x = canvas.getWidth() / 2;
+CONTAINER.y = canvas.getHeight() / 2;
+}
+
 
 
 

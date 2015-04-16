@@ -9,10 +9,16 @@ var INFO = {
             { image: 'cave_entrance', text: "Cathedral Level 1", x: 377, y: 65 },
             { image: 'cave_entrance', text: "Dank Cellar", x: -178, y: 315 },
             { image: 'cave_entrance', text: "The Cave Under the Well", x: -415, y: 505 },
-            { image: 'cave_entrance', text: "Damp Cellar", x: -270, y: 512 },
+            { image: 'cave_entrance', text: "Damp Cellar", x: -270, y: 512, destination: 'damp_cellar' },
             { image: 'cave_entrance', text: "The Cave Under the Well", x: -190, y: 565 },
             { image: 'cave_entrance', text: "Musty Cellar", x: -155, y: 715 },
             { image: 'cave_entrance', text: "The Cave Under the Well", x: -247, y: 381 }
+        ]
+    },
+    damp_cellar: {
+        image: 'damp_cellar',
+        labels: [
+            { image: 'cave_exit', text: 'Old Tristram Road', x: 39, y: -38, destination: 'act_1' }
         ]
     }
 };
