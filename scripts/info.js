@@ -48,6 +48,10 @@ var INFO = {
 
         cave_exits: [
 
+        ],
+
+        areas: [
+            { x: 0, y: 0, width: 0, height: 0, name: '' }
         ]
     },
     damp_cellar: {
