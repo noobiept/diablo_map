@@ -222,6 +222,7 @@ declare module Game {
          * Check if the given x/y position intersects with any of this container's children. Returns all the elements it intersects.
          */
         intersect(x: number, y: number): any[];
+        mouseClickEvents(x: any, y: any, event: any): boolean;
         /**
          * Calculate the width/height of the container (based on the dimensions of the children elements).
          */

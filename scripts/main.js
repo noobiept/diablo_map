@@ -31,8 +31,9 @@ function Main()
 
 }
 
-var CONTAINER;
-var AREA_NAME;
+var CONTAINER;      // top-level container
+var AREA_NAME;      // text element, which identifies the current map image
+var SCALE = 1;      // current scale of the map
 
 
 Main.init = function()
@@ -132,7 +133,14 @@ var scale = new Game.Html.Range({
             changeScale( button.getValue() );
             }
     });
-menu.addChild( scale );
+
+var recenter = new Game.Html.Button({
+        value: 'Recenter',
+        callback: reCenterCamera
+    });
+
+menu.addChild( scale, recenter );
+
 
 document.body.appendChild( menu.container );
 };
@@ -156,8 +164,8 @@ if ( typeof mapPosition === 'undefined' )
 else
     {
     var positionInfo = mapInfo[ mapPosition ];
-    CONTAINER.x = canvas.getWidth() / 2 - positionInfo.x;
-    CONTAINER.y = canvas.getHeight() / 2 - positionInfo.y;
+    CONTAINER.x = canvas.getWidth() / 2 - positionInfo.x * SCALE;
+    CONTAINER.y = canvas.getHeight() / 2 - positionInfo.y * SCALE;
     }
 
 
@@ -214,6 +222,14 @@ CONTAINER.removeAllChildren();
 }
 
 
+function reCenterCamera()
+{
+var canvas = Game.getCanvas();
+
+CONTAINER.x = canvas.getWidth() / 2;
+CONTAINER.y = canvas.getHeight() / 2;
+}
+
 
 
 function moveCamera( xMov, yMov )
@@ -226,6 +242,8 @@ CONTAINER.y += yMov;
 function changeScale( scale )
 {
 CONTAINER.scaleX = CONTAINER.scaleY = scale;
+
+SCALE = scale;
 }
 
 
