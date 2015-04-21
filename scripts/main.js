@@ -93,14 +93,15 @@ document.body.addEventListener( 'keydown', function( event )
 var mouseDown = false;
 var referenceX;
 var referenceY;
+var canvasContainer = Game.getCanvasContainer();
 
-document.body.addEventListener( 'mousedown', function( event )
+canvasContainer.addEventListener( 'mousedown', function( event )
     {
     mouseDown = true;
     referenceX = event.clientX;
     referenceY = event.clientY;
     });
-document.body.addEventListener( 'mousemove', function( event )
+canvasContainer.addEventListener( 'mousemove', function( event )
     {
     if ( mouseDown )
         {
@@ -113,7 +114,7 @@ document.body.addEventListener( 'mousemove', function( event )
         referenceY = currentY;
         }
     });
-document.body.addEventListener( 'mouseup', function( event )
+canvasContainer.addEventListener( 'mouseup', function( event )
     {
     mouseDown = false;
     });
@@ -211,6 +212,20 @@ for (a = 0 ; a < length ; a++)
     label = new Label( info );
 
     CONTAINER.addChild( label );
+    }
+};
+
+
+Main.changeCursor = function( mouseOver )
+{
+if ( mouseOver === true )
+    {
+    document.body.style.cursor = 'pointer';
+    }
+
+else
+    {
+    document.body.style.cursor = 'default';
     }
 };
 

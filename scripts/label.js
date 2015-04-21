@@ -19,10 +19,12 @@ image.addEventListener( 'click', function( data )
     });
 image.addEventListener( 'mouseover', function( data )
     {
+    Main.changeCursor( true );
     text.visible = true;
     });
 image.addEventListener( 'mouseout', function( data )
     {
+    Main.changeCursor( false );
     text.visible = false;
     });
 

@@ -26,10 +26,12 @@ image.addEventListener( 'click', function( data )
     });
 image.addEventListener( 'mouseover', function( data )
     {
+    MapEditor.changeCursor( true );
     text.visible = true;
     });
 image.addEventListener( 'mouseout', function( data )
     {
+    MapEditor.changeCursor( false );
     text.visible = false;
     });
 

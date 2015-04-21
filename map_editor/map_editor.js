@@ -1,6 +1,6 @@
 window.onload = function()
 {
-Game.init( document.body, 700, 500 );
+Game.init( document.body, 1000, 600 );
 
 var manifest = [
         { id: 'act_1', path: '../images/act_1.jpg' },
@@ -29,6 +29,8 @@ function MapEditor()
 }
 
 var CONTAINER;
+var AREA_NAME;
+var SCALE = 1;
 var SELECTED_TYPE = null;
 
 
@@ -42,18 +44,30 @@ CONTAINER = new Game.Container();
 Game.addElement( CONTAINER );
 
 
-    // and the mouse events for the movement as well
+    // add the area name element
+var canvas = Game.getCanvas();
+
+AREA_NAME = new Game.Text({
+        textAlign: 'end',
+        color: 'white'
+    });
+AREA_NAME.x = canvas.getWidth();
+Game.addElement( AREA_NAME );
+
+
+    // set the mouse events for the movement
 var mouseDown = false;
 var referenceX;
 var referenceY;
+var canvasContainer = Game.getCanvasContainer();
 
-document.body.addEventListener( 'mousedown', function( event )
+canvasContainer.addEventListener( 'mousedown', function( event )
     {
     mouseDown = true;
     referenceX = event.clientX;
     referenceY = event.clientY;
     });
-document.body.addEventListener( 'mousemove', function( event )
+canvasContainer.addEventListener( 'mousemove', function( event )
     {
     if ( mouseDown )
         {
@@ -66,14 +80,14 @@ document.body.addEventListener( 'mousemove', function( event )
         referenceY = currentY;
         }
     });
-document.body.addEventListener( 'mouseup', function( event )
+canvasContainer.addEventListener( 'mouseup', function( event )
     {
     mouseDown = false;
     });
 
 
     // add the labels on click (depending on what value is selected in the menu)
-Game.getCanvas().getHtmlCanvasElement().addEventListener( 'mouseup', function( event )
+canvasContainer.addEventListener( 'mouseup', function( event )
     {
     if ( SELECTED_TYPE )
         {
@@ -83,8 +97,8 @@ Game.getCanvas().getHtmlCanvasElement().addEventListener( 'mouseup', function( e
         var y = event.clientY - rect.top - CONTAINER.y;
 
         var label = new Label({
-                x: x,
-                y: y,
+                x: x / SCALE,
+                y: y / SCALE,
                 text: '------',
                 image: SELECTED_TYPE
             });
@@ -95,6 +109,23 @@ Game.getCanvas().getHtmlCanvasElement().addEventListener( 'mouseup', function( e
 
     // create the menu
 var menu = new Game.Html.HtmlContainer();
+
+var scale = new Game.Html.Range({
+        min: 0.4,
+        max: 2,
+        value: 1,
+        step: 0.2,
+        preText: 'Scale',
+        onChange: function( button )
+            {
+            changeScale( button.getValue() );
+            }
+    });
+
+var recenter = new Game.Html.Button({
+        value: 'Recenter',
+        callback: reCenterCamera
+    });
 
 var selectElement = new Game.Html.MultipleOptions({
         options: [ 'none', 'cave_entrance', 'cave_exit' ],
@@ -113,7 +144,7 @@ var selectElement = new Game.Html.MultipleOptions({
                 }
             }
     });
-menu.addChild( selectElement );
+menu.addChild( selectElement, scale, recenter );
 
 document.body.appendChild( menu.container );
 };
@@ -121,19 +152,51 @@ document.body.appendChild( menu.container );
 
 MapEditor.load = function( map )
 {
+clear();
+
 var image = Game.Preload.get( 'act_1' );
 
 var map = new Game.Bitmap({
-        x: image.width / 2,
-        y: image.height / 2,
         image: image
     });
 CONTAINER.addChild( map );
 
-CONTAINER.x = -660;
-CONTAINER.y = -2900;
+reCenterCamera();
+
+AREA_NAME.text = 'Act 1';
+
 };
 
+
+MapEditor.changeCursor = function( mouseOver )
+{
+if ( mouseOver === true )
+    {
+    document.body.style.cursor = 'pointer';
+    }
+
+else
+    {
+    document.body.style.cursor = 'default';
+    }
+};
+
+
+
+function clear()
+{
+CONTAINER.removeAllChildren();
+}
+
+
+
+function reCenterCamera()
+{
+var canvas = Game.getCanvas();
+
+CONTAINER.x = canvas.getWidth() / 2;
+CONTAINER.y = canvas.getHeight() / 2;
+}
 
 
 
@@ -141,6 +204,14 @@ function moveCamera( xMov, yMov )
 {
 CONTAINER.x += xMov;
 CONTAINER.y += yMov;
+}
+
+
+function changeScale( scale )
+{
+CONTAINER.scaleX = CONTAINER.scaleY = scale;
+
+SCALE = scale;
 }
 
 
