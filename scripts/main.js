@@ -116,6 +116,25 @@ document.body.addEventListener( 'mouseup', function( event )
     {
     mouseDown = false;
     });
+
+
+    // add the menu
+var menu = new Game.Html.HtmlContainer();
+
+var scale = new Game.Html.Range({
+        min: 0.4,
+        max: 2,
+        value: 1,
+        step: 0.2,
+        preText: 'Scale',
+        onChange: function( button )
+            {
+            changeScale( button.getValue() );
+            }
+    });
+menu.addChild( scale );
+
+document.body.appendChild( menu.container );
 };
 
 
@@ -203,6 +222,11 @@ CONTAINER.x += xMov;
 CONTAINER.y += yMov;
 }
 
+
+function changeScale( scale )
+{
+CONTAINER.scaleX = CONTAINER.scaleY = scale;
+}
 
 
 window.Main = Main;

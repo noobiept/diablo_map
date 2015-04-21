@@ -63,6 +63,8 @@ declare module Game {
         height: number;
         opacity: number;
         visible: boolean;
+        scaleX: number;
+        scaleY: number;
         column: number;
         line: number;
         _rotation: number;
@@ -91,10 +93,8 @@ declare module Game {
         logic(deltaTime: any): void;
         /**
          * Check if the element is within the given x/y position.
-         *
-         * @abstract
          */
-        intersect(x: number, y: number): Element;
+        intersect(refX: number, refY: number): any[];
         mouseClickEvents(x: any, y: any, event: any): boolean;
         dispatchMouseOverEvent(): void;
         dispatchMouseOutEvent(): void;
@@ -153,7 +153,6 @@ declare module Game {
         _half_height: number;
         constructor(args: BitmapArgs);
         drawElement(ctx: any): void;
-        intersect(x: number, y: number): Bitmap;
         clone(): Bitmap;
         image: HTMLImageElement;
     }
@@ -204,6 +203,10 @@ declare module Game {
          */
         removeChild(args: any): void;
         /**
+         * Remove all of this container's children.
+         */
+        removeAllChildren(): void;
+        /**
          * Draw all the elements in the container.
          *
          * @param ctx The canvas rendering context.
@@ -216,10 +219,9 @@ declare module Game {
          */
         drawElement(ctx: CanvasRenderingContext2D): void;
         /**
-         * Check if the given x/y position intersects with any of this container's children.
+         * Check if the given x/y position intersects with any of this container's children. Returns all the elements it intersects.
          */
-        intersect(x: number, y: number): Element;
-        mouseClickEvents(x: any, y: any, event: any): boolean;
+        intersect(x: number, y: number): any[];
         /**
          * Calculate the width/height of the container (based on the dimensions of the children elements).
          */
@@ -354,9 +356,9 @@ declare module Game {
          */
         removeElement(args: any): boolean;
         /**
-         * Get an element that is in given x/y position.
+         * Get all the elements that are in a given x/y position.
          */
-        getElement(x: number, y: number): Element;
+        getElements(x: number, y: number): any[];
         /**
          * Call the logic of the elements added to this canvas (normally on the game loop).
          *
@@ -414,7 +416,7 @@ declare module Game {
         /**
          * @return The elements added to this canvas.
          */
-        getElements(): Element[];
+        getAllElements(): Element[];
     }
 }
 declare module Game {
@@ -447,7 +449,6 @@ declare module Game {
         constructor(args: CircleArgs);
         radius: number;
         drawElement(ctx: CanvasRenderingContext2D): void;
-        intersect(x: number, y: number): Circle;
         clone(): Circle;
     }
 }
@@ -668,6 +669,7 @@ declare module Game {
             current_value: number;
             change_ref: (event) => any;
             input_ref: (event) => any;
+            number_of_decimals: number;
             constructor(args: RangeArgs);
             /**
              * @param value New value to be set.
@@ -1226,7 +1228,6 @@ declare module Game {
          * @param ctx The canvas rendering context.
          */
         drawElement(ctx: CanvasRenderingContext2D): void;
-        intersect(x: number, y: number): Text;
         /**
          * @return The current text.
          */
@@ -1452,7 +1453,6 @@ declare module Game {
          * @param ctx The canvas rendering context.
          */
         drawElement(ctx: CanvasRenderingContext2D): void;
-        intersect(x: number, y: number): Rectangle;
         clone(): Rectangle;
     }
 }
