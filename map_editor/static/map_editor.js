@@ -144,7 +144,18 @@ var selectElement = new Game.Html.MultipleOptions({
                 }
             }
     });
-menu.addChild( selectElement, scale, recenter );
+
+var save = new Game.Html.Button({
+        value: 'Save',
+        callback: saveMap
+    });
+var textInput = document.createElement( 'input' );
+
+textInput.type = 'text';
+textInput.id = 'TextInput';
+
+menu.addChild( selectElement, scale, recenter, save );
+menu.container.appendChild( textInput );
 
 document.body.appendChild( menu.container );
 };
@@ -212,6 +223,57 @@ function changeScale( scale )
 CONTAINER.scaleX = CONTAINER.scaleY = scale;
 
 SCALE = scale;
+}
+
+
+
+function saveMap()
+{
+    // name of the map
+var textInput = document.querySelector( '#TextInput' );
+var name = textInput.value;
+var container = Game.getCanvasContainer();
+
+if ( name === '' )
+    {
+    new Game.Message({
+            text: 'Specify the map name before saving.',
+            container: container,
+            timeout: 2
+        });
+    return;
+    }
+
+
+var data = {
+    cave_entrances: [ 'test' ]
+};
+
+var dataStr = JSON.stringify( data );
+
+var formData = new FormData();
+
+formData.append( 'name', name );
+formData.append( 'data', dataStr );
+
+var request = new XMLHttpRequest();
+
+request.open( 'POST', 'http://localhost:8000/save' );
+request.onload = function()
+    {
+    if ( this.status !== 200 )
+        {
+        new Game.Message({
+                text: 'Error. Failed to save.',
+                container: container,
+                timeout: 2
+            });
+
+        console.log( this.status );
+        console.log( this.responseText );
+        }
+    };
+request.send( formData );
 }
 
 
