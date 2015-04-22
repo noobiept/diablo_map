@@ -3,10 +3,10 @@ window.onload = function()
 Game.init( document.body, 1000, 600 );
 
 var manifest = [
-        { id: 'act_1', path: '../images/act_1.jpg' },
-        { id: 'cave_entrance', path: '../images/cave_entrance.png' },
-        { id: 'cave_exit', path: '../images/cave_exit.png' },
-        { id: 'damp_cellar', path: '../images/damp_cellar.jpg' }
+        { id: 'act_1', path: '/static/images/act_1.jpg' },
+        { id: 'cave_entrance', path: '/static/images/cave_entrance.png' },
+        { id: 'cave_exit', path: '/static/images/cave_exit.png' },
+        { id: 'damp_cellar', path: '/static/images/damp_cellar.jpg' }
     ];
 
 
