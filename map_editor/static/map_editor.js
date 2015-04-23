@@ -15,7 +15,13 @@ var preload = new Game.Preload({ save_global: true });
 preload.addEventListener( 'complete', function()
     {
     MapEditor.init();
-    //MapEditor.load();
+
+    var previousMap = MapEditor.getSavedFileName();
+
+    if ( previousMap )
+        {
+        MapEditor.loadMap( previousMap );
+        }
     });
 preload.loadManifest( manifest );
 };
@@ -29,7 +35,8 @@ function MapEditor()
 }
 
 var CONTAINER;
-var AREA_NAME;
+var FILE_NAME;  // element in the menu, which shows the current file name
+var AREA_NAME;  // located at the top left of the map, shows the area name
 var SCALE = 1;
 var SELECTED_TYPE = null;
 var MAP_INFO = {};
@@ -158,16 +165,13 @@ var save = new Game.Html.Button({
 
 var load = new Game.Html.Button({
         value: 'Load',
-        callback: loadMap
+        callback: openLoadMessage
     });
 
-var textInput = document.createElement( 'input' );
+FILE_NAME = new Game.Html.Value({ value: '' });
 
-textInput.type = 'text';
-textInput.id = 'TextInput';
+menu.addChild( selectElement, scale, recenter, newMap, save, load, FILE_NAME );
 
-menu.addChild( selectElement, scale, recenter, newMap, save, load );
-menu.container.appendChild( textInput );
 
 document.body.appendChild( menu.container );
 };
@@ -177,7 +181,7 @@ MapEditor.load = function( mapInfo )
 {
 clear();
 
-var image = Game.Preload.get( mapInfo.image );
+var image = Game.Preload.get( mapInfo.imageId );
 
 var map = new Game.Bitmap({
         image: image
@@ -186,8 +190,11 @@ CONTAINER.addChild( map );
 
 reCenterCamera();
 
-AREA_NAME.text = mapInfo.name;
+AREA_NAME.text = mapInfo.mapName;
+FILE_NAME.setValue( mapInfo.fileName );
 MAP_INFO = mapInfo;
+
+MapEditor.saveFileName( mapInfo.fileName );
 };
 
 
@@ -243,19 +250,23 @@ function startNewMap()
 {
 var container = Game.getCanvasContainer();
 
+var fileName = new Game.Html.Text({
+        preText: 'File Name:'
+    });
 var name = new Game.Html.Text({
-        preText: 'Name:'
+        preText: 'Map Name:'
     });
 var image = new Game.Html.Text({
-        preText: 'Image:'
+        preText: 'Image Id:'
     });
 var start = new Game.Html.Button({
         value: 'Start',
         callback: function()
             {
             var info = {
-                name: name.getValue(),
-                image: image.getValue()
+                fileName: fileName.getValue(),
+                mapName: name.getValue(),
+                imageId: image.getValue()
             };
 
             MapEditor.load( info );
@@ -274,18 +285,67 @@ var close = new Game.Html.Button({
 var message = new Game.Message({
         text: 'New Map',
         container: container,
-        buttons: [ name, image, start, close ]
+        buttons: [ fileName, name, image, start, close ]
+    });
+}
+
+
+/**
+ * Save the previously saved file name, so that the next time the program is run, we can load it.
+ */
+MapEditor.saveFileName = function( fileName )
+{
+localStorage.setItem( 'diablo_map_previous_map', fileName );
+};
+
+MapEditor.getSavedFileName = function()
+{
+return localStorage.getItem( 'diablo_map_previous_map' );
+};
+
+
+MapEditor.clearSavedFileName = function()
+{
+localStorage.removeItem( 'diablo_map_previous_map' );
+};
+
+
+
+function openLoadMessage()
+{
+var container = Game.getCanvasContainer();
+
+var fileName = new Game.Html.Text({
+        preText: 'File Name:'
+    });
+var load = new Game.Html.Button({
+        value: 'Load',
+        callback: function()
+            {
+            MapEditor.loadMap( fileName.getValue() );
+            message.clear();
+            }
+    });
+var close = new Game.Html.Button({
+        value: 'Close',
+        callback: function()
+            {
+            message.clear();
+            }
+    });
+
+
+var message = new Game.Message({
+        text: 'Load Map',
+        container: container,
+        buttons: [ fileName, load, close ]
     });
 }
 
 
 
-
-function loadMap()
+MapEditor.loadMap = function( name )
 {
-    // name of the map
-var textInput = document.querySelector( '#TextInput' );
-var name = textInput.value;
 var container = Game.getCanvasContainer();
 
 if ( name === '' )
@@ -317,6 +377,8 @@ request.onload = function()
                 timeout: 2
             });
 
+        MapEditor.clearSavedFileName();
+
         console.log( this.status );
         console.log( this.responseText );
         }
@@ -329,7 +391,7 @@ request.onload = function()
         }
     };
 request.send( formData );
-}
+};
 
 
 
@@ -337,26 +399,13 @@ request.send( formData );
 function saveMap()
 {
     // name of the map
-var textInput = document.querySelector( '#TextInput' );
-var name = textInput.value;
 var container = Game.getCanvasContainer();
-
-if ( name === '' )
-    {
-    new Game.Message({
-            text: 'Specify the map name before saving.',
-            container: container,
-            timeout: 2
-        });
-    return;
-    }
-
 
 var dataStr = JSON.stringify( MAP_INFO, null, 4 );
 
 var formData = new FormData();
 
-formData.append( 'name', name );
+formData.append( 'name', MAP_INFO.fileName );
 formData.append( 'data', dataStr );
 
 var request = new XMLHttpRequest();

@@ -16,7 +16,7 @@ def save( request ):
         name = request.POST.get( 'name' )
         data = request.POST.get( 'data' )
 
-        with open( '../map_info/{}.json'.format( name ), 'w', encoding= 'utf-8' ) as f:
+        with open( '../map_info/{}'.format( name ), 'w', encoding= 'utf-8' ) as f:
 
             f.write( data )
 
@@ -33,8 +33,12 @@ def load( request ):
 
         name = request.POST.get( 'name' )
 
-        with open( '../map_info/{}.json'.format( name ), 'r', encoding= 'utf-8' ) as f:
-            data = f.read()
+        try:
+            with open( '../map_info/{}'.format( name ), 'r', encoding= 'utf-8' ) as f:
+                data = f.read()
+
+        except OSError:
+            return HttpResponseBadRequest()
 
         return HttpResponse( data, content_type= 'application/json' )
 
