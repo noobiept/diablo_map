@@ -693,6 +693,25 @@ declare module Game {
              */
             clear(): void;
         }
+        interface TextArgs extends HtmlElementArgs {
+            placeholder?: string;
+            callback?: (button: Text) => any;
+            buttonText?: string;
+        }
+        /**
+         * Text input control.
+         */
+        class Text extends HtmlElement {
+            input: HTMLInputElement;
+            button: Button;
+            key_ref: (event) => any;
+            constructor(args?: TextArgs);
+            setValue(value: string): void;
+            getValue(): string;
+            addEvents(): void;
+            removeEvents(): void;
+            clear(): void;
+        }
     }
 }
 declare module Game {

@@ -28,4 +28,15 @@ def save( request ):
 
 @csrf_exempt
 def load( request ):
-    pass
+
+    if request.POST:
+
+        name = request.POST.get( 'name' )
+
+        with open( '../map_info/{}.json'.format( name ), 'r', encoding= 'utf-8' ) as f:
+            data = f.read()
+
+        return HttpResponse( data, content_type= 'application/json' )
+
+
+    return HttpResponseBadRequest()

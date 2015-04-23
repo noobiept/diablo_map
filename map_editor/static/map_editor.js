@@ -15,7 +15,7 @@ var preload = new Game.Preload({ save_global: true });
 preload.addEventListener( 'complete', function()
     {
     MapEditor.init();
-    MapEditor.load();
+    //MapEditor.load();
     });
 preload.loadManifest( manifest );
 };
@@ -32,6 +32,7 @@ var CONTAINER;
 var AREA_NAME;
 var SCALE = 1;
 var SELECTED_TYPE = null;
+var MAP_INFO = {};
 
 
 MapEditor.init = function()
@@ -145,27 +146,38 @@ var selectElement = new Game.Html.MultipleOptions({
             }
     });
 
+var newMap = new Game.Html.Button({
+        value: 'New Map',
+        callback: startNewMap
+    });
+
 var save = new Game.Html.Button({
         value: 'Save',
         callback: saveMap
     });
+
+var load = new Game.Html.Button({
+        value: 'Load',
+        callback: loadMap
+    });
+
 var textInput = document.createElement( 'input' );
 
 textInput.type = 'text';
 textInput.id = 'TextInput';
 
-menu.addChild( selectElement, scale, recenter, save );
+menu.addChild( selectElement, scale, recenter, newMap, save, load );
 menu.container.appendChild( textInput );
 
 document.body.appendChild( menu.container );
 };
 
 
-MapEditor.load = function( map )
+MapEditor.load = function( mapInfo )
 {
 clear();
 
-var image = Game.Preload.get( 'act_1' );
+var image = Game.Preload.get( mapInfo.image );
 
 var map = new Game.Bitmap({
         image: image
@@ -174,8 +186,8 @@ CONTAINER.addChild( map );
 
 reCenterCamera();
 
-AREA_NAME.text = 'Act 1';
-
+AREA_NAME.text = mapInfo.name;
+MAP_INFO = mapInfo;
 };
 
 
@@ -227,6 +239,101 @@ SCALE = scale;
 
 
 
+function startNewMap()
+{
+var container = Game.getCanvasContainer();
+
+var name = new Game.Html.Text({
+        preText: 'Name:'
+    });
+var image = new Game.Html.Text({
+        preText: 'Image:'
+    });
+var start = new Game.Html.Button({
+        value: 'Start',
+        callback: function()
+            {
+            var info = {
+                name: name.getValue(),
+                image: image.getValue()
+            };
+
+            MapEditor.load( info );
+            message.clear();
+            }
+    });
+var close = new Game.Html.Button({
+        value: 'Close',
+        callback: function()
+            {
+            message.clear();
+            }
+    });
+
+
+var message = new Game.Message({
+        text: 'New Map',
+        container: container,
+        buttons: [ name, image, start, close ]
+    });
+}
+
+
+
+
+function loadMap()
+{
+    // name of the map
+var textInput = document.querySelector( '#TextInput' );
+var name = textInput.value;
+var container = Game.getCanvasContainer();
+
+if ( name === '' )
+    {
+    new Game.Message({
+            text: 'Need to specify the map name.',
+            container: container,
+            timeout: 2
+        });
+    return;
+    }
+
+
+var formData = new FormData();
+
+formData.append( 'name', name );
+
+    // make the request to the server
+var request = new XMLHttpRequest();
+
+request.open( 'POST', 'http://localhost:8000/load' );
+request.onload = function()
+    {
+    if ( this.status !== 200 )
+        {
+        new Game.Message({
+                text: 'Error. Failed to save.',
+                container: container,
+                timeout: 2
+            });
+
+        console.log( this.status );
+        console.log( this.responseText );
+        }
+
+    else
+        {
+        var info = JSON.parse( this.responseText );
+
+        MapEditor.load( info );
+        }
+    };
+request.send( formData );
+}
+
+
+
+
 function saveMap()
 {
     // name of the map
@@ -245,11 +352,7 @@ if ( name === '' )
     }
 
 
-var data = {
-    cave_entrances: [ 'test' ]
-};
-
-var dataStr = JSON.stringify( data );
+var dataStr = JSON.stringify( MAP_INFO, null, 4 );
 
 var formData = new FormData();
 
@@ -271,6 +374,15 @@ request.onload = function()
 
         console.log( this.status );
         console.log( this.responseText );
+        }
+
+    else
+        {
+        new Game.Message({
+                text: 'Saved',
+                container: container,
+                timeout: 2
+            });
         }
     };
 request.send( formData );

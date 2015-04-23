@@ -66,6 +66,11 @@ body
     text-decoration: none;
     }
 
+.Game-preText
+    {
+    padding: 5px;
+    }
+    
 
     /* ---- Message ---- */
 
@@ -77,6 +82,11 @@ body
     transform: translate(-50%, -50%);
     padding: 10px;
     background-color: aliceblue;
+    color: black;
+    }
+
+.Game-Message-container .Game-preText
+    {
     color: black;
     }
 
