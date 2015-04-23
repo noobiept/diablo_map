@@ -625,7 +625,7 @@ declare module Game {
         }
         interface MultipleOptionsArgs extends HtmlElementArgs {
             options: string[];
-            callback: (button: MultipleOptions, position: number, htmlElement: HTMLElement) => any;
+            callback?: (button: MultipleOptions, position: number, htmlElement: HTMLElement) => any;
         }
         /**
          * Multiple options button.
@@ -641,6 +641,10 @@ declare module Game {
              * @param position The position to select.
              */
             select(position: number): void;
+            /**
+             * Get the string value of the currently selected option.
+             */
+            getValue(): string;
             /**
              * add the click event handler on the options.
              */

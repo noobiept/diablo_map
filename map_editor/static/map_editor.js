@@ -38,7 +38,7 @@ var CONTAINER;
 var FILE_NAME;  // element in the menu, which shows the current file name
 var AREA_NAME;  // located at the top left of the map, shows the area name
 var SCALE = 1;
-var SELECTED_TYPE = null;
+var REMOVE_MODE = false;
 var MAP_INFO = {};
 var LABELS = [];    // all the label elements
 
@@ -98,24 +98,14 @@ canvasContainer.addEventListener( 'mouseup', function( event )
     // add the labels on click (depending on what value is selected in the menu)
 canvasContainer.addEventListener( 'mouseup', function( event )
     {
-    if ( SELECTED_TYPE && SELECTED_TYPE !== 'none' )
+    if ( REMOVE_MODE === true )
         {
         var rect = Game.getCanvas().getHtmlCanvasElement().getBoundingClientRect();
 
         var mouseX = event.clientX - rect.left;
         var mouseY = event.clientY - rect.top;
-        var x = (mouseX - CONTAINER.x) / SCALE;
-        var y = (mouseY - CONTAINER.y) / SCALE;
 
-        if ( SELECTED_TYPE === 'remove' )
-            {
-            MapEditor.removeLabel2( mouseX, mouseY );
-            }
-
-        else
-            {
-            MapEditor.addLabel( x, y );
-            }
+        MapEditor.removeLabel2( mouseX, mouseY );
         }
     });
 
@@ -140,11 +130,21 @@ var recenter = new Game.Html.Button({
         callback: reCenterCamera
     });
 
-var selectElement = new Game.Html.MultipleOptions({
-        options: [ 'none', 'remove', 'cave_entrance', 'cave_exit' ],
-        callback: function( button, position, htmlElement )
+var addLabel = new Game.Html.Button({
+        value: 'Add Label',
+        callback: MapEditor.addLabel
+    });
+
+var removeMode = new Game.Html.TwoState({
+        value: 'Remove Mode',
+        value2: 'Normal Mode',
+        callback: function()
             {
-            SELECTED_TYPE = htmlElement.innerHTML;
+            REMOVE_MODE = true;
+            },
+        callback2: function()
+            {
+            REMOVE_MODE = false;
             }
     });
 
@@ -165,7 +165,7 @@ var load = new Game.Html.Button({
 
 FILE_NAME = new Game.Html.Value({ value: '' });
 
-menu.addChild( selectElement, scale, recenter, newMap, save, load, FILE_NAME );
+menu.addChild( scale, recenter, addLabel, removeMode, newMap, save, load, FILE_NAME );
 
 
 document.body.appendChild( menu.container );
@@ -215,17 +215,54 @@ CONTAINER.removeAllChildren();
 
 
 
-MapEditor.addLabel = function( x, y )
+MapEditor.addLabel = function()
 {
-var label = new Label({
-        x: x,
-        y: y,
-        text: '------',
-        image: SELECTED_TYPE
-    });
-CONTAINER.addChild( label );
+var container = Game.getCanvasContainer();
+var canvas = Game.getCanvas();
 
-LABELS.push( label );
+var x = (canvas.getWidth() / 2 - CONTAINER.x) / SCALE;
+var y = (canvas.getHeight() / 2 - CONTAINER.y) / SCALE;
+
+var type = new Game.Html.MultipleOptions({
+        options: [ 'cave_entrance', 'cave_exit' ]
+    });
+var text = new Game.Html.Text({
+        preText: 'Text:'
+    });
+var destinationId = new Game.Html.Text({
+        preText: 'Destination Id:'
+    });
+var add = new Game.Html.Button({
+        value: 'Add',
+        callback: function()
+            {
+            var label = new Label({
+                    x: x,
+                    y: y,
+                    text: text.getValue(),
+                    image: type.getValue()
+                });
+            CONTAINER.addChild( label );
+
+            LABELS.push( label );
+
+            message.clear();
+            }
+    });
+var close = new Game.Html.Button({
+        value: 'Close',
+        callback: function()
+            {
+            message.clear();
+            }
+    });
+
+var message = new Game.Message({
+        text: 'New Label',
+        container: container,
+        background: true,
+        buttons: [ type, text, destinationId, add, close ]
+    });
 };
 
 
@@ -323,6 +360,7 @@ var close = new Game.Html.Button({
 var message = new Game.Message({
         text: 'New Map',
         container: container,
+        background: true,
         buttons: [ fileName, name, image, start, close ]
     });
 }
@@ -376,6 +414,7 @@ var close = new Game.Html.Button({
 var message = new Game.Message({
         text: 'Load Map',
         container: container,
+        background: true,
         buttons: [ fileName, load, close ]
     });
 }
