@@ -40,6 +40,7 @@ var AREA_NAME;  // located at the top left of the map, shows the area name
 var SCALE = 1;
 var SELECTED_TYPE = null;
 var MAP_INFO = {};
+var LABELS = [];    // all the label elements
 
 
 MapEditor.init = function()
@@ -97,20 +98,24 @@ canvasContainer.addEventListener( 'mouseup', function( event )
     // add the labels on click (depending on what value is selected in the menu)
 canvasContainer.addEventListener( 'mouseup', function( event )
     {
-    if ( SELECTED_TYPE )
+    if ( SELECTED_TYPE && SELECTED_TYPE !== 'none' )
         {
         var rect = Game.getCanvas().getHtmlCanvasElement().getBoundingClientRect();
 
-        var x = event.clientX - rect.left - CONTAINER.x;
-        var y = event.clientY - rect.top - CONTAINER.y;
+        var mouseX = event.clientX - rect.left;
+        var mouseY = event.clientY - rect.top;
+        var x = (mouseX - CONTAINER.x) / SCALE;
+        var y = (mouseY - CONTAINER.y) / SCALE;
 
-        var label = new Label({
-                x: x / SCALE,
-                y: y / SCALE,
-                text: '------',
-                image: SELECTED_TYPE
-            });
-        CONTAINER.addChild( label );
+        if ( SELECTED_TYPE === 'remove' )
+            {
+            MapEditor.removeLabel2( mouseX, mouseY );
+            }
+
+        else
+            {
+            MapEditor.addLabel( x, y );
+            }
         }
     });
 
@@ -136,20 +141,10 @@ var recenter = new Game.Html.Button({
     });
 
 var selectElement = new Game.Html.MultipleOptions({
-        options: [ 'none', 'cave_entrance', 'cave_exit' ],
+        options: [ 'none', 'remove', 'cave_entrance', 'cave_exit' ],
         callback: function( button, position, htmlElement )
             {
-            var id = htmlElement.innerHTML;
-
-            if ( id === 'none' )
-                {
-                SELECTED_TYPE = null;
-                }
-
-            else
-                {
-                SELECTED_TYPE = id;
-                }
+            SELECTED_TYPE = htmlElement.innerHTML;
             }
     });
 
@@ -217,6 +212,49 @@ function clear()
 {
 CONTAINER.removeAllChildren();
 }
+
+
+
+MapEditor.addLabel = function( x, y )
+{
+var label = new Label({
+        x: x,
+        y: y,
+        text: '------',
+        image: SELECTED_TYPE
+    });
+CONTAINER.addChild( label );
+
+LABELS.push( label );
+};
+
+
+MapEditor.removeLabel = function( label )
+{
+var position = LABELS.indexOf( label );
+
+LABELS.splice( position, 1 );
+
+label.remove();
+};
+
+
+MapEditor.removeLabel2 = function( x, y )
+{
+for (var a = LABELS.length - 1 ; a >= 0 ; a--)
+    {
+    var label = LABELS[ a ];
+    var elements = label.intersect( x, y );
+
+    if ( elements.length > 0 )
+        {
+        LABELS.splice( a, 1 );
+
+        label.remove();
+        return;
+        }
+    }
+};
 
 
 

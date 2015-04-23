@@ -19,9 +19,10 @@ image.addEventListener( 'click', function( data )
     {
     var code = data.event.button;
 
+        // this won't trigger if the whole page isn't visible (middle clicking will turn into a drag movement)
     if ( code === Utilities.MOUSE_CODE.middle )
         {
-        _this.remove();
+        MapEditor.removeLabel( _this );
         }
     });
 image.addEventListener( 'mouseover', function( data )
