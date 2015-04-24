@@ -27,12 +27,9 @@ preload.loadManifest( manifest );
 };
 
 
-(function(window)
-{
-function MapEditor()
-{
+var MapEditor;
+(function(MapEditor) {
 
-}
 
 var CONTAINER;
 var FILE_NAME;  // element in the menu, which shows the current file name
@@ -160,7 +157,7 @@ var recenter = new Game.Html.Button({
 
 var addLabel = new Game.Html.Button({
         value: 'Add Label',
-        callback: MapEditor.addLabel
+        callback: MapEditor.openAddLabel
     });
 
 var activeMode = new Game.Html.MultipleOptions({
@@ -174,17 +171,17 @@ var activeMode = new Game.Html.MultipleOptions({
 
 var newMap = new Game.Html.Button({
         value: 'New Map',
-        callback: startNewMap
+        callback: MapEditor.startNewMap
     });
 
 var save = new Game.Html.Button({
         value: 'Save',
-        callback: saveMap
+        callback: MapEditor.saveMap
     });
 
 var load = new Game.Html.Button({
         value: 'Load',
-        callback: openLoadMessage
+        callback: MapEditor.openLoadMessage
     });
 
 FILE_NAME = new Game.Html.Value({ value: '' });
@@ -239,55 +236,23 @@ CONTAINER.removeAllChildren();
 }
 
 
-
-MapEditor.addLabel = function()
+MapEditor.getTopLevelContainer = function()
 {
-var container = Game.getCanvasContainer();
-var canvas = Game.getCanvas();
+return CONTAINER;
+};
 
-var x = (canvas.getWidth() / 2 - CONTAINER.x) / SCALE;
-var y = (canvas.getHeight() / 2 - CONTAINER.y) / SCALE;
 
-var type = new Game.Html.MultipleOptions({
-        options: [ 'cave_entrance', 'cave_exit' ]
+MapEditor.addLabel = function( x, y, text, image )
+{
+var label = new Label({
+        x: x,
+        y: y,
+        text: text,
+        image: image
     });
-var text = new Game.Html.Text({
-        preText: 'Text:'
-    });
-var destinationId = new Game.Html.Text({
-        preText: 'Destination Id:'
-    });
-var add = new Game.Html.Button({
-        value: 'Add',
-        callback: function()
-            {
-            var label = new Label({
-                    x: x,
-                    y: y,
-                    text: text.getValue(),
-                    image: type.getValue()
-                });
-            CONTAINER.addChild( label );
+CONTAINER.addChild( label );
 
-            LABELS.push( label );
-
-            message.clear();
-            }
-    });
-var close = new Game.Html.Button({
-        value: 'Close',
-        callback: function()
-            {
-            message.clear();
-            }
-    });
-
-var message = new Game.Message({
-        text: 'New Label',
-        container: container,
-        background: true,
-        buttons: [ type, text, destinationId, add, close ]
-    });
+LABELS.push( label );
 };
 
 
@@ -345,6 +310,12 @@ SCALE = scale;
 }
 
 
+MapEditor.getScale = function()
+{
+return SCALE;
+};
+
+
 /**
  * Marks a label as selected. If the label given was already the one selected, and we deselect it.
  */
@@ -363,201 +334,10 @@ else
 
 
 
-function startNewMap()
+MapEditor.getMapInfo = function()
 {
-var container = Game.getCanvasContainer();
-
-var fileName = new Game.Html.Text({
-        preText: 'File Name:'
-    });
-var name = new Game.Html.Text({
-        preText: 'Map Name:'
-    });
-var image = new Game.Html.Text({
-        preText: 'Image Id:'
-    });
-var start = new Game.Html.Button({
-        value: 'Start',
-        callback: function()
-            {
-            var info = {
-                fileName: fileName.getValue(),
-                mapName: name.getValue(),
-                imageId: image.getValue()
-            };
-
-            MapEditor.load( info );
-            message.clear();
-            }
-    });
-var close = new Game.Html.Button({
-        value: 'Close',
-        callback: function()
-            {
-            message.clear();
-            }
-    });
-
-
-var message = new Game.Message({
-        text: 'New Map',
-        container: container,
-        background: true,
-        buttons: [ fileName, name, image, start, close ]
-    });
-}
-
-
-/**
- * Save the previously saved file name, so that the next time the program is run, we can load it.
- */
-MapEditor.saveFileName = function( fileName )
-{
-localStorage.setItem( 'diablo_map_previous_map', fileName );
-};
-
-MapEditor.getSavedFileName = function()
-{
-return localStorage.getItem( 'diablo_map_previous_map' );
+return MAP_INFO;
 };
 
 
-MapEditor.clearSavedFileName = function()
-{
-localStorage.removeItem( 'diablo_map_previous_map' );
-};
-
-
-
-function openLoadMessage()
-{
-var container = Game.getCanvasContainer();
-
-var fileName = new Game.Html.Text({
-        preText: 'File Name:'
-    });
-var load = new Game.Html.Button({
-        value: 'Load',
-        callback: function()
-            {
-            MapEditor.loadMap( fileName.getValue() );
-            message.clear();
-            }
-    });
-var close = new Game.Html.Button({
-        value: 'Close',
-        callback: function()
-            {
-            message.clear();
-            }
-    });
-
-
-var message = new Game.Message({
-        text: 'Load Map',
-        container: container,
-        background: true,
-        buttons: [ fileName, load, close ]
-    });
-}
-
-
-
-MapEditor.loadMap = function( name )
-{
-var container = Game.getCanvasContainer();
-
-if ( name === '' )
-    {
-    new Game.Message({
-            text: 'Need to specify the map name.',
-            container: container,
-            timeout: 2
-        });
-    return;
-    }
-
-
-var formData = new FormData();
-
-formData.append( 'name', name );
-
-    // make the request to the server
-var request = new XMLHttpRequest();
-
-request.open( 'POST', 'http://localhost:8000/load' );
-request.onload = function()
-    {
-    if ( this.status !== 200 )
-        {
-        new Game.Message({
-                text: 'Error. Failed to save.',
-                container: container,
-                timeout: 2
-            });
-
-        MapEditor.clearSavedFileName();
-
-        console.log( this.status );
-        console.log( this.responseText );
-        }
-
-    else
-        {
-        var info = JSON.parse( this.responseText );
-
-        MapEditor.load( info );
-        }
-    };
-request.send( formData );
-};
-
-
-
-
-function saveMap()
-{
-    // name of the map
-var container = Game.getCanvasContainer();
-
-var dataStr = JSON.stringify( MAP_INFO, null, 4 );
-
-var formData = new FormData();
-
-formData.append( 'name', MAP_INFO.fileName );
-formData.append( 'data', dataStr );
-
-var request = new XMLHttpRequest();
-
-request.open( 'POST', 'http://localhost:8000/save' );
-request.onload = function()
-    {
-    if ( this.status !== 200 )
-        {
-        new Game.Message({
-                text: 'Error. Failed to save.',
-                container: container,
-                timeout: 2
-            });
-
-        console.log( this.status );
-        console.log( this.responseText );
-        }
-
-    else
-        {
-        new Game.Message({
-                text: 'Saved',
-                container: container,
-                timeout: 2
-            });
-        }
-    };
-request.send( formData );
-}
-
-
-
-window.MapEditor = MapEditor;
-
-})(window);
+})(MapEditor || (MapEditor = {}));
