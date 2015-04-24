@@ -52,11 +52,10 @@ request.send( formData );
 };
 
 
-MapEditor.saveMap = function()
+MapEditor.saveMap = function( mapInfo )
 {
     // name of the map
 var container = Game.getCanvasContainer();
-var mapInfo = MapEditor.getMapInfo();
 
 var dataStr = JSON.stringify( mapInfo, null, 4 );
 

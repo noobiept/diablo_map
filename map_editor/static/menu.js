@@ -57,7 +57,11 @@ var newMap = new Game.Html.Button({
 
 var save = new Game.Html.Button({
         value: 'Save',
-        callback: MapEditor.saveMap
+        callback: function()
+            {
+            var info = MapEditor.constructMapInfo();
+            MapEditor.saveMap( info );
+            }
     });
 
 var load = new Game.Html.Button({
@@ -80,6 +84,12 @@ FILE_NAME.setValue( name );
 };
 
 
+MapEditor.getFileName = function()
+{
+return FILE_NAME.getValue();
+};
+
+
 MapEditor.getCurrentMode = function()
 {
 return CURRENT_MODE;
@@ -99,6 +109,9 @@ var y = (canvas.getHeight() / 2 - topLevelContainer.y) / scale;
 var type = new Game.Html.MultipleOptions({
         options: [ 'cave_entrance', 'cave_exit' ]
     });
+var id = new Game.Html.Text({
+        preText: 'Id:'
+    });
 var text = new Game.Html.Text({
         preText: 'Text:'
     });
@@ -109,7 +122,7 @@ var add = new Game.Html.Button({
         value: 'Add',
         callback: function()
             {
-            MapEditor.addLabel( x, y, text.getValue(), type.getValue() );
+            MapEditor.addLabel( x, y, type.getValue(), id.getValue(), text.getValue(), destinationId.getValue() );
 
             message.clear();
             }
@@ -126,7 +139,7 @@ var message = new Game.Message({
         text: 'New Label',
         container: container,
         background: true,
-        buttons: [ type, text, destinationId, add, close ]
+        buttons: [ type, id, text, destinationId, add, close ]
     });
 };
 

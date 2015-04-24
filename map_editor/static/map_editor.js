@@ -35,7 +35,7 @@ var CONTAINER;
 
 var AREA_NAME;  // located at the top left of the map, shows the area name
 var SCALE = 1;
-var MAP_INFO = {};
+var BASIC_INFO = {};
 var LABELS = [];    // all the label elements
 var SELECTED_LABEL = null;
 
@@ -147,11 +147,53 @@ MapEditor.reCenterCamera();
 MapEditor.setFileName( mapInfo.fileName );
 
 AREA_NAME.text = mapInfo.mapName;
-MAP_INFO = mapInfo;
+BASIC_INFO = {
+        imageId: mapInfo.imageId,
+        fileName: mapInfo.fileName,
+        mapName: mapInfo.mapName
+    };
 
 MapEditor.saveFileName( mapInfo.fileName );
+
+
+    // add all the labels
+if ( typeof mapInfo.labels !== 'undefined' )
+    {
+    var labelsIds = Object.keys( mapInfo.labels );
+
+    for (var a = labelsIds.length - 1 ; a >= 0 ; a--)
+        {
+        var id = labelsIds[ a ];
+        var labelInfo = mapInfo.labels[ id ];
+
+        MapEditor.addLabel( labelInfo.x, labelInfo.y, labelInfo.imageId, id, labelInfo.text, labelInfo.destination );
+        }
+    }
 };
 
+
+
+MapEditor.constructMapInfo = function()
+{
+var mapInfo = Utilities.deepClone( BASIC_INFO );
+
+mapInfo.labels = {};
+
+for (var a = LABELS.length - 1 ; a >= 0 ; a--)
+    {
+    var label = LABELS[ a ];
+
+    mapInfo.labels[ label.id ] = {
+            text: label.text,
+            imageId: label.imageId,
+            x: label.x,
+            y: label.y,
+            destination: label.destination
+        };
+    }
+
+return mapInfo;
+};
 
 
 MapEditor.changeCursor = function( mouseOver )
@@ -181,13 +223,15 @@ return CONTAINER;
 };
 
 
-MapEditor.addLabel = function( x, y, text, image )
+MapEditor.addLabel = function( x, y, imageId, id, text, destinationId )
 {
 var label = new Label({
         x: x,
         y: y,
+        id: id,
         text: text,
-        image: image
+        image: imageId,
+        destination: destinationId
     });
 CONTAINER.addChild( label );
 
@@ -271,12 +315,6 @@ else
     }
 };
 
-
-
-MapEditor.getMapInfo = function()
-{
-return MAP_INFO;
-};
 
 
 })(MapEditor || (MapEditor = {}));
