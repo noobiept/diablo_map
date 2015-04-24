@@ -32,19 +32,14 @@ var MapEditor;
 
 
 var CONTAINER;
-var FILE_NAME;  // element in the menu, which shows the current file name
+
 var AREA_NAME;  // located at the top left of the map, shows the area name
 var SCALE = 1;
 var MAP_INFO = {};
 var LABELS = [];    // all the label elements
 var SELECTED_LABEL = null;
 
-    // 'move' -- move the camera mode
-    // 'drag' -- drag a label mode
-    // 'remove' -- remove a label mode
-var POSSIBLE_MODES = [ 'Move', 'Drag', 'Remove' ];
-var MODES = Utilities.createEnum( POSSIBLE_MODES );
-var CURRENT_MODE = -1;
+
 
 MapEditor.init = function()
 {
@@ -85,7 +80,7 @@ canvasContainer.addEventListener( 'mousemove', function( event )
     var currentX, currentY;
 
         // the drag of the labels
-    if ( CURRENT_MODE === MODES.Drag )
+    if ( MapEditor.getCurrentMode() === MapEditor.MODES.Drag )
         {
         if ( SELECTED_LABEL )
             {
@@ -108,7 +103,7 @@ canvasContainer.addEventListener( 'mousemove', function( event )
         currentX = event.clientX;
         currentY = event.clientY;
 
-        moveCamera( currentX - referenceX, currentY - referenceY );
+        MapEditor.moveCamera( currentX - referenceX, currentY - referenceY );
 
         referenceX = currentX;
         referenceY = currentY;
@@ -117,13 +112,9 @@ canvasContainer.addEventListener( 'mousemove', function( event )
 canvasContainer.addEventListener( 'mouseup', function( event )
     {
     mouseDown = false;
-    });
 
-
-    // add the labels on click (depending on what value is selected in the menu)
-canvasContainer.addEventListener( 'mouseup', function( event )
-    {
-    if ( CURRENT_MODE === MODES.Remove )
+        // remove a label on click (if its on remove mode)
+    if ( MapEditor.getCurrentMode() === MapEditor.MODES.Remove )
         {
         var rect = canvasHtmlElement.getBoundingClientRect();
 
@@ -135,61 +126,9 @@ canvasContainer.addEventListener( 'mouseup', function( event )
     });
 
 
-    // create the menu
-var menu = new Game.Html.HtmlContainer();
-
-var scale = new Game.Html.Range({
-        min: 0.4,
-        max: 2,
-        value: 1,
-        step: 0.2,
-        preText: 'Scale',
-        onChange: function( button )
-            {
-            changeScale( button.getValue() );
-            }
-    });
-
-var recenter = new Game.Html.Button({
-        value: 'Recenter',
-        callback: reCenterCamera
-    });
-
-var addLabel = new Game.Html.Button({
-        value: 'Add Label',
-        callback: MapEditor.openAddLabel
-    });
-
-var activeMode = new Game.Html.MultipleOptions({
-        preText: 'Mode:',
-        options: POSSIBLE_MODES,
-        callback: function( button, position, htmlElement )
-            {
-            CURRENT_MODE = position;
-            }
-    });
-
-var newMap = new Game.Html.Button({
-        value: 'New Map',
-        callback: MapEditor.startNewMap
-    });
-
-var save = new Game.Html.Button({
-        value: 'Save',
-        callback: MapEditor.saveMap
-    });
-
-var load = new Game.Html.Button({
-        value: 'Load',
-        callback: MapEditor.openLoadMessage
-    });
-
-FILE_NAME = new Game.Html.Value({ value: '' });
-
-menu.addChild( scale, recenter, addLabel, activeMode, newMap, save, load, FILE_NAME );
+MapEditor.initMenu();
 
 
-document.body.appendChild( menu.container );
 };
 
 
@@ -204,10 +143,10 @@ var map = new Game.Bitmap({
     });
 CONTAINER.addChild( map );
 
-reCenterCamera();
+MapEditor.reCenterCamera();
+MapEditor.setFileName( mapInfo.fileName );
 
 AREA_NAME.text = mapInfo.mapName;
-FILE_NAME.setValue( mapInfo.fileName );
 MAP_INFO = mapInfo;
 
 MapEditor.saveFileName( mapInfo.fileName );
@@ -285,29 +224,29 @@ for (var a = LABELS.length - 1 ; a >= 0 ; a--)
 
 
 
-function reCenterCamera()
+MapEditor.reCenterCamera = function()
 {
 var canvas = Game.getCanvas();
 
 CONTAINER.x = canvas.getWidth() / 2;
 CONTAINER.y = canvas.getHeight() / 2;
-}
+};
 
 
 
-function moveCamera( xMov, yMov )
+MapEditor.moveCamera = function( xMov, yMov )
 {
 CONTAINER.x += xMov;
 CONTAINER.y += yMov;
-}
+};
 
 
-function changeScale( scale )
+MapEditor.changeScale = function( scale )
 {
 CONTAINER.scaleX = CONTAINER.scaleY = scale;
 
 SCALE = scale;
-}
+};
 
 
 MapEditor.getScale = function()

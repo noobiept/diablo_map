@@ -2,9 +2,87 @@ var MapEditor;
 (function(MapEditor) {
 
 
+    // 'move' -- move the camera mode
+    // 'drag' -- drag a label mode
+    // 'remove' -- remove a label mode
+var POSSIBLE_MODES = [ 'Move', 'Drag', 'Remove' ];
+var CURRENT_MODE = -1;
+
+MapEditor.MODES = Utilities.createEnum( POSSIBLE_MODES );
+
+var FILE_NAME;  // element in the menu, which shows the current file name
+
+/**
+ * Create the map editor's menu
+ */
 MapEditor.initMenu = function()
 {
-    //HERE
+var menu = new Game.Html.HtmlContainer();
+
+var scale = new Game.Html.Range({
+        min: 0.4,
+        max: 2,
+        value: 1,
+        step: 0.2,
+        preText: 'Scale',
+        onChange: function( button )
+            {
+            MapEditor.changeScale( button.getValue() );
+            }
+    });
+
+var recenter = new Game.Html.Button({
+        value: 'Recenter',
+        callback: MapEditor.reCenterCamera
+    });
+
+var addLabel = new Game.Html.Button({
+        value: 'Add Label',
+        callback: MapEditor.openAddLabel
+    });
+
+var activeMode = new Game.Html.MultipleOptions({
+        preText: 'Mode:',
+        options: POSSIBLE_MODES,
+        callback: function( button, position, htmlElement )
+            {
+            CURRENT_MODE = position;
+            }
+    });
+
+var newMap = new Game.Html.Button({
+        value: 'New Map',
+        callback: MapEditor.startNewMap
+    });
+
+var save = new Game.Html.Button({
+        value: 'Save',
+        callback: MapEditor.saveMap
+    });
+
+var load = new Game.Html.Button({
+        value: 'Load',
+        callback: MapEditor.openLoadMessage
+    });
+
+FILE_NAME = new Game.Html.Value({ value: '' });
+
+menu.addChild( scale, recenter, addLabel, activeMode, newMap, save, load, FILE_NAME );
+
+
+document.body.appendChild( menu.container );
+};
+
+
+MapEditor.setFileName = function( name )
+{
+FILE_NAME.setValue( name );
+};
+
+
+MapEditor.getCurrentMode = function()
+{
+return CURRENT_MODE;
 };
 
 
