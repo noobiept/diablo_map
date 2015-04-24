@@ -38,12 +38,16 @@ var CONTAINER;
 var FILE_NAME;  // element in the menu, which shows the current file name
 var AREA_NAME;  // located at the top left of the map, shows the area name
 var SCALE = 1;
-var REMOVE_MODE = false;
-var DRAG_MODE = false;
 var MAP_INFO = {};
 var LABELS = [];    // all the label elements
 var SELECTED_LABEL = null;
 
+    // 'move' -- move the camera mode
+    // 'drag' -- drag a label mode
+    // 'remove' -- remove a label mode
+var POSSIBLE_MODES = [ 'Move', 'Drag', 'Remove' ];
+var MODES = Utilities.createEnum( POSSIBLE_MODES );
+var CURRENT_MODE = -1;
 
 MapEditor.init = function()
 {
@@ -57,6 +61,7 @@ Game.addElement( CONTAINER );
 
     // add the area name element
 var canvas = Game.getCanvas();
+var canvasHtmlElement = canvas.getHtmlCanvasElement();
 
 AREA_NAME = new Game.Text({
         textAlign: 'end',
@@ -83,14 +88,14 @@ canvasContainer.addEventListener( 'mousemove', function( event )
     var currentX, currentY;
 
         // the drag of the labels
-    if ( DRAG_MODE )
+    if ( CURRENT_MODE === MODES.Drag )
         {
         if ( SELECTED_LABEL )
             {
             currentX = event.clientX;
             currentY = event.clientY;
 
-            var rect = canvas.getHtmlCanvasElement().getBoundingClientRect();
+            var rect = canvasHtmlElement.getBoundingClientRect();
 
             var x = (currentX - rect.left - CONTAINER.x) / SCALE;
             var y = (currentY - rect.top - CONTAINER.y) / SCALE;
@@ -121,9 +126,9 @@ canvasContainer.addEventListener( 'mouseup', function( event )
     // add the labels on click (depending on what value is selected in the menu)
 canvasContainer.addEventListener( 'mouseup', function( event )
     {
-    if ( REMOVE_MODE === true )
+    if ( CURRENT_MODE === MODES.Remove )
         {
-        var rect = Game.getCanvas().getHtmlCanvasElement().getBoundingClientRect();
+        var rect = canvasHtmlElement.getBoundingClientRect();
 
         var mouseX = event.clientX - rect.left;
         var mouseY = event.clientY - rect.top;
@@ -158,29 +163,12 @@ var addLabel = new Game.Html.Button({
         callback: MapEditor.addLabel
     });
 
-var removeMode = new Game.Html.TwoState({
-        value: 'Remove Mode',
-        value2: 'Normal Mode',
-        callback: function()
+var activeMode = new Game.Html.MultipleOptions({
+        preText: 'Mode:',
+        options: POSSIBLE_MODES,
+        callback: function( button, position, htmlElement )
             {
-            REMOVE_MODE = true;
-            },
-        callback2: function()
-            {
-            REMOVE_MODE = false;
-            }
-    });
-
-var dragMode = new Game.Html.TwoState({
-        value: 'Drag Mode',
-        value2: 'Move Mode',
-        callback: function()
-            {
-            DRAG_MODE = true;
-            },
-        callback2: function()
-            {
-            DRAG_MODE = false;
+            CURRENT_MODE = position;
             }
     });
 
@@ -201,7 +189,7 @@ var load = new Game.Html.Button({
 
 FILE_NAME = new Game.Html.Value({ value: '' });
 
-menu.addChild( scale, recenter, addLabel, removeMode, dragMode, newMap, save, load, FILE_NAME );
+menu.addChild( scale, recenter, addLabel, activeMode, newMap, save, load, FILE_NAME );
 
 
 document.body.appendChild( menu.container );
