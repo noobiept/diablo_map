@@ -127,8 +127,6 @@ canvasContainer.addEventListener( 'mouseup', function( event )
 
 
 MapEditor.initMenu();
-
-
 };
 
 
@@ -188,7 +186,8 @@ for (var a = LABELS.length - 1 ; a >= 0 ; a--)
             imageId: label.imageId,
             x: label.x,
             y: label.y,
-            destination: label.destination
+            destination: label.destination,
+            destinationLabel: label.destinationLabel
         };
     }
 
@@ -214,6 +213,8 @@ else
 function clear()
 {
 CONTAINER.removeAllChildren();
+
+LABELS.length = 0;
 }
 
 
@@ -223,7 +224,7 @@ return CONTAINER;
 };
 
 
-MapEditor.addLabel = function( x, y, imageId, id, text, destinationId )
+MapEditor.addLabel = function( x, y, imageId, id, text, destinationId, destinationLabel )
 {
 var label = new Label({
         x: x,
@@ -231,7 +232,8 @@ var label = new Label({
         id: id,
         text: text,
         image: imageId,
-        destination: destinationId
+        destination: destinationId,
+        destinationLabel: destinationLabel
     });
 CONTAINER.addChild( label );
 

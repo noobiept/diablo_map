@@ -46,6 +46,8 @@ this.imageId = info.image;
 this.text = info.text;
 this.id = info.id;
 this.destination = info.destination;
+this.destinationLabel = info.destinationLabel;
+
 this.x = info.x;
 this.y = info.y;
 this.addChild( image, text );

@@ -118,11 +118,22 @@ var text = new Game.Html.Text({
 var destinationId = new Game.Html.Text({
         preText: 'Destination Id:'
     });
+var destinationLabel = new Game.Html.Text({
+        preText: 'Destination Label:'
+    });
 var add = new Game.Html.Button({
         value: 'Add',
         callback: function()
             {
-            MapEditor.addLabel( x, y, type.getValue(), id.getValue(), text.getValue(), destinationId.getValue() );
+            MapEditor.addLabel(
+                x,
+                y,
+                type.getValue(),
+                id.getValue(),
+                text.getValue(),
+                destinationId.getValue(),
+                destinationLabel.getValue()
+            );
 
             message.clear();
             }
@@ -139,7 +150,7 @@ var message = new Game.Message({
         text: 'New Label',
         container: container,
         background: true,
-        buttons: [ type, id, text, destinationId, add, close ]
+        buttons: [ type, id, text, destinationId, destinationLabel, add, close ]
     });
 };
 
