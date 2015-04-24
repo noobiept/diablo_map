@@ -39,8 +39,10 @@ var FILE_NAME;  // element in the menu, which shows the current file name
 var AREA_NAME;  // located at the top left of the map, shows the area name
 var SCALE = 1;
 var REMOVE_MODE = false;
+var DRAG_MODE = false;
 var MAP_INFO = {};
 var LABELS = [];    // all the label elements
+var SELECTED_LABEL = null;
 
 
 MapEditor.init = function()
@@ -78,10 +80,31 @@ canvasContainer.addEventListener( 'mousedown', function( event )
     });
 canvasContainer.addEventListener( 'mousemove', function( event )
     {
-    if ( mouseDown )
+    var currentX, currentY;
+
+        // the drag of the labels
+    if ( DRAG_MODE )
         {
-        var currentX = event.clientX;
-        var currentY = event.clientY;
+        if ( SELECTED_LABEL )
+            {
+            currentX = event.clientX;
+            currentY = event.clientY;
+
+            var rect = canvas.getHtmlCanvasElement().getBoundingClientRect();
+
+            var x = (currentX - rect.left - CONTAINER.x) / SCALE;
+            var y = (currentY - rect.top - CONTAINER.y) / SCALE;
+
+            SELECTED_LABEL.x = x;
+            SELECTED_LABEL.y = y;
+            }
+        }
+
+        // the movement of the camera
+    else if ( mouseDown )
+        {
+        currentX = event.clientX;
+        currentY = event.clientY;
 
         moveCamera( currentX - referenceX, currentY - referenceY );
 
@@ -148,6 +171,19 @@ var removeMode = new Game.Html.TwoState({
             }
     });
 
+var dragMode = new Game.Html.TwoState({
+        value: 'Drag Mode',
+        value2: 'Move Mode',
+        callback: function()
+            {
+            DRAG_MODE = true;
+            },
+        callback2: function()
+            {
+            DRAG_MODE = false;
+            }
+    });
+
 var newMap = new Game.Html.Button({
         value: 'New Map',
         callback: startNewMap
@@ -165,7 +201,7 @@ var load = new Game.Html.Button({
 
 FILE_NAME = new Game.Html.Value({ value: '' });
 
-menu.addChild( scale, recenter, addLabel, removeMode, newMap, save, load, FILE_NAME );
+menu.addChild( scale, recenter, addLabel, removeMode, dragMode, newMap, save, load, FILE_NAME );
 
 
 document.body.appendChild( menu.container );
@@ -191,6 +227,7 @@ MAP_INFO = mapInfo;
 
 MapEditor.saveFileName( mapInfo.fileName );
 };
+
 
 
 MapEditor.changeCursor = function( mouseOver )
@@ -318,6 +355,23 @@ CONTAINER.scaleX = CONTAINER.scaleY = scale;
 
 SCALE = scale;
 }
+
+
+/**
+ * Marks a label as selected. If the label given was already the one selected, and we deselect it.
+ */
+MapEditor.selectLabel = function( label )
+{
+if ( SELECTED_LABEL === label )
+    {
+    SELECTED_LABEL = null;
+    }
+
+else
+    {
+    SELECTED_LABEL = label;
+    }
+};
 
 
 

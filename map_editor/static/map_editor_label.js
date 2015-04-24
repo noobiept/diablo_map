@@ -24,6 +24,11 @@ image.addEventListener( 'click', function( data )
         {
         MapEditor.removeLabel( _this );
         }
+
+    else if ( code === Utilities.MOUSE_CODE.left )
+        {
+        MapEditor.selectLabel( _this );
+        }
     });
 image.addEventListener( 'mouseover', function( data )
     {
@@ -35,6 +40,7 @@ image.addEventListener( 'mouseout', function( data )
     MapEditor.changeCursor( false );
     text.visible = false;
     });
+
 
 this.x = info.x;
 this.y = info.y;

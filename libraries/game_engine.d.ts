@@ -54,6 +54,15 @@ declare module Game {
     /**
      * Base class for a canvas element. Don't create an object directly.
      *
+     * Events:
+     *
+     * - `click` -- `listener( data: { event: MouseEvent; } );`
+     * - `mousedown` -- `listener( data: { event: MouseEvent; } );`
+     * - `mouseup` -- `listener( data: { event: MouseEvent; } );`
+     * - `mousemove` -- `listener( data: { event: MouseEvent; } );`
+     * - `mouseover` -- `listener( data: { element: Element; } );`
+     * - `mouseout` -- `listener( data: { element: Element; } );`
+     *
      * @abstract
      */
     class Element extends EventDispatcher {
@@ -98,6 +107,10 @@ declare module Game {
         mouseClickEvents(x: any, y: any, event: any): boolean;
         dispatchMouseOverEvent(): void;
         dispatchMouseOutEvent(): void;
+        dispatchMouseMoveEvent(): void;
+        /**
+         * @param event Either a mouse up, mouse down or click event.
+         */
         dispatchMouseClickEvent(event: MouseEvent): void;
         /**
          * @returns Rotation in radians.
@@ -140,6 +153,9 @@ declare module Game {
      * Events:
      *
      * - `click` -- `listener( data: { event: MouseEvent; } );`
+     * - `mousedown` -- `listener( data: { event: MouseEvent; } );`
+     * - `mouseup` -- `listener( data: { event: MouseEvent; } );`
+     * - `mousemove` -- `listener( data: { event: MouseEvent; } );`
      * - `mouseover` -- `listener( data: { element: Element; } );`
      * - `mouseout` -- `listener( data: { element: Element; } );`
      *
@@ -178,6 +194,9 @@ declare module Game {
      * Events:
      *
      * - `click` -- `listener( data: { event: MouseEvent; } );`
+     * - `mousedown` -- `listener( data: { event: MouseEvent; } );`
+     * - `mouseup` -- `listener( data: { event: MouseEvent; } );`
+     * - `mousemove` -- `listener( data: { event: MouseEvent; } );`
      * - `mouseover` -- `listener( data: { element: Element; } );`
      * - `mouseout` -- `listener( data: { element: Element; } );`
      *
@@ -266,6 +285,15 @@ declare module Game {
      *                 }
      *         });
      *     bullet.addChild( bulletShape );
+     *
+     * Events:
+     *
+     * - `click` -- `listener( data: { event: MouseEvent; } );`
+     * - `mousedown` -- `listener( data: { event: MouseEvent; } );`
+     * - `mouseup` -- `listener( data: { event: MouseEvent; } );`
+     * - `mousemove` -- `listener( data: { event: MouseEvent; } );`
+     * - `mouseover` -- `listener( data: { element: Element; } );`
+     * - `mouseout` -- `listener( data: { element: Element; } );`
      */
     class Bullet extends Container {
         movement_speed: number;
@@ -371,7 +399,7 @@ declare module Game {
          */
         draw(): void;
         /**
-         * Check if a mouse event that was triggered is on top of an element (if it intersects it) that is part of this canvas.
+         * Receives a mouse event. Move it along to this canvas elements, to see if there's an element that has listeners to it.
          *
          * @param event The mouse event triggered.
          */
@@ -439,6 +467,9 @@ declare module Game {
      * Events:
      *
      * - `click` -- `listener( data: { event: MouseEvent; } );`
+     * - `mousedown` -- `listener( data: { event: MouseEvent; } );`
+     * - `mouseup` -- `listener( data: { event: MouseEvent; } );`
+     * - `mousemove` -- `listener( data: { event: MouseEvent; } );`
      * - `mouseover` -- `listener( data: { element: Element; } );`
      * - `mouseout` -- `listener( data: { element: Element; } );`
      *
@@ -1161,6 +1192,9 @@ declare module Game {
      * Events:
      *
      * - `click` -- `listener( data: { event: MouseEvent; } );`
+     * - `mousedown` -- `listener( data: { event: MouseEvent; } );`
+     * - `mouseup` -- `listener( data: { event: MouseEvent; } );`
+     * - `mousemove` -- `listener( data: { event: MouseEvent; } );`
      * - `mouseover` -- `listener( data: { element: Element; } );`
      * - `mouseout` -- `listener( data: { element: Element; } );`
      *
@@ -1229,6 +1263,9 @@ declare module Game {
      * Events:
      *
      * - `click` -- `listener( data: { event: MouseEvent; } );`
+     * - `mousedown` -- `listener( data: { event: MouseEvent; } );`
+     * - `mouseup` -- `listener( data: { event: MouseEvent; } );`
+     * - `mousemove` -- `listener( data: { event: MouseEvent; } );`
      * - `mouseover` -- `listener( data: { element: Element; } );`
      * - `mouseout` -- `listener( data: { element: Element; } );`
      *
@@ -1460,6 +1497,9 @@ declare module Game {
      * Events:
      *
      * - `click` -- `listener( data: { event: MouseEvent; } );`
+     * - `mousedown` -- `listener( data: { event: MouseEvent; } );`
+     * - `mouseup` -- `listener( data: { event: MouseEvent; } );`
+     * - `mousemove` -- `listener( data: { event: MouseEvent; } );`
      * - `mouseover` -- `listener( data: { element: Element; } );`
      * - `mouseout` -- `listener( data: { element: Element; } );`
      *
@@ -1577,6 +1617,13 @@ declare module Game {
      * @return The canvas container (an html element).
      */
     function getCanvasContainer(): HTMLDivElement;
+    /**
+     * Return the current mouse position (in the client area, not the canvas).
+     */
+    function getMousePosition(): {
+        x: number;
+        y: number;
+    };
 }
 declare module Game {
     interface UnitArgs extends ContainerArgs {
@@ -1619,6 +1666,9 @@ declare module Game {
      * Events:
      *
      * - `click` -- `listener( data: { event: MouseEvent; } );`
+     * - `mousedown` -- `listener( data: { event: MouseEvent; } );`
+     * - `mouseup` -- `listener( data: { event: MouseEvent; } );`
+     * - `mousemove` -- `listener( data: { event: MouseEvent; } );`
      * - `mouseover` -- `listener( data: { element: Element; } );`
      * - `mouseout` -- `listener( data: { element: Element; } );`
      * - `collision` -- `listener( data: { element: Unit; collidedWith: Unit; } );`
