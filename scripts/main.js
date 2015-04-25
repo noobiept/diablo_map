@@ -5,9 +5,12 @@ Game.init( document.body, 1000, 600 );
 
 var manifest = [
         { id: 'act_1', path: 'images/act_1.jpg' },
+        { id: 'act_1_info', path: 'map_info/act_1.json' },
+        { id: 'damp_cellar', path: 'images/damp_cellar.jpg' },
+        { id: 'damp_cellar_info', path: 'map_info/damp_cellar.json' },
+
         { id: 'cave_entrance', path: 'images/cave_entrance.png' },
-        { id: 'cave_exit', path: 'images/cave_exit.png' },
-        { id: 'damp_cellar', path: 'images/damp_cellar.jpg' }
+        { id: 'cave_exit', path: 'images/cave_exit.png' }
     ];
 
 
@@ -16,7 +19,7 @@ var preload = new Game.Preload({ save_global: true });
 preload.addEventListener( 'complete', function()
     {
     Main.init();
-    Main.load( 'damp_cellar' );
+    Main.load( 'act_1', 'damp_cellar' );
     });
 preload.loadManifest( manifest );
 };
@@ -151,11 +154,11 @@ Main.load = function( mapName, mapPosition )
 {
 clear();
 
-var mapInfo = INFO[ mapName ];
+var mapInfo = Game.Preload.get( mapName + '_info' );
 var canvas = Game.getCanvas();
 
     // center the container in the middle of the canvas
-if ( typeof mapPosition === 'undefined' )
+if ( typeof mapPosition === 'undefined' || mapPosition === '' )
     {
     CONTAINER.x = canvas.getWidth() / 2;
     CONTAINER.y = canvas.getHeight() / 2;
@@ -164,7 +167,7 @@ if ( typeof mapPosition === 'undefined' )
     // center in the middle of the given x/y position
 else
     {
-    var positionInfo = mapInfo[ mapPosition ];
+    var positionInfo = mapInfo.labels[ mapPosition ];
     CONTAINER.x = canvas.getWidth() / 2 - positionInfo.x * SCALE;
     CONTAINER.y = canvas.getHeight() / 2 - positionInfo.y * SCALE;
     }
@@ -172,44 +175,23 @@ else
 
     // load the map image
 var map = new Game.Bitmap({
-        image: Game.Preload.get( mapInfo.image )
+        image: Game.Preload.get( mapInfo.imageId )
     });
 CONTAINER.addChild( map );
 
 
-AREA_NAME.text = mapInfo.text;
+AREA_NAME.text = mapInfo.mapName;
 
 
-    // cave entrances
-var caveEntrances = mapInfo.cave_entrances;
-var length = caveEntrances.length;
-var info;
-var a;
-var id;
-var label;
+    // add the labels
+var labelsIds = Object.keys( mapInfo.labels );
 
-for (a = 0 ; a < length ; a++)
+for (var a = labelsIds.length - 1 ; a >= 0 ; a--)
     {
-    id = caveEntrances[ a ];
-    info = mapInfo[ id ];
-    info.image = 'cave_entrance';
+    var id = labelsIds[ a ];
 
-    label = new Label( info );
-
-    CONTAINER.addChild( label );
-    }
-
-    // cave exits
-var caveExits = mapInfo.cave_exits;
-length = caveExits.length;
-
-for (a = 0 ; a < length ; a++)
-    {
-    id = caveExits[ a ];
-    info = mapInfo[ id ];
-    info.image = 'cave_exit';
-
-    label = new Label( info );
+    var labelInfo = mapInfo.labels[ id ];
+    var label = new Label( labelInfo );
 
     CONTAINER.addChild( label );
     }

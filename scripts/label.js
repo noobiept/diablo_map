@@ -11,11 +11,11 @@ var text = new Game.Text({
 text.visible = false;
 
 var image = new Game.Bitmap({
-        image: Game.Preload.get( info.image )
+        image: Game.Preload.get( info.imageId )
     });
 image.addEventListener( 'click', function( data )
     {
-    Main.load( info.dest, info.position );
+    Main.load( info.destination, info.destinationLabel );
     });
 image.addEventListener( 'mouseover', function( data )
     {
