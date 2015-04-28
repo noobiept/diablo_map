@@ -147,10 +147,10 @@ var close = new Game.Html.Button({
     });
 
 var message = new Game.Message({
-        text: 'New Label',
+        body: [ 'New Label', type, id, text, destinationId, destinationLabel ],
         container: container,
         background: true,
-        buttons: [ type, id, text, destinationId, destinationLabel, add, close ]
+        buttons: [ add, close ]
     });
 };
 
@@ -192,10 +192,10 @@ var close = new Game.Html.Button({
 
 
 var message = new Game.Message({
-        text: 'New Map',
+        body: [ 'New Map', fileName, name, image ],
         container: container,
         background: true,
-        buttons: [ fileName, name, image, start, close ]
+        buttons: [ start, close ]
     });
 };
 
@@ -225,10 +225,10 @@ var close = new Game.Html.Button({
 
 
 var message = new Game.Message({
-        text: 'Load Map',
+        body: [ 'Load Map', fileName ],
         container: container,
         background: true,
-        buttons: [ fileName, load, close ]
+        buttons: [ load, close ]
     });
 };
 

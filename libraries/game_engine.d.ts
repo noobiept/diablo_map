@@ -514,7 +514,8 @@ declare module Game {
          */
         class HtmlElement {
             container: HTMLElement;
-            isActive: boolean;
+            _is_active: boolean;
+            _pre_text: HTMLElement;
             constructor(args?: HtmlElementArgs);
             /**
              * When the element is inactive, its events are disabled, and a `.Game-inactive` css class is applied.
@@ -522,6 +523,10 @@ declare module Game {
              * @param yesNo Whether to set it active or not.
              */
             setActive(yesNo: boolean): void;
+            /**
+             * Check if the element is active or not currently.
+             */
+            isActive(): boolean;
             /**
              * Activates the element's event handlers.
              */
@@ -561,7 +566,11 @@ declare module Game {
              */
             removeChild(args: any): void;
             /**
-             * Removes the game menu, plus all of its children (can't use the menu after this).
+             * Remove all children of this container.
+             */
+            removeAllChildren(): void;
+            /**
+             * Removes the container, plus all of its children (can't use the container after this).
              */
             clear(): void;
         }
@@ -589,7 +598,7 @@ declare module Game {
             clear(): void;
         }
         interface ButtonArgs extends ValueArgs {
-            callback: (button: Button) => any;
+            callback?: (button: Button) => any;
         }
         /**
          * An html button.
@@ -610,26 +619,15 @@ declare module Game {
              */
             clear(): void;
         }
-        interface BooleanArgs extends HtmlElementArgs {
+        interface BooleanArgs extends ButtonArgs {
             value: boolean;
-            callback: (value: any) => any;
         }
         /**
          * A boolean html button (possible values are 'On' or 'Off').
          */
-        class Boolean extends HtmlElement {
+        class Boolean extends Button {
             value: boolean;
-            element: HTMLElement;
-            click_ref: () => any;
             constructor(args: BooleanArgs);
-            /**
-             * Add the click event handler.
-             */
-            addEvents(): void;
-            /**
-             * Remove the click event handler.
-             */
-            removeEvents(): void;
             /**
              * @param value New value of the button. When the value is `true`, the display text is 'On`, and when the value is `false`, the display text will be `Off`.
              */
@@ -638,14 +636,10 @@ declare module Game {
              * @return The current value that is set.
              */
             getValue(): boolean;
-            /**
-             * Clear the object.
-             */
-            clear(): void;
         }
         interface TwoStateArgs extends ButtonArgs {
-            callback2: (button: Button) => any;
             value2: string;
+            callback2?: (button: TwoState) => any;
         }
         /**
          * A button that has 2 states, each state with its own value and callback.
@@ -653,6 +647,7 @@ declare module Game {
         class TwoState extends Button {
             isValue1: boolean;
             constructor(args: TwoStateArgs);
+            getValue(): string;
         }
         interface MultipleOptionsArgs extends HtmlElementArgs {
             options: string[];
@@ -796,7 +791,7 @@ declare module Game {
 }
 declare module Game {
     interface MessageArgs extends Game.Html.HtmlContainerArgs {
-        text: any;
+        body: any;
         container: HTMLElement;
         buttons?: any;
         timeout?: number;
@@ -815,7 +810,7 @@ declare module Game {
      *                 }
      *         });
      *     var message = new Game.Message({
-     *             text: 'Hi there!',
+     *             body: 'Hi there!',
      *             container: container,
      *             background: true,
      *             buttons: button
@@ -824,7 +819,8 @@ declare module Game {
      * Examples -- `message`, `minesweeper`
      */
     class Message extends Game.Html.HtmlContainer {
-        text: HTMLElement;
+        body: Html.HtmlContainer;
+        buttons: Html.HtmlContainer;
         background: HTMLElement;
         timeout: Utilities.Timeout;
         constructor(args: MessageArgs);
@@ -833,13 +829,9 @@ declare module Game {
          */
         clear(): void;
         /**
-         * @return Current message.
+         * @param body Set the body of the message. Either a `string`, `HTMLElement`, `Html.HtmlElement` or an `array` with any combination of the types above.
          */
-        getText(): string;
-        /**
-         * @param text New message text. Its either a `string` or an `HTMLElement`.
-         */
-        setText(text: any): void;
+        setBody(body: any): void;
     }
 }
 declare module Game {
