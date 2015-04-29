@@ -91,16 +91,15 @@ canvasContainer.addEventListener( 'mousedown', function( event )
     });
 canvasContainer.addEventListener( 'mousemove', function( event )
     {
-    var currentX, currentY;
+    var currentX = event.clientX;
+    var currentY = event.clientY;
+    var currentMode = MapEditor.getCurrentMode();
 
-        // the drag of the labels
-    if ( MapEditor.getCurrentMode() === MapEditor.MODES.Drag )
+        // the drag of the elements
+    if ( currentMode === MapEditor.MODES.Drag )
         {
         if ( SELECTED_ELEMENT )
             {
-            currentX = event.clientX;
-            currentY = event.clientY;
-
             var rect = canvasHtmlElement.getBoundingClientRect();
 
             var x = (currentX - rect.left - CONTAINER.x) / SCALE;
@@ -114,9 +113,6 @@ canvasContainer.addEventListener( 'mousemove', function( event )
         // the movement of the camera
     else if ( mouseDown )
         {
-        currentX = event.clientX;
-        currentY = event.clientY;
-
         MapEditor.moveCamera( currentX - referenceX, currentY - referenceY );
 
         referenceX = currentX;
@@ -136,6 +132,39 @@ canvasContainer.addEventListener( 'mouseup', function( event )
         var mouseY = event.clientY - rect.top;
 
         MapEditor.removeElement2( mouseX, mouseY );
+        }
+    });
+document.body.addEventListener( 'keyup', function( event )
+    {
+    var key = event.keyCode;
+    var currentMode = MapEditor.getCurrentMode();
+
+    if ( currentMode === MapEditor.MODES.Resize && SELECTED_ELEMENT )
+        {
+        var step = 5;
+
+        switch( key )
+            {
+            case Utilities.KEY_CODE.leftArrow:
+            case Utilities.KEY_CODE.a:
+                SELECTED_ELEMENT.width -= step;
+                break;
+
+            case Utilities.KEY_CODE.rightArrow:
+            case Utilities.KEY_CODE.d:
+                SELECTED_ELEMENT.width += step;
+                break;
+
+            case Utilities.KEY_CODE.upArrow:
+            case Utilities.KEY_CODE.w:
+                SELECTED_ELEMENT.height -= step;
+                break;
+
+            case Utilities.KEY_CODE.downArrow:
+            case Utilities.KEY_CODE.s:
+                SELECTED_ELEMENT.height += step;
+                break;
+            }
         }
     });
 
@@ -367,7 +396,10 @@ return SCALE;
  */
 MapEditor.selectElement = function( label )
 {
-if ( MapEditor.getCurrentMode() === MapEditor.MODES.Drag )
+var currentMode = MapEditor.getCurrentMode();
+
+if ( currentMode === MapEditor.MODES.Drag ||
+     currentMode === MapEditor.MODES.Resize )
     {
     if ( SELECTED_ELEMENT === label )
         {

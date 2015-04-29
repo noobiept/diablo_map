@@ -3,9 +3,10 @@ var MapEditor;
 
 
     // 'move' -- move the camera mode
-    // 'drag' -- drag a label mode
-    // 'remove' -- remove a label mode
-var POSSIBLE_MODES = [ 'Move', 'Drag', 'Remove' ];
+    // 'drag' -- drag an element mode
+    // 'remove' -- remove an element mode
+    // 'resize' -- resize an area element mode
+var POSSIBLE_MODES = [ 'Move', 'Drag', 'Remove', 'Resize' ];
 var CURRENT_MODE = -1;
 
 MapEditor.MODES = Utilities.createEnum( POSSIBLE_MODES );

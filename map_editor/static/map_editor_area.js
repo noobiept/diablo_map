@@ -1,23 +1,20 @@
 function Area( args )
 {
-Game.Container.call( this );
+args.color = 'rgba(255, 255, 255, 0.2)';
+
+Game.Rectangle.call( this, args );
 
 var _this = this;
 
-var rect = new Game.Rectangle({
-        width: args.width,
-        height: args.height,
-        color: 'rgba(255, 255, 255, 0.2)'
-    });
-rect.addEventListener( 'mouseover', function()
+this.addEventListener( 'mouseover', function()
     {
     MapEditor.setAreaName( args.name );
     });
-rect.addEventListener( 'mouseout', function()
+this.addEventListener( 'mouseout', function()
     {
     MapEditor.setAreaName( '' );
     });
-rect.addEventListener( 'click', function( data )
+this.addEventListener( 'click', function( data )
     {
     var code = data.event.button;
 
@@ -31,10 +28,6 @@ rect.addEventListener( 'click', function( data )
         MapEditor.selectElement( _this );
         }
     });
-
-this.x = args.x;
-this.y = args.y;
-this.addChild( rect );
 }
 
-Utilities.inheritPrototype( Area, Game.Container );
+Utilities.inheritPrototype( Area, Game.Rectangle );
