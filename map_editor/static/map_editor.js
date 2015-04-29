@@ -16,13 +16,7 @@ var preload = new Game.Preload({ save_global: true });
 preload.addEventListener( 'complete', function()
     {
     MapEditor.init();
-
-    var previousMap = MapEditor.getSavedFileName();
-
-    if ( previousMap )
-        {
-        MapEditor.loadMap( previousMap );
-        }
+    MapEditor.loadMapsInfo();
     });
 preload.loadManifest( manifest );
 };
@@ -34,14 +28,15 @@ var MapEditor;
 
 var CONTAINER;
 
-var MAP_NAME;   // located at the top left of the map, shows the map name
-var AREA_NAME;  // name of the area currently under the mouse
+var MAP_NAME;       // located at the top left of the map, shows the map name
+var AREA_NAME;      // name of the area currently under the mouse
 var SCALE = 1;
+var SELECTED_ELEMENT = null;
 var BASIC_INFO = {};
 var LABELS = [];    // all the label elements
-var SELECTED_ELEMENT = null;
-var AREAS = [];
-
+var AREAS = [];     // all the area elements
+var MAPS_INFO;      // has all the maps info (labels/areas position, names, etc)
+var CURRENT_MAP_ID = '';  // id of the current map that is loaded
 
 
 MapEditor.init = function()
@@ -174,9 +169,11 @@ MapEditor.initMenu();
 };
 
 
-MapEditor.load = function( mapInfo )
+MapEditor.load = function( mapId, mapPosition )
 {
 clear();
+
+var mapInfo = MAPS_INFO[ mapId ];
 
 var image = Game.Preload.get( mapInfo.imageId );
 
@@ -185,17 +182,27 @@ var map = new Game.Bitmap({
     });
 CONTAINER.addChild( map );
 
-MapEditor.reCenterCamera();
-MapEditor.setFileName( mapInfo.fileName );
+
+if ( typeof mapPosition === 'undefined' || mapPosition === '' )
+    {
+    MapEditor.reCenterCamera();
+    }
+
+else
+    {
+    var info = mapInfo.labels[ mapPosition ];
+
+    MapEditor.reCenterCamera( info.x, info.y );
+    }
 
 MAP_NAME.text = mapInfo.mapName;
+CURRENT_MAP_ID = mapId;
 BASIC_INFO = {
         imageId: mapInfo.imageId,
-        fileName: mapInfo.fileName,
         mapName: mapInfo.mapName
     };
 
-MapEditor.saveFileName( mapInfo.fileName );
+MapEditor.saveMapName( mapId, mapPosition );
 
 
     // add all the labels
@@ -229,7 +236,7 @@ if ( typeof mapInfo.areas !== 'undefined' )
 
 
 
-MapEditor.constructMapInfo = function()
+MapEditor.getUpdatedMapInfo = function()
 {
 var mapInfo = Utilities.deepClone( BASIC_INFO );
 var a;
@@ -268,7 +275,10 @@ for (a = AREAS.length - 1 ; a >= 0 ; a--)
         });
     }
 
-return mapInfo;
+
+MAPS_INFO[ CURRENT_MAP_ID ] = mapInfo;
+
+return MAPS_INFO;
 };
 
 
@@ -299,6 +309,15 @@ AREAS.length = 0;
 MapEditor.getTopLevelContainer = function()
 {
 return CONTAINER;
+};
+
+
+MapEditor.addNewMap = function( info )
+{
+MAPS_INFO[ info.mapId ] = {
+        imageId: info.imageId,
+        mapName: info.mapName
+    };
 };
 
 
@@ -394,12 +413,21 @@ AREAS.push( area );
 
 
 
-MapEditor.reCenterCamera = function()
+/**
+ * Center the camera around a given point (or (0, 0) if there's no arguments).
+ */
+MapEditor.reCenterCamera = function( refX, refY )
 {
+if ( typeof refX === 'undefined' )
+    {
+    refX = refY = 0;
+    }
+
+
 var canvas = Game.getCanvas();
 
-CONTAINER.x = canvas.getWidth() / 2;
-CONTAINER.y = canvas.getHeight() / 2;
+CONTAINER.x = canvas.getWidth() / 2 - refX * SCALE;
+CONTAINER.y = canvas.getHeight() / 2 - refY * SCALE;
 };
 
 
@@ -454,6 +482,11 @@ MapEditor.setAreaName = function( name )
 AREA_NAME.text = name;
 };
 
+
+MapEditor.setMapsInfo = function( info )
+{
+MAPS_INFO = info;
+};
 
 
 })(MapEditor || (MapEditor = {}));

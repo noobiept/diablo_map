@@ -3,44 +3,45 @@ from django.http.response import HttpResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
 
 
+
 def home( request ):
 
     return render( request, 'map_editor.html' )
 
 
+
 @csrf_exempt
 def save( request ):
 
-    if request.POST:
+    if not request.POST:
+        return HttpResponseBadRequest( "Need to be a POST request." )
 
-        name = request.POST.get( 'name' )
-        data = request.POST.get( 'data' )
+    data = request.POST.get( 'data' )
 
-        with open( '../map_info/{}'.format( name ), 'w', encoding= 'utf-8' ) as f:
+    if not data:
+        return HttpResponseBadRequest( "Need a 'data' argument." )
+
+    try:
+        with open( '../map_info/info.json', 'w', encoding= 'utf-8' ) as f:
 
             f.write( data )
 
-        return HttpResponse()
+    except OSError:
+        return HttpResponseBadRequest( "Failed to open the file." )
 
+    return HttpResponse( "Saved." )
 
-    return HttpResponseBadRequest()
 
 
 @csrf_exempt
 def load( request ):
 
-    if request.POST:
+    try:
+        with open( '../map_info/info.json', 'r', encoding= 'utf-8' ) as f:
+            data = f.read()
 
-        name = request.POST.get( 'name' )
+    except OSError:
+        return HttpResponseBadRequest( "Couldn't open the file." )
 
-        try:
-            with open( '../map_info/{}'.format( name ), 'r', encoding= 'utf-8' ) as f:
-                data = f.read()
+    return HttpResponse( data, content_type= 'application/json' )
 
-        except OSError:
-            return HttpResponseBadRequest()
-
-        return HttpResponse( data, content_type= 'application/json' )
-
-
-    return HttpResponseBadRequest()

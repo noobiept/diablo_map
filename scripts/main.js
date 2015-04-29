@@ -5,14 +5,13 @@ Game.init( document.body, 1000, 600 );
 
 var manifest = [
         { id: 'act_1', path: 'images/act_1.jpg' },
-        { id: 'act_1_info', path: 'map_info/act_1.json' },
         { id: 'damp_cellar', path: 'images/damp_cellar.jpg' },
-        { id: 'damp_cellar_info', path: 'map_info/damp_cellar.json' },
         { id: 'dank_cellar', path: 'images/dank_cellar.jpg' },
-        { id: 'dank_cellar_info', path: 'map_info/dank_cellar.json' },
 
         { id: 'cave_entrance', path: 'images/cave_entrance.png' },
-        { id: 'cave_exit', path: 'images/cave_exit.png' }
+        { id: 'cave_exit', path: 'images/cave_exit.png' },
+
+        { id: 'info', path: 'map_info/info.json' }
     ];
 
 
@@ -40,7 +39,7 @@ var CONTAINER;      // top-level container
 var MAP_NAME;       // text element, which identifies the current map image
 var AREA_NAME;      // text element, that has the name of the current are under the mouse pointer
 var SCALE = 1;      // current scale of the map
-
+var MAPS_INFO;      // has all the maps info (labels/areas position, names, etc)
 
 Main.init = function()
 {
@@ -50,6 +49,10 @@ Game.activateMouseMoveEvents( 100 );
 CONTAINER = new Game.Container();
 
 Game.addElement( CONTAINER );
+
+
+    // get the maps info
+MAPS_INFO = Game.Preload.get( 'info' );
 
 
     // add the map name element
@@ -164,30 +167,14 @@ document.body.appendChild( menu.container );
 
 
 /**
- * @param mapName Id of the map we're loading.
- * @param mapPosition Optional label id to center the camera on
+ * @param mapId Id of the map we're loading.
+ * @param mapPosition Optional label id to center the camera on.
  */
-Main.load = function( mapName, mapPosition )
+Main.load = function( mapId, mapPosition )
 {
 clear();
 
-var mapInfo = Game.Preload.get( mapName + '_info' );
-var canvas = Game.getCanvas();
-
-    // center the container in the middle of the canvas
-if ( typeof mapPosition === 'undefined' || mapPosition === '' )
-    {
-    CONTAINER.x = canvas.getWidth() / 2;
-    CONTAINER.y = canvas.getHeight() / 2;
-    }
-
-    // center in the middle of the given x/y position
-else
-    {
-    var positionInfo = mapInfo.labels[ mapPosition ];
-    CONTAINER.x = canvas.getWidth() / 2 - positionInfo.x * SCALE;
-    CONTAINER.y = canvas.getHeight() / 2 - positionInfo.y * SCALE;
-    }
+var mapInfo = MAPS_INFO[ mapId ];
 
 
     // load the map image
@@ -196,8 +183,22 @@ var map = new Game.Bitmap({
     });
 CONTAINER.addChild( map );
 
-
 MAP_NAME.text = mapInfo.mapName;
+
+
+    // center the container in the middle of the canvas
+if ( typeof mapPosition === 'undefined' || mapPosition === '' )
+    {
+    reCenterCamera();
+    }
+
+    // center in the middle of the given x/y position
+else
+    {
+    var positionInfo = mapInfo.labels[ mapPosition ];
+
+    reCenterCamera( positionInfo.x, positionInfo.y );
+    }
 
 
     // add the labels
@@ -252,12 +253,20 @@ CONTAINER.removeAllChildren();
 }
 
 
-function reCenterCamera()
+/**
+ * Center the camera around a given point (or (0, 0) if there's no arguments).
+ */
+function reCenterCamera( refX, refY )
 {
+if ( typeof refX === 'undefined' )
+    {
+    refX = refY = 0;
+    }
+
 var canvas = Game.getCanvas();
 
-CONTAINER.x = canvas.getWidth() / 2;
-CONTAINER.y = canvas.getHeight() / 2;
+CONTAINER.x = canvas.getWidth() / 2 - refX * SCALE;
+CONTAINER.y = canvas.getHeight() / 2 - refY * SCALE;
 }
 
 

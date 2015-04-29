@@ -65,7 +65,7 @@ var save = new Game.Html.Button({
         value: 'Save',
         callback: function()
             {
-            var info = MapEditor.constructMapInfo();
+            var info = MapEditor.getUpdatedMapInfo();
             MapEditor.saveMap( info );
             }
     });
@@ -75,25 +75,12 @@ var load = new Game.Html.Button({
         callback: MapEditor.openLoadMessage
     });
 
-FILE_NAME = new Game.Html.Value({ value: '' });
-
-menu.addChild( scale, recenter, addLabel, addArea, activeMode, newMap, save, load, FILE_NAME );
+menu.addChild( scale, recenter, addLabel, addArea, activeMode, newMap, save, load );
 
 
 document.body.appendChild( menu.container );
 };
 
-
-MapEditor.setFileName = function( name )
-{
-FILE_NAME.setValue( name );
-};
-
-
-MapEditor.getFileName = function()
-{
-return FILE_NAME.getValue();
-};
 
 
 MapEditor.getCurrentMode = function()
@@ -211,26 +198,28 @@ MapEditor.startNewMap = function()
 {
 var container = Game.getCanvasContainer();
 
-var fileName = new Game.Html.Text({
-        preText: 'File Name:'
+var mapId = new Game.Html.Text({
+        preText: 'Map Id:'
     });
 var name = new Game.Html.Text({
         preText: 'Map Name:'
     });
-var image = new Game.Html.Text({
+var imageId = new Game.Html.Text({
         preText: 'Image Id:'
     });
 var start = new Game.Html.Button({
         value: 'Start',
         callback: function()
             {
+            var id = mapId.getValue();
             var info = {
-                fileName: fileName.getValue(),
+                mapId: id,
                 mapName: name.getValue(),
-                imageId: image.getValue()
+                imageId: imageId.getValue()
             };
 
-            MapEditor.load( info );
+            MapEditor.addNewMap( info );
+            MapEditor.load( id );
             message.clear();
             }
     });
@@ -244,7 +233,7 @@ var close = new Game.Html.Button({
 
 
 var message = new Game.Message({
-        body: [ 'New Map', fileName, name, image ],
+        body: [ 'New Map', mapId, name, imageId ],
         container: container,
         background: true,
         buttons: [ start, close ]
@@ -256,14 +245,17 @@ MapEditor.openLoadMessage = function()
 {
 var container = Game.getCanvasContainer();
 
-var fileName = new Game.Html.Text({
-        preText: 'File Name:'
+var mapName = new Game.Html.Text({
+        preText: 'Map Name:'
+    });
+var mapPosition = new Game.Html.Text({
+        preText: 'Map Position:'
     });
 var load = new Game.Html.Button({
         value: 'Load',
         callback: function()
             {
-            MapEditor.loadMap( fileName.getValue() );
+            MapEditor.load( mapName.getValue(), mapPosition.getValue() );
             message.clear();
             }
     });
@@ -277,7 +269,7 @@ var close = new Game.Html.Button({
 
 
 var message = new Game.Message({
-        body: [ 'Load Map', fileName ],
+        body: [ 'Load Map', mapName, mapPosition ],
         container: container,
         background: true,
         buttons: [ load, close ]
