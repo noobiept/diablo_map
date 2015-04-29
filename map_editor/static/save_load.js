@@ -9,7 +9,7 @@ var container = Game.getCanvasContainer();
 if ( name === '' )
     {
     new Game.Message({
-            text: 'Need to specify the map name.',
+            body: 'Need to specify the map name.',
             container: container,
             timeout: 2
         });
@@ -30,7 +30,7 @@ request.onload = function()
     if ( this.status !== 200 )
         {
         new Game.Message({
-                text: 'Error. Failed to save.',
+                body: 'Error. Failed to save.',
                 container: container,
                 timeout: 2
             });
@@ -72,7 +72,7 @@ request.onload = function()
     if ( this.status !== 200 )
         {
         new Game.Message({
-                text: 'Error. Failed to save.',
+                body: 'Error. Failed to save.',
                 container: container,
                 timeout: 2
             });
@@ -84,7 +84,7 @@ request.onload = function()
     else
         {
         new Game.Message({
-                text: 'Saved',
+                body: 'Saved',
                 container: container,
                 timeout: 2
             });

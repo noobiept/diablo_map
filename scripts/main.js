@@ -35,7 +35,8 @@ function Main()
 }
 
 var CONTAINER;      // top-level container
-var AREA_NAME;      // text element, which identifies the current map image
+var MAP_NAME;       // text element, which identifies the current map image
+var AREA_NAME;      // text element, that has the name of the current are under the mouse pointer
 var SCALE = 1;      // current scale of the map
 
 
@@ -49,16 +50,26 @@ CONTAINER = new Game.Container();
 Game.addElement( CONTAINER );
 
 
-    // add the area name element
+    // add the map name element
 var canvas = Game.getCanvas();
+var canvasWidth = canvas.getWidth();
 
+MAP_NAME = new Game.Text({
+        textAlign: 'end',
+        color: 'white'
+    });
+MAP_NAME.x = canvasWidth;
+Game.addElement( MAP_NAME );
+
+
+    // add the area name element
 AREA_NAME = new Game.Text({
         textAlign: 'end',
         color: 'white'
     });
-AREA_NAME.x = canvas.getWidth();
+AREA_NAME.x = canvasWidth;
+AREA_NAME.y = 20;
 Game.addElement( AREA_NAME );
-
 
 
     // set up the key events for navigating the map
@@ -150,6 +161,10 @@ document.body.appendChild( menu.container );
 };
 
 
+/**
+ * @param mapName Id of the map we're loading.
+ * @param mapPosition Optional label id to center the camera on
+ */
 Main.load = function( mapName, mapPosition )
 {
 clear();
@@ -180,13 +195,14 @@ var map = new Game.Bitmap({
 CONTAINER.addChild( map );
 
 
-AREA_NAME.text = mapInfo.mapName;
+MAP_NAME.text = mapInfo.mapName;
 
 
     // add the labels
 var labelsIds = Object.keys( mapInfo.labels );
+var a;
 
-for (var a = labelsIds.length - 1 ; a >= 0 ; a--)
+for (a = labelsIds.length - 1 ; a >= 0 ; a--)
     {
     var id = labelsIds[ a ];
 
@@ -194,6 +210,21 @@ for (var a = labelsIds.length - 1 ; a >= 0 ; a--)
     var label = new Label( labelInfo );
 
     CONTAINER.addChild( label );
+    }
+
+    // and the area elements
+for (a = mapInfo.areas.length - 1 ; a >= 0 ; a--)
+    {
+    var areaInfo = mapInfo.areas[ a ];
+
+    var area = new Area({
+            x: areaInfo.x,
+            y: areaInfo.y,
+            width: areaInfo.width,
+            height: areaInfo.height,
+            name: areaInfo.name
+        });
+    CONTAINER.addChild( area );
     }
 };
 
@@ -242,6 +273,12 @@ CONTAINER.scaleX = CONTAINER.scaleY = scale;
 
 SCALE = scale;
 }
+
+
+Main.setAreaName = function( name )
+{
+AREA_NAME.text = name;
+};
 
 
 window.Main = Main;

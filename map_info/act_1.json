@@ -1,1 +1,23 @@
-{    "imageId": "act_1",    "fileName": "act_1.json",    "mapName": "Act 1",    "labels": {        "damp_cellar": {            "text": "Damp Cellar",            "imageId": "cave_entrance",            "x": -270,            "y": 511,            "destination": "damp_cellar",            "destinationLabel": ""        }    }}
+{
+    "imageId": "act_1",
+    "fileName": "act_1.json",
+    "mapName": "Act 1",
+    "labels": {
+        "damp_cellar": {
+            "text": "Damp Cellar",
+            "imageId": "cave_entrance",
+            "x": -270,
+            "y": 511,
+            "destination": "damp_cellar"
+        }
+    },
+    "areas": [
+        {
+            "x": -39.20001220703125,
+            "y": 530.6000022888184,
+            "width": 250,
+            "height": 250,
+            "name": "Old Tristram"
+        }
+    ]
+}

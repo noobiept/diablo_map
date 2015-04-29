@@ -198,16 +198,30 @@ MapEditor.saveFileName( mapInfo.fileName );
 
 
     // add all the labels
+var a;
+
 if ( typeof mapInfo.labels !== 'undefined' )
     {
     var labelsIds = Object.keys( mapInfo.labels );
 
-    for (var a = labelsIds.length - 1 ; a >= 0 ; a--)
+    for (a = labelsIds.length - 1 ; a >= 0 ; a--)
         {
         var id = labelsIds[ a ];
         var labelInfo = mapInfo.labels[ id ];
 
         MapEditor.addLabel( labelInfo.x, labelInfo.y, labelInfo.imageId, id, labelInfo.text, labelInfo.destination );
+        }
+    }
+
+
+    // add all the areas
+if ( typeof mapInfo.areas !== 'undefined' )
+    {
+    for (a = mapInfo.areas.length - 1 ; a >= 0 ; a--)
+        {
+        var areaInfo = mapInfo.areas[ a ];
+
+        MapEditor.addArea( areaInfo.x, areaInfo.y, areaInfo.width, areaInfo.height, areaInfo.name );
         }
     }
 };
@@ -217,10 +231,12 @@ if ( typeof mapInfo.labels !== 'undefined' )
 MapEditor.constructMapInfo = function()
 {
 var mapInfo = Utilities.deepClone( BASIC_INFO );
+var a;
 
+    // add the labels
 mapInfo.labels = {};
 
-for (var a = LABELS.length - 1 ; a >= 0 ; a--)
+for (a = LABELS.length - 1 ; a >= 0 ; a--)
     {
     var label = LABELS[ a ];
 
@@ -232,6 +248,23 @@ for (var a = LABELS.length - 1 ; a >= 0 ; a--)
             destination: label.destination,
             destinationLabel: label.destinationLabel
         };
+    }
+
+
+    // add the areas
+mapInfo.areas = [];
+
+for (a = AREAS.length - 1 ; a >= 0 ; a--)
+    {
+    var area = AREAS[ a ];
+
+    mapInfo.areas.push({
+            x: area.x,
+            y: area.y,
+            width: area.width,
+            height: area.height,
+            name: area.name
+        });
     }
 
 return mapInfo;
@@ -344,13 +377,13 @@ for (a = AREAS.length - 1 ; a >= 0 ; a--)
 };
 
 
-MapEditor.addArea = function( x, y, name )
+MapEditor.addArea = function( x, y, width, height, name )
 {
 var area = new Area({
         x: x,
         y: y,
-        width: 50,
-        height: 50,
+        width: width,
+        height: height,
         name: name
     });
 CONTAINER.addChild( area );

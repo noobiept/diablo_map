@@ -6,6 +6,8 @@ Game.Rectangle.call( this, args );
 
 var _this = this;
 
+this.name = args.name;
+
 this.addEventListener( 'mouseover', function()
     {
     MapEditor.setAreaName( args.name );

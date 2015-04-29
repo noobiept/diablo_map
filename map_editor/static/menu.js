@@ -182,6 +182,8 @@ var add = new Game.Html.Button({
             MapEditor.addArea(
                 x,
                 y,
+                50,
+                50,
                 name.getValue()
             );
 
