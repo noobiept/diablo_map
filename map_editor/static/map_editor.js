@@ -33,11 +33,13 @@ var MapEditor;
 
 var CONTAINER;
 
-var AREA_NAME;  // located at the top left of the map, shows the area name
+var MAP_NAME;   // located at the top left of the map, shows the map name
+var AREA_NAME;  // name of the area currently under the mouse
 var SCALE = 1;
 var BASIC_INFO = {};
 var LABELS = [];    // all the label elements
-var SELECTED_LABEL = null;
+var SELECTED_ELEMENT = null;
+var AREAS = [];
 
 
 
@@ -51,16 +53,28 @@ CONTAINER = new Game.Container();
 Game.addElement( CONTAINER );
 
 
-    // add the area name element
+    // add the map name element
 var canvas = Game.getCanvas();
+var canvasWidth = canvas.getWidth();
 var canvasHtmlElement = canvas.getHtmlCanvasElement();
 
+MAP_NAME = new Game.Text({
+        textAlign: 'end',
+        color: 'white'
+    });
+MAP_NAME.x = canvasWidth;
+Game.addElement( MAP_NAME );
+
+
+    // add the area name element
 AREA_NAME = new Game.Text({
         textAlign: 'end',
         color: 'white'
     });
-AREA_NAME.x = canvas.getWidth();
+AREA_NAME.x = canvasWidth;
+AREA_NAME.y = 20;
 Game.addElement( AREA_NAME );
+
 
 
     // set the mouse events for the movement
@@ -82,7 +96,7 @@ canvasContainer.addEventListener( 'mousemove', function( event )
         // the drag of the labels
     if ( MapEditor.getCurrentMode() === MapEditor.MODES.Drag )
         {
-        if ( SELECTED_LABEL )
+        if ( SELECTED_ELEMENT )
             {
             currentX = event.clientX;
             currentY = event.clientY;
@@ -92,8 +106,8 @@ canvasContainer.addEventListener( 'mousemove', function( event )
             var x = (currentX - rect.left - CONTAINER.x) / SCALE;
             var y = (currentY - rect.top - CONTAINER.y) / SCALE;
 
-            SELECTED_LABEL.x = x;
-            SELECTED_LABEL.y = y;
+            SELECTED_ELEMENT.x = x;
+            SELECTED_ELEMENT.y = y;
             }
         }
 
@@ -121,7 +135,7 @@ canvasContainer.addEventListener( 'mouseup', function( event )
         var mouseX = event.clientX - rect.left;
         var mouseY = event.clientY - rect.top;
 
-        MapEditor.removeLabel2( mouseX, mouseY );
+        MapEditor.removeElement2( mouseX, mouseY );
         }
     });
 
@@ -144,7 +158,7 @@ CONTAINER.addChild( map );
 MapEditor.reCenterCamera();
 MapEditor.setFileName( mapInfo.fileName );
 
-AREA_NAME.text = mapInfo.mapName;
+MAP_NAME.text = mapInfo.mapName;
 BASIC_INFO = {
         imageId: mapInfo.imageId,
         fileName: mapInfo.fileName,
@@ -215,6 +229,7 @@ function clear()
 CONTAINER.removeAllChildren();
 
 LABELS.length = 0;
+AREAS.length = 0;
 }
 
 
@@ -241,22 +256,39 @@ LABELS.push( label );
 };
 
 
-MapEditor.removeLabel = function( label )
+MapEditor.removeElement = function( element )
 {
-var position = LABELS.indexOf( label );
+var position;
+var array;
 
-LABELS.splice( position, 1 );
+if ( element instanceof Label )
+    {
+    array = LABELS;
+    }
 
-label.remove();
+else
+    {
+    array = AREAS;
+    }
+
+
+position = array.indexOf( element );
+
+array.splice( position, 1 );
+
+element.remove();
 };
 
 
-MapEditor.removeLabel2 = function( x, y )
+MapEditor.removeElement2 = function( x, y )
 {
-for (var a = LABELS.length - 1 ; a >= 0 ; a--)
+var a;
+var elements;
+
+for (a = LABELS.length - 1 ; a >= 0 ; a--)
     {
     var label = LABELS[ a ];
-    var elements = label.intersect( x, y );
+    elements = label.intersect( x, y );
 
     if ( elements.length > 0 )
         {
@@ -266,6 +298,35 @@ for (var a = LABELS.length - 1 ; a >= 0 ; a--)
         return;
         }
     }
+
+for (a = AREAS.length - 1 ; a >= 0 ; a--)
+    {
+    var area = AREAS[ a ];
+    elements = area.intersect( x, y );
+
+    if ( elements.length > 0 )
+        {
+        AREAS.splice( a, 1 );
+
+        area.remove();
+        return;
+        }
+    }
+};
+
+
+MapEditor.addArea = function( x, y, name )
+{
+var area = new Area({
+        x: x,
+        y: y,
+        width: 50,
+        height: 50,
+        name: name
+    });
+CONTAINER.addChild( area );
+
+AREAS.push( area );
 };
 
 
@@ -304,17 +365,27 @@ return SCALE;
 /**
  * Marks a label as selected. If the label given was already the one selected, and we deselect it.
  */
-MapEditor.selectLabel = function( label )
+MapEditor.selectElement = function( label )
 {
-if ( SELECTED_LABEL === label )
+if ( MapEditor.getCurrentMode() === MapEditor.MODES.Drag )
     {
-    SELECTED_LABEL = null;
-    }
+    if ( SELECTED_ELEMENT === label )
+        {
+        SELECTED_ELEMENT = null;
+        }
 
-else
-    {
-    SELECTED_LABEL = label;
+    else
+        {
+        SELECTED_ELEMENT = label;
+        }
     }
+};
+
+
+
+MapEditor.setAreaName = function( name )
+{
+AREA_NAME.text = name;
 };
 
 

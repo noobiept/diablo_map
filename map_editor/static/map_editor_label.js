@@ -22,12 +22,12 @@ image.addEventListener( 'click', function( data )
         // this won't trigger if the whole page isn't visible (middle clicking will turn into a drag movement)
     if ( code === Utilities.MOUSE_CODE.middle )
         {
-        MapEditor.removeLabel( _this );
+        MapEditor.removeElement( _this );
         }
 
     else if ( code === Utilities.MOUSE_CODE.left )
         {
-        MapEditor.selectLabel( _this );
+        MapEditor.selectElement( _this );
         }
     });
 image.addEventListener( 'mouseover', function( data )

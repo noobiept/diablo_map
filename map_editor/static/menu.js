@@ -41,6 +41,11 @@ var addLabel = new Game.Html.Button({
         callback: MapEditor.openAddLabel
     });
 
+var addArea = new Game.Html.Button({
+        value: 'Add Area',
+        callback: MapEditor.openAddArea
+    });
+
 var activeMode = new Game.Html.MultipleOptions({
         preText: 'Mode:',
         options: POSSIBLE_MODES,
@@ -71,7 +76,7 @@ var load = new Game.Html.Button({
 
 FILE_NAME = new Game.Html.Value({ value: '' });
 
-menu.addChild( scale, recenter, addLabel, activeMode, newMap, save, load, FILE_NAME );
+menu.addChild( scale, recenter, addLabel, addArea, activeMode, newMap, save, load, FILE_NAME );
 
 
 document.body.appendChild( menu.container );
@@ -148,6 +153,50 @@ var close = new Game.Html.Button({
 
 var message = new Game.Message({
         body: [ 'New Label', type, id, text, destinationId, destinationLabel ],
+        container: container,
+        background: true,
+        buttons: [ add, close ]
+    });
+};
+
+
+MapEditor.openAddArea = function()
+{
+var container = Game.getCanvasContainer();
+var canvas = Game.getCanvas();
+var topLevelContainer = MapEditor.getTopLevelContainer();
+var scale = MapEditor.getScale();
+
+var x = (canvas.getWidth() / 2 - topLevelContainer.x) / scale;
+var y = (canvas.getHeight() / 2 - topLevelContainer.y) / scale;
+
+var name = new Game.Html.Text({
+        preText: 'Area Name:'
+    });
+
+var add = new Game.Html.Button({
+        value: 'Add',
+        callback: function()
+            {
+            MapEditor.addArea(
+                x,
+                y,
+                name.getValue()
+            );
+
+            message.clear();
+            }
+    });
+var close = new Game.Html.Button({
+        value: 'Close',
+        callback: function()
+            {
+            message.clear();
+            }
+    });
+
+var message = new Game.Message({
+        body: [ 'New Area', name ],
         container: container,
         background: true,
         buttons: [ add, close ]
