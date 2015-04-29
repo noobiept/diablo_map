@@ -8,6 +8,8 @@ var manifest = [
         { id: 'act_1_info', path: 'map_info/act_1.json' },
         { id: 'damp_cellar', path: 'images/damp_cellar.jpg' },
         { id: 'damp_cellar_info', path: 'map_info/damp_cellar.json' },
+        { id: 'dank_cellar', path: 'images/dank_cellar.jpg' },
+        { id: 'dank_cellar_info', path: 'map_info/dank_cellar.json' },
 
         { id: 'cave_entrance', path: 'images/cave_entrance.png' },
         { id: 'cave_exit', path: 'images/cave_exit.png' }

@@ -3,6 +3,14 @@
     "fileName": "act_1.json",
     "mapName": "Act 1",
     "labels": {
+        "dank_cellar": {
+            "text": "Dank Cellar",
+            "imageId": "cave_entrance",
+            "x": -176.60000610351562,
+            "y": 320,
+            "destination": "dank_cellar",
+            "destinationLabel": ""
+        },
         "damp_cellar": {
             "text": "Damp Cellar",
             "imageId": "cave_entrance",
@@ -13,11 +21,25 @@
     },
     "areas": [
         {
-            "x": -39.20001220703125,
-            "y": 530.6000022888184,
-            "width": 250,
-            "height": 250,
-            "name": "Old Tristram"
+            "x": -358.6000061035156,
+            "y": 453,
+            "width": 145,
+            "height": 110,
+            "name": "Old Tristram Road"
+        },
+        {
+            "x": -119.60000610351562,
+            "y": 467,
+            "width": 85,
+            "height": 115,
+            "name": "The Old Ruins"
+        },
+        {
+            "x": 10.399993896484375,
+            "y": 510,
+            "width": 175,
+            "height": 270,
+            "name": "The Old Ruins"
         }
     ]
 }
