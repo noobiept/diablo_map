@@ -53,6 +53,8 @@ var activeMode = new Game.Html.MultipleOptions({
         callback: function( button, position, htmlElement )
             {
             CURRENT_MODE = position;
+
+            MapEditor.clearSelectedElement();
             }
     });
 

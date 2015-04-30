@@ -59,7 +59,7 @@ declare module Game {
      * - `click` -- `listener( data: { event: MouseEvent; } );`
      * - `mousedown` -- `listener( data: { event: MouseEvent; } );`
      * - `mouseup` -- `listener( data: { event: MouseEvent; } );`
-     * - `mousemove` -- `listener( data: { event: MouseEvent; } );`
+     * - `mousemove` -- `listener( data: { element: Element; } );`
      * - `mouseover` -- `listener( data: { element: Element; } );`
      * - `mouseout` -- `listener( data: { element: Element; } );`
      *
@@ -68,14 +68,16 @@ declare module Game {
     class Element extends EventDispatcher {
         x: number;
         y: number;
-        width: number;
-        height: number;
         opacity: number;
         visible: boolean;
         scaleX: number;
         scaleY: number;
         column: number;
         line: number;
+        _width: number;
+        _height: number;
+        _half_width: number;
+        _half_height: number;
         _rotation: number;
         _container: Container;
         _has_logic: boolean;
@@ -112,6 +114,26 @@ declare module Game {
          * @param event Either a mouse up, mouse down or click event.
          */
         dispatchMouseClickEvent(event: MouseEvent): void;
+        /**
+         * @return The element's width.
+         */
+        getWidth(): number;
+        /**
+         * @return The element's height.
+         */
+        getHeight(): number;
+        /**
+         * @param width New width.
+         */
+        setWidth(width: number): void;
+        /**
+         * @param height New height.
+         */
+        setHeight(height: number): void;
+        /**
+         * Set the width and height at the same time.
+         */
+        setDimensions(width: number, height: number): void;
         /**
          * @returns Rotation in radians.
          */
@@ -155,7 +177,7 @@ declare module Game {
      * - `click` -- `listener( data: { event: MouseEvent; } );`
      * - `mousedown` -- `listener( data: { event: MouseEvent; } );`
      * - `mouseup` -- `listener( data: { event: MouseEvent; } );`
-     * - `mousemove` -- `listener( data: { event: MouseEvent; } );`
+     * - `mousemove` -- `listener( data: { element: Element; } );`
      * - `mouseover` -- `listener( data: { element: Element; } );`
      * - `mouseout` -- `listener( data: { element: Element; } );`
      *
@@ -165,8 +187,6 @@ declare module Game {
         _image: HTMLImageElement;
         _source_x: number;
         _source_y: number;
-        _half_width: number;
-        _half_height: number;
         constructor(args: BitmapArgs);
         drawElement(ctx: any): void;
         clone(): Bitmap;
@@ -196,7 +216,7 @@ declare module Game {
      * - `click` -- `listener( data: { event: MouseEvent; } );`
      * - `mousedown` -- `listener( data: { event: MouseEvent; } );`
      * - `mouseup` -- `listener( data: { event: MouseEvent; } );`
-     * - `mousemove` -- `listener( data: { event: MouseEvent; } );`
+     * - `mousemove` -- `listener( data: { element: Element; } );`
      * - `mouseover` -- `listener( data: { element: Element; } );`
      * - `mouseout` -- `listener( data: { element: Element; } );`
      *
@@ -291,7 +311,7 @@ declare module Game {
      * - `click` -- `listener( data: { event: MouseEvent; } );`
      * - `mousedown` -- `listener( data: { event: MouseEvent; } );`
      * - `mouseup` -- `listener( data: { event: MouseEvent; } );`
-     * - `mousemove` -- `listener( data: { event: MouseEvent; } );`
+     * - `mousemove` -- `listener( data: { element: Element; } );`
      * - `mouseover` -- `listener( data: { element: Element; } );`
      * - `mouseout` -- `listener( data: { element: Element; } );`
      */
@@ -469,7 +489,7 @@ declare module Game {
      * - `click` -- `listener( data: { event: MouseEvent; } );`
      * - `mousedown` -- `listener( data: { event: MouseEvent; } );`
      * - `mouseup` -- `listener( data: { event: MouseEvent; } );`
-     * - `mousemove` -- `listener( data: { event: MouseEvent; } );`
+     * - `mousemove` -- `listener( data: { element: Element; } );`
      * - `mouseover` -- `listener( data: { element: Element; } );`
      * - `mouseout` -- `listener( data: { element: Element; } );`
      *
@@ -829,7 +849,7 @@ declare module Game {
          */
         clear(): void;
         /**
-         * @param body Set the body of the message. Either a `string`, `HTMLElement`, `Html.HtmlElement` or an `array` with any combination of the types above.
+         * @param body Set the body of the message. Either a `string`, `HTMLElement`, `Html.HtmlElement` or an `array` with any combination of the types before.
          */
         setBody(body: any): void;
     }
@@ -1186,7 +1206,7 @@ declare module Game {
      * - `click` -- `listener( data: { event: MouseEvent; } );`
      * - `mousedown` -- `listener( data: { event: MouseEvent; } );`
      * - `mouseup` -- `listener( data: { event: MouseEvent; } );`
-     * - `mousemove` -- `listener( data: { event: MouseEvent; } );`
+     * - `mousemove` -- `listener( data: { element: Element; } );`
      * - `mouseover` -- `listener( data: { element: Element; } );`
      * - `mouseout` -- `listener( data: { element: Element; } );`
      *
@@ -1257,7 +1277,7 @@ declare module Game {
      * - `click` -- `listener( data: { event: MouseEvent; } );`
      * - `mousedown` -- `listener( data: { event: MouseEvent; } );`
      * - `mouseup` -- `listener( data: { event: MouseEvent; } );`
-     * - `mousemove` -- `listener( data: { event: MouseEvent; } );`
+     * - `mousemove` -- `listener( data: { element: Element; } );`
      * - `mouseover` -- `listener( data: { element: Element; } );`
      * - `mouseout` -- `listener( data: { element: Element; } );`
      *
@@ -1491,7 +1511,7 @@ declare module Game {
      * - `click` -- `listener( data: { event: MouseEvent; } );`
      * - `mousedown` -- `listener( data: { event: MouseEvent; } );`
      * - `mouseup` -- `listener( data: { event: MouseEvent; } );`
-     * - `mousemove` -- `listener( data: { event: MouseEvent; } );`
+     * - `mousemove` -- `listener( data: { element: Element; } );`
      * - `mouseover` -- `listener( data: { element: Element; } );`
      * - `mouseout` -- `listener( data: { element: Element; } );`
      *
@@ -1499,8 +1519,6 @@ declare module Game {
      */
     class Rectangle extends Element {
         color: string;
-        half_width: number;
-        half_height: number;
         fill: boolean;
         constructor(args: RectangleArgs);
         /**
@@ -1660,7 +1678,7 @@ declare module Game {
      * - `click` -- `listener( data: { event: MouseEvent; } );`
      * - `mousedown` -- `listener( data: { event: MouseEvent; } );`
      * - `mouseup` -- `listener( data: { event: MouseEvent; } );`
-     * - `mousemove` -- `listener( data: { event: MouseEvent; } );`
+     * - `mousemove` -- `listener( data: { element: Element; } );`
      * - `mouseover` -- `listener( data: { element: Element; } );`
      * - `mouseout` -- `listener( data: { element: Element; } );`
      * - `collision` -- `listener( data: { element: Unit; collidedWith: Unit; } );`

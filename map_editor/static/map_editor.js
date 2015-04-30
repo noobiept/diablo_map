@@ -138,27 +138,29 @@ document.body.addEventListener( 'keyup', function( event )
     if ( currentMode === MapEditor.MODES.Resize && SELECTED_ELEMENT )
         {
         var step = 5;
+        var width = SELECTED_ELEMENT.getWidth();
+        var height = SELECTED_ELEMENT.getHeight();
 
         switch( key )
             {
             case Utilities.KEY_CODE.leftArrow:
             case Utilities.KEY_CODE.a:
-                SELECTED_ELEMENT.width -= step;
+                SELECTED_ELEMENT.setWidth( width - step );
                 break;
 
             case Utilities.KEY_CODE.rightArrow:
             case Utilities.KEY_CODE.d:
-                SELECTED_ELEMENT.width += step;
+                SELECTED_ELEMENT.setWidth( width + step );
                 break;
 
             case Utilities.KEY_CODE.upArrow:
             case Utilities.KEY_CODE.w:
-                SELECTED_ELEMENT.height -= step;
+                SELECTED_ELEMENT.setHeight( height - step );
                 break;
 
             case Utilities.KEY_CODE.downArrow:
             case Utilities.KEY_CODE.s:
-                SELECTED_ELEMENT.height += step;
+                SELECTED_ELEMENT.setHeight( height + step );
                 break;
             }
         }
@@ -269,8 +271,8 @@ for (a = AREAS.length - 1 ; a >= 0 ; a--)
     mapInfo.areas.push({
             x: area.x,
             y: area.y,
-            width: area.width,
-            height: area.height,
+            width: area.getWidth(),
+            height: area.getHeight(),
             name: area.name
         });
     }
@@ -475,6 +477,11 @@ if ( currentMode === MapEditor.MODES.Drag ||
     }
 };
 
+
+MapEditor.clearSelectedElement = function()
+{
+SELECTED_ELEMENT = null;
+};
 
 
 MapEditor.setAreaName = function( name )
