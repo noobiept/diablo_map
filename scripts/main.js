@@ -17,8 +17,20 @@ var manifest = [
 
 var preload = new Game.Preload({ save_global: true });
 
+var container = Game.getCanvasContainer();
+var loadingMessage = new Game.Message({
+        container: container,
+        body: 'Loading..'
+    });
+
+preload.addEventListener( 'progress', function( progress )
+    {
+    loadingMessage.setBody( 'Loadding.. ' + progress + '%' );
+    });
 preload.addEventListener( 'complete', function()
     {
+    loadingMessage.clear();
+
     Main.init();
     Main.load( 'act_1', 'damp_cellar' );
     });
@@ -38,8 +50,13 @@ function Main()
 var CONTAINER;      // top-level container
 var MAP_NAME;       // text element, which identifies the current map image
 var AREA_NAME;      // text element, that has the name of the current are under the mouse pointer
-var SCALE = 1;      // current scale of the map
 var MAPS_INFO;      // has all the maps info (labels/areas position, names, etc)
+var SCALE = 1;      // current scale of the map
+var MIN_SCALE = 0.4;
+var MAX_SCALE = 2;
+var SCALE_STEP = 0.2;
+var SCALE_MENU_ELEMENT;
+
 
 Main.init = function()
 {
@@ -78,13 +95,15 @@ Game.addElement( AREA_NAME );
 
 
     // set up the key events for navigating the map
+    // and for shortcuts to the menu
 document.body.addEventListener( 'keydown', function( event )
     {
     var key = event.keyCode;
-    var step = 10;  // movement step
+    var step = 20;  // movement step
 
     switch( key )
         {
+            // key movement
         case Utilities.KEY_CODE.leftArrow:
         case Utilities.KEY_CODE.a:
             moveCamera( step, 0 );
@@ -103,6 +122,25 @@ document.body.addEventListener( 'keydown', function( event )
         case Utilities.KEY_CODE.downArrow:
         case Utilities.KEY_CODE.s:
             moveCamera( 0, -step );
+            break;
+
+            // menu shortcuts
+        case Utilities.KEY_CODE[ '1' ]:
+            reCenterCamera();
+            break;
+
+        case Utilities.KEY_CODE[ '2' ]:
+            changeScale( SCALE - SCALE_STEP );
+            break;
+
+        case Utilities.KEY_CODE[ '3' ]:
+            changeScale( SCALE + SCALE_STEP );
+            break;
+
+            // other shortcuts
+            // go back to the top level
+        case Utilities.KEY_CODE.esc:
+            Main.load( 'act_1' );
             break;
         }
     });
@@ -142,11 +180,11 @@ canvasContainer.addEventListener( 'mouseup', function( event )
     // add the menu
 var menu = new Game.Html.HtmlContainer();
 
-var scale = new Game.Html.Range({
-        min: 0.4,
-        max: 2,
+SCALE_MENU_ELEMENT = new Game.Html.Range({
+        min: MIN_SCALE,
+        max: MAX_SCALE,
         value: 1,
-        step: 0.2,
+        step: SCALE_STEP,
         preText: 'Scale',
         onChange: function( button )
             {
@@ -159,7 +197,7 @@ var recenter = new Game.Html.Button({
         callback: reCenterCamera
     });
 
-menu.addChild( scale, recenter );
+menu.addChild( SCALE_MENU_ELEMENT, recenter );
 
 
 document.body.appendChild( menu.container );
@@ -280,9 +318,16 @@ CONTAINER.y += yMov;
 
 function changeScale( scale )
 {
-CONTAINER.scaleX = CONTAINER.scaleY = scale;
+if ( scale < MIN_SCALE ||
+     scale > MAX_SCALE )
+    {
+    return;
+    }
 
+CONTAINER.scaleX = CONTAINER.scaleY = scale;
 SCALE = scale;
+
+SCALE_MENU_ELEMENT.setValue( scale );
 }
 
 
