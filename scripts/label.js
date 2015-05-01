@@ -15,7 +15,12 @@ var image = new Game.Bitmap({
     });
 image.addEventListener( 'click', function( data )
     {
-    Main.load( info.destination, info.destinationLabel );
+        // since Main.load() will remove elements, can't call this directly in the event handler (since its still processing the elements)
+        // add to the loop to be called later
+    Game.addToGameLoop( function()
+        {
+        Main.load( info.destination, info.destinationLabel );
+        }, 0, false );
     });
 image.addEventListener( 'mouseover', function( data )
     {

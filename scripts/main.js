@@ -194,7 +194,10 @@ SCALE_MENU_ELEMENT = new Game.Html.Range({
 
 var recenter = new Game.Html.Button({
         value: 'Recenter',
-        callback: reCenterCamera
+        callback: function( button )
+            {
+            reCenterCamera();
+            }
     });
 
 menu.addChild( SCALE_MENU_ELEMENT, recenter );

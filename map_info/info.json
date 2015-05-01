@@ -16,6 +16,55 @@
                 "x": -270,
                 "y": 511,
                 "destination": "damp_cellar"
+            },
+            "dark_cellar": {
+                "text": "Dark Cellar",
+                "imageId": "cave_entrance",
+                "x": -46,
+                "y": 487,
+                "destination": "dark_cellar"
+            },
+            "hidden_cellar": {
+                "text": "The Hidden Cellar",
+                "imageId": "cave_entrance",
+                "x": 285,
+                "y": 414,
+                "destination": "hidden_cellar"
+            },
+            "mass_grave": {
+                "text": "Mass Grave",
+                "imageId": "cave_entrance",
+                "x": 216,
+                "y": 240,
+                "destination": "mass_grave"
+            },
+            "leorics_passage": {
+                "text": "Leoric's Passage",
+                "imageId": "cave_entrance",
+                "x": 462,
+                "y": 150,
+                "destination": "leorics_passage"
+            },
+            "cathedral_level_1": {
+                "text": "Cathedral Level 1",
+                "imageId": "cave_entrance",
+                "x": 377,
+                "y": 65,
+                "destination": "cathedral_level_1"
+            },
+            "cave_under_the_well": {
+                "text": "The Cave Under the Well",
+                "imageId": "cave_entrance",
+                "x": -247,
+                "y": 381,
+                "destination": "cave_under_the_well"
+            },
+            "musty_cellar": {
+                "text": "Musty Cellar",
+                "imageId": "cave_entrance",
+                "x": -155,
+                "y": 715,
+                "destination": "musty_cellar"
             }
         },
         "areas": [

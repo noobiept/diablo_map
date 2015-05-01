@@ -1605,13 +1605,16 @@ declare module Game {
      */
     function removeElement(element: any): boolean;
     /**
-     * Adds a callback function to be called at a certain interval (or every tick) in the game loop (before the draw phase)
+     * Adds a callback function to be called at a certain timeout/interval (or every tick) in the game loop (before the draw phase).
+     *
+     * Sometimes its useful to add a function call through this, for example when you have code that may remove elements, but its called from an event handler (which may try to process the elements that you removed).
      *
      * @param callback The callback function.
-     * @param interval Interval between function calls. If not given then it is called every tick. In seconds.
-     * @return If it was added successful.
+     * @param delay Time until the function is called. In seconds.
+     * @param isInterval If the function is to be called constantly (every passed `delay`), or just one time (a timeout). Default is an interval.
+     * @return If it was added successfully.
      */
-    function addToGameLoop(callback: () => any, interval?: number): boolean;
+    function addToGameLoop(callback: () => any, delay: number, isInterval?: boolean): boolean;
     /**
      * Remove a callback from the game loop.
      *
