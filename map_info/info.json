@@ -1,117 +1,1 @@
-{
-    "act_1": {
-        "imageId": "act_1",
-        "mapName": "Act 1",
-        "labels": {
-            "dank_cellar": {
-                "text": "Dank Cellar",
-                "imageId": "cave_entrance",
-                "x": -176.60000610351562,
-                "y": 320,
-                "destination": "dank_cellar"
-            },
-            "damp_cellar": {
-                "text": "Damp Cellar",
-                "imageId": "cave_entrance",
-                "x": -270,
-                "y": 511,
-                "destination": "damp_cellar"
-            },
-            "dark_cellar": {
-                "text": "Dark Cellar",
-                "imageId": "cave_entrance",
-                "x": -46,
-                "y": 487,
-                "destination": "dark_cellar"
-            },
-            "hidden_cellar": {
-                "text": "The Hidden Cellar",
-                "imageId": "cave_entrance",
-                "x": 285,
-                "y": 414,
-                "destination": "hidden_cellar"
-            },
-            "mass_grave": {
-                "text": "Mass Grave",
-                "imageId": "cave_entrance",
-                "x": 216,
-                "y": 240,
-                "destination": "mass_grave"
-            },
-            "leorics_passage": {
-                "text": "Leoric's Passage",
-                "imageId": "cave_entrance",
-                "x": 462,
-                "y": 150,
-                "destination": "leorics_passage"
-            },
-            "cathedral_level_1": {
-                "text": "Cathedral Level 1",
-                "imageId": "cave_entrance",
-                "x": 377,
-                "y": 65,
-                "destination": "cathedral_level_1"
-            },
-            "cave_under_the_well": {
-                "text": "The Cave Under the Well",
-                "imageId": "cave_entrance",
-                "x": -247,
-                "y": 381,
-                "destination": "cave_under_the_well"
-            },
-            "musty_cellar": {
-                "text": "Musty Cellar",
-                "imageId": "cave_entrance",
-                "x": -155,
-                "y": 715,
-                "destination": "musty_cellar"
-            }
-        },
-        "areas": [
-            {
-                "x": -359.8000183105469,
-                "y": 483,
-                "width": 145,
-                "height": 130,
-                "name": "Old Tristram Road"
-            },
-            {
-                "x": -32.800018310546875,
-                "y": 506,
-                "width": 130,
-                "height": 160,
-                "name": "The Old Ruins"
-            }
-        ]
-    },
-    "damp_cellar": {
-        "imageId": "damp_cellar",
-        "mapName": "Damp Cellar",
-        "labels": {
-            "old_tristram_road": {
-                "text": "Old Tristram Road",
-                "imageId": "cave_exit",
-                "x": 40,
-                "y": -38,
-                "destination": "act_1",
-                "destinationLabel": "damp_cellar"
-            }
-        },
-        "areas": []
-    },
-    "dank_cellar": {
-        "imageId": "dank_cellar",
-        "mapName": "Dank Cellar",
-        "labels": {
-            "old_tristram_road": {
-                "text": "Old Tristram Road",
-                "imageId": "cave_exit",
-                "x": 44.79998779296875,
-                "y": -0.3999977111816406,
-                "destination": "act_1",
-                "destinationLabel": "dank_cellar"
-            }
-        },
-        "areas": []
-    }
-}
+{    "act_1": {        "imageId": "act_1",        "mapName": "Act 1",        "labels": {            "dank_cellar": {                "text": "Dank Cellar",                "imageId": "cave_entrance",                "x": -177,                "y": 320,                "destination": "dank_cellar"            },            "damp_cellar": {                "text": "Damp Cellar",                "imageId": "cave_entrance",                "x": -270,                "y": 511,                "destination": "damp_cellar"            },            "dark_cellar": {                "text": "Dark Cellar",                "imageId": "cave_entrance",                "x": -46,                "y": 487,                "destination": "dark_cellar"            },            "hidden_cellar": {                "text": "The Hidden Cellar",                "imageId": "cave_entrance",                "x": 285,                "y": 414,                "destination": "hidden_cellar"            },            "mass_grave": {                "text": "Mass Grave",                "imageId": "cave_entrance",                "x": 216,                "y": 240,                "destination": "mass_grave"            },            "leorics_passage": {                "text": "Leoric's Passage",                "imageId": "cave_entrance",                "x": 462,                "y": 150,                "destination": "leorics_passage"            },            "cathedral_level_1": {                "text": "Cathedral Level 1",                "imageId": "cave_entrance",                "x": 377,                "y": 65,                "destination": "cathedral_level_1"            },            "cave_under_the_well": {                "text": "The Cave Under the Well",                "imageId": "cave_entrance",                "x": -247,                "y": 381,                "destination": "cave_under_the_well"            },            "musty_cellar": {                "text": "Musty Cellar",                "imageId": "cave_entrance",                "x": -155,                "y": 715,                "destination": "musty_cellar"            }        },        "areas": [            {                "x": 462,                "y": 143,                "width": 150,                "height": 165,                "name": "Cathedral Garden"            },            {                "x": 312,                "y": 122,                "width": 155,                "height": 165,                "name": "Cathedral"            },            {                "x": 268,                "y": 247,                "width": 140,                "height": 85,                "name": "Old Tristram Road"            },            {                "x": 243,                "y": 415,                "width": 40,                "height": 45,                "name": "Adria's Hut"            },            {                "x": 324,                "y": 372,                "width": 125,                "height": 165,                "name": "Adria's Hut"            },            {                "x": 221,                "y": 370,                "width": 45,                "height": 45,                "name": "Old Tristram Road"            },            {                "x": 152,                "y": 362,                "width": 95,                "height": 170,                "name": "Old Tristram Road"            },            {                "x": -99,                "y": 551,                "width": 50,                "height": 65,                "name": "The Old Ruins"            },            {                "x": -117,                "y": 464,                "width": 85,                "height": 110,                "name": "The Old Ruins"            },            {                "x": -387,                "y": 492,                "width": 145,                "height": 130,                "name": "Old Tristram Road"            },            {                "x": 15,                "y": 512,                "width": 180,                "height": 275,                "name": "The Old Ruins"            }        ]    },    "damp_cellar": {        "imageId": "damp_cellar",        "mapName": "Damp Cellar",        "labels": {            "old_tristram_road": {                "text": "Old Tristram Road",                "imageId": "cave_exit",                "x": 40,                "y": -38,                "destination": "act_1",                "destinationLabel": "damp_cellar"            }        },        "areas": []    },    "dank_cellar": {        "imageId": "dank_cellar",        "mapName": "Dank Cellar",        "labels": {            "old_tristram_road": {                "text": "Old Tristram Road",                "imageId": "cave_exit",                "x": 45,                "y": 0,                "destination": "act_1",                "destinationLabel": "dank_cellar"            }        },        "areas": []    }}

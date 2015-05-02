@@ -121,8 +121,8 @@ var add = new Game.Html.Button({
         callback: function()
             {
             MapEditor.addLabel(
-                x,
-                y,
+                Math.round( x ),
+                Math.round( y ),
                 type.getValue(),
                 id.getValue(),
                 text.getValue(),
@@ -169,8 +169,8 @@ var add = new Game.Html.Button({
         callback: function()
             {
             MapEditor.addArea(
-                x,
-                y,
+                Math.round( x ),
+                Math.round( y ),
                 50,
                 50,
                 name.getValue()

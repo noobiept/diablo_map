@@ -101,8 +101,8 @@ canvasContainer.addEventListener( 'mousemove', function( event )
             var x = (currentX - rect.left - CONTAINER.x) / SCALE;
             var y = (currentY - rect.top - CONTAINER.y) / SCALE;
 
-            SELECTED_ELEMENT.x = x;
-            SELECTED_ELEMENT.y = y;
+            SELECTED_ELEMENT.x = Math.round( x );
+            SELECTED_ELEMENT.y = Math.round( y );
             }
         }
 
