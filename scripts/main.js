@@ -83,6 +83,7 @@ var canvasWidth = canvas.getWidth();
 
 MAP_NAME = new Game.Text({
         textAlign: 'end',
+        fontFamily: '"Exocet Blizzard Light" serif',
         color: 'white'
     });
 MAP_NAME.x = canvasWidth;
@@ -92,6 +93,7 @@ Game.addElement( MAP_NAME );
     // add the area name element
 AREA_NAME = new Game.Text({
         textAlign: 'end',
+        fontFamily: '"Exocet Blizzard Light" serif',
         color: 'white'
     });
 AREA_NAME.x = canvasWidth;

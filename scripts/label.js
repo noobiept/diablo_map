@@ -6,6 +6,7 @@ var text = new Game.Text({
         y: 20,
         text: info.text,
         textAlign: 'center',
+        fontFamily: '"Exocet Blizzard Light" serif',
         color: 'white'
     });
 text.visible = false;

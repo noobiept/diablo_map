@@ -1,8 +1,15 @@
     /* ---- Basic elements ---- */
 
+@font-face
+    {
+    font-family: "Exocet Blizzard Light";
+    src: url('libraries/exocet-blizzard-light.woff');
+    }
+
 body
     {
     margin: 0;
+    font-family: "Exocet Blizzard Light", serif;
     text-align: center;
     background-color: black;
     }
@@ -89,15 +96,8 @@ body
     top: 50%;
     transform: translate(-50%, -50%);
     padding: 10px;
-    background-color: aliceblue;
-    color: black;
     }
 
-.Game-Message-container .Game-Container,
-.Game-Message-container .Game-preText
-    {
-    color: black;
-    }
     
 .Game-Message-container .Game-Button
     {
