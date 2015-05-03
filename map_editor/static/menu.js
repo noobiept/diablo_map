@@ -8,10 +8,10 @@ var MapEditor;
     // 'resize' -- resize an area element mode
 var POSSIBLE_MODES = [ 'Move', 'Drag', 'Remove', 'Resize' ];
 var CURRENT_MODE = -1;
+var ACTIVE_MODE_MENU;   // the element that selects the mode
 
 MapEditor.MODES = Utilities.createEnum( POSSIBLE_MODES );
 
-var FILE_NAME;  // element in the menu, which shows the current file name
 
 /**
  * Create the map editor's menu
@@ -47,14 +47,12 @@ var addArea = new Game.Html.Button({
         callback: MapEditor.openAddArea
     });
 
-var activeMode = new Game.Html.MultipleOptions({
+ACTIVE_MODE_MENU = new Game.Html.MultipleOptions({
         preText: 'Mode:',
         options: POSSIBLE_MODES,
         callback: function( button, position, htmlElement )
             {
-            CURRENT_MODE = position;
-
-            MapEditor.clearSelectedElement();
+            MapEditor.setCurrentMode( position );
             }
     });
 
@@ -77,7 +75,7 @@ var load = new Game.Html.Button({
         callback: MapEditor.openLoadMessage
     });
 
-menu.addChild( scale, recenter, addLabel, addArea, activeMode, newMap, save, load );
+menu.addChild( scale, recenter, addLabel, addArea, ACTIVE_MODE_MENU, newMap, save, load );
 
 
 document.body.appendChild( menu.container );
@@ -88,6 +86,15 @@ document.body.appendChild( menu.container );
 MapEditor.getCurrentMode = function()
 {
 return CURRENT_MODE;
+};
+
+
+MapEditor.setCurrentMode = function( modeId )
+{
+CURRENT_MODE = modeId;
+ACTIVE_MODE_MENU.select( modeId );
+
+MapEditor.clearSelectedElement();
 };
 
 

@@ -4,10 +4,17 @@ Game.init( document.body, 1000, 600 );
 
 var manifest = [
         { id: 'act_1', path: '/static/images/act_1.jpg' },
+
         { id: 'cave_entrance', path: '/static/images/cave_entrance.png' },
         { id: 'cave_exit', path: '/static/images/cave_exit.png' },
+
         { id: 'damp_cellar', path: '/static/images/damp_cellar.jpg' },
-        { id: 'dank_cellar', path: '/static/images/dank_cellar.jpg' }
+        { id: 'dank_cellar', path: '/static/images/dank_cellar.jpg' },
+        { id: 'dark_cellar', path: '/static/images/dark_cellar.jpg' },
+        { id: 'mass_grave', path: '/static/images/mass_grave.jpg' },
+        { id: 'musty_cellar', path: '/static/images/musty_cellar.jpg' },
+        { id: 'the_cave_under_the_well', path: '/static/images/the_cave_under_the_well.jpg' },
+        { id: 'the_hidden_cellar', path: '/static/images/the_hidden_cellar.jpg' }
     ];
 
 
@@ -31,6 +38,7 @@ var CONTAINER;
 var MAP_NAME;       // located at the top left of the map, shows the map name
 var AREA_NAME;      // name of the area currently under the mouse
 var SCALE = 1;
+var SCALE_STEP = 0.2;
 var SELECTED_ELEMENT = null;
 var BASIC_INFO = {};
 var LABELS = [];    // all the label elements
@@ -70,7 +78,6 @@ AREA_NAME = new Game.Text({
 AREA_NAME.x = canvasWidth;
 AREA_NAME.y = 20;
 Game.addElement( AREA_NAME );
-
 
 
     // set the mouse events for the movement
@@ -135,6 +142,48 @@ document.body.addEventListener( 'keyup', function( event )
     var key = event.keyCode;
     var currentMode = MapEditor.getCurrentMode();
 
+        // global shortcuts
+    switch( key )
+        {
+            // menu shortcuts
+        case Utilities.KEY_CODE[ '1' ]:
+            MapEditor.reCenterCamera();
+            break;
+
+        case Utilities.KEY_CODE[ '2' ]:
+            MapEditor.changeScale( SCALE - SCALE_STEP );
+            break;
+
+        case Utilities.KEY_CODE[ '3' ]:
+            MapEditor.changeScale( SCALE + SCALE_STEP );
+            break;
+
+            // map editor specific shortcuts
+        case Utilities.KEY_CODE.q:
+            MapEditor.setCurrentMode( MapEditor.MODES.Move );
+            break;
+
+        case Utilities.KEY_CODE.w:
+            MapEditor.setCurrentMode( MapEditor.MODES.Drag );
+            break;
+
+        case Utilities.KEY_CODE.e:
+            MapEditor.setCurrentMode( MapEditor.MODES.Remove );
+            break;
+
+        case Utilities.KEY_CODE.r:
+            MapEditor.setCurrentMode( MapEditor.MODES.Resize );
+            break;
+
+            // other shortcuts
+            // go back to the top level
+        case Utilities.KEY_CODE.esc:
+            Main.load( 'act_1' );
+            break;
+        }
+
+
+        // resize mode specific shortcuts
     if ( currentMode === MapEditor.MODES.Resize && SELECTED_ELEMENT )
         {
         var step = 5;
@@ -144,22 +193,18 @@ document.body.addEventListener( 'keyup', function( event )
         switch( key )
             {
             case Utilities.KEY_CODE.leftArrow:
-            case Utilities.KEY_CODE.a:
                 SELECTED_ELEMENT.setWidth( width - step );
                 break;
 
             case Utilities.KEY_CODE.rightArrow:
-            case Utilities.KEY_CODE.d:
                 SELECTED_ELEMENT.setWidth( width + step );
                 break;
 
             case Utilities.KEY_CODE.upArrow:
-            case Utilities.KEY_CODE.w:
                 SELECTED_ELEMENT.setHeight( height - step );
                 break;
 
             case Utilities.KEY_CODE.downArrow:
-            case Utilities.KEY_CODE.s:
                 SELECTED_ELEMENT.setHeight( height + step );
                 break;
             }

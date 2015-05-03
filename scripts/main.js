@@ -7,6 +7,11 @@ var manifest = [
         { id: 'act_1', path: 'images/act_1.jpg' },
         { id: 'damp_cellar', path: 'images/damp_cellar.jpg' },
         { id: 'dank_cellar', path: 'images/dank_cellar.jpg' },
+        { id: 'dark_cellar', path: 'images/dark_cellar.jpg' },
+        { id: 'mass_grave', path: 'images/mass_grave.jpg' },
+        { id: 'musty_cellar', path: 'images/musty_cellar.jpg' },
+        { id: 'the_cave_under_the_well', path: 'images/the_cave_under_the_well.jpg' },
+        { id: 'the_hidden_cellar', path: 'images/the_hidden_cellar.jpg' },
 
         { id: 'cave_entrance', path: 'images/cave_entrance.png' },
         { id: 'cave_exit', path: 'images/cave_exit.png' },
@@ -290,6 +295,7 @@ else
 
 function clear()
 {
+AREA_NAME.text = '';
 CONTAINER.removeAllChildren();
 }
 
