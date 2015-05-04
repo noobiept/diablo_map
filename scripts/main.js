@@ -11,6 +11,9 @@ var manifest = [
         { id: 'cathedral_level_4', path: 'images/cathedral_level_4.jpg' },
         { id: 'cave_entrance', path: 'images/cave_entrance.png' },
         { id: 'cave_exit', path: 'images/cave_exit.png' },
+        { id: 'caverns_of_araneae', path: 'images/caverns_of_araneae.jpg' },
+        { id: 'cellar_of_the_damned', path: 'images/cellar_of_the_damned.jpg' },
+        { id: 'chamber_of_queen_araneae', path: 'images/chamber_of_queen_araneae.jpg' },
         { id: 'crypt_of_the_skeleton_king', path: 'images/crypt_of_the_skeleton_king.jpg' },
         { id: 'damp_cellar', path: 'images/damp_cellar.jpg' },
         { id: 'dank_cellar', path: 'images/dank_cellar.jpg' },
@@ -22,6 +25,8 @@ var manifest = [
         { id: 'the_cave_under_the_well', path: 'images/the_cave_under_the_well.jpg' },
         { id: 'the_hidden_cellar', path: 'images/the_hidden_cellar.jpg' },
         { id: 'the_royal_crypts', path: 'images/the_royal_crypts.jpg' },
+        { id: 'wortham', path: 'images/wortham.jpg' },
+        { id: 'wortham_chapel_cellar', path: 'images/wortham_chapel_cellar.jpg' },
 
         { id: 'info', path: 'map_info/info.json' }
     ];
