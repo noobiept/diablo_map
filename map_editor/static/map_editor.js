@@ -14,7 +14,15 @@ var manifest = [
         { id: 'mass_grave', path: '/static/images/mass_grave.jpg' },
         { id: 'musty_cellar', path: '/static/images/musty_cellar.jpg' },
         { id: 'the_cave_under_the_well', path: '/static/images/the_cave_under_the_well.jpg' },
-        { id: 'the_hidden_cellar', path: '/static/images/the_hidden_cellar.jpg' }
+        { id: 'the_hidden_cellar', path: '/static/images/the_hidden_cellar.jpg' },
+        { id: 'cathedral_level_1', path: '/static/images/cathedral_level_1.jpg' },
+        { id: 'cathedral_level_2', path: '/static/images/cathedral_level_2.jpg' },
+        { id: 'cathedral_level_3', path: '/static/images/cathedral_level_3.jpg' },
+        { id: 'cathedral_level_4', path: '/static/images/cathedral_level_4.jpg' },
+        { id: 'crypt_of_the_skeleton_king', path: '/static/images/crypt_of_the_skeleton_king.jpg' },
+        { id: 'desolate_chamber', path: '/static/images/desolate_chamber.jpg' },
+        { id: 'leorics_passage', path: '/static/images/leorics_passage.jpg' },
+        { id: 'the_royal_crypts', path: '/static/images/the_royal_crypts.jpg' }
     ];
 
 

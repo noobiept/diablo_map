@@ -5,16 +5,23 @@ Game.init( document.body, 1000, 600 );
 
 var manifest = [
         { id: 'act_1', path: 'images/act_1.jpg' },
+        { id: 'cathedral_level_1', path: 'images/cathedral_level_1.jpg' },
+        { id: 'cathedral_level_2', path: 'images/cathedral_level_2.jpg' },
+        { id: 'cathedral_level_3', path: 'images/cathedral_level_3.jpg' },
+        { id: 'cathedral_level_4', path: 'images/cathedral_level_4.jpg' },
+        { id: 'cave_entrance', path: 'images/cave_entrance.png' },
+        { id: 'cave_exit', path: 'images/cave_exit.png' },
+        { id: 'crypt_of_the_skeleton_king', path: 'images/crypt_of_the_skeleton_king.jpg' },
         { id: 'damp_cellar', path: 'images/damp_cellar.jpg' },
         { id: 'dank_cellar', path: 'images/dank_cellar.jpg' },
         { id: 'dark_cellar', path: 'images/dark_cellar.jpg' },
+        { id: 'desolate_chamber', path: 'images/desolate_chamber.jpg' },
+        { id: 'leorics_passage', path: 'images/leorics_passage.jpg' },
         { id: 'mass_grave', path: 'images/mass_grave.jpg' },
         { id: 'musty_cellar', path: 'images/musty_cellar.jpg' },
         { id: 'the_cave_under_the_well', path: 'images/the_cave_under_the_well.jpg' },
         { id: 'the_hidden_cellar', path: 'images/the_hidden_cellar.jpg' },
-
-        { id: 'cave_entrance', path: 'images/cave_entrance.png' },
-        { id: 'cave_exit', path: 'images/cave_exit.png' },
+        { id: 'the_royal_crypts', path: 'images/the_royal_crypts.jpg' },
 
         { id: 'info', path: 'map_info/info.json' }
     ];

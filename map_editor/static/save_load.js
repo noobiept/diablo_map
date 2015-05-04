@@ -92,6 +92,11 @@ request.send( formData );
  */
 MapEditor.saveMapName = function( mapName, mapPosition )
 {
+if ( typeof mapPosition === 'undefined' )
+    {
+    mapPosition = '';
+    }
+
 localStorage.setItem( 'diablo_map_previous_map', mapName );
 localStorage.setItem( 'diablo_map_previous_map_position', mapPosition );
 };
