@@ -62,6 +62,7 @@ body
 .Game-MultipleOptions span
     {
     padding: 5px;
+    display: inline-block;
     }
 
 .Game-selected

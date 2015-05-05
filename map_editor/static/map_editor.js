@@ -275,7 +275,7 @@ if ( typeof mapInfo.labels !== 'undefined' )
         var id = labelsIds[ a ];
         var labelInfo = mapInfo.labels[ id ];
 
-        MapEditor.addLabel( labelInfo.x, labelInfo.y, labelInfo.imageId, id, labelInfo.text, labelInfo.destination );
+        MapEditor.addLabel( labelInfo.x, labelInfo.y, labelInfo.imageId, id, labelInfo.text, labelInfo.destination, labelInfo.destinationLabel );
         }
     }
 

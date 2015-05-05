@@ -232,7 +232,6 @@ document.body.appendChild( menu.container );
 Main.load = function( mapId, mapPosition )
 {
 clear();
-
 var mapInfo = MAPS_INFO[ mapId ];
 
 
