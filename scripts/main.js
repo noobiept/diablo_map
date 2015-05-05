@@ -9,8 +9,6 @@ var manifest = [
         { id: 'cathedral_level_2', path: 'images/cathedral_level_2.jpg' },
         { id: 'cathedral_level_3', path: 'images/cathedral_level_3.jpg' },
         { id: 'cathedral_level_4', path: 'images/cathedral_level_4.jpg' },
-        { id: 'cave_entrance', path: 'images/cave_entrance.png' },
-        { id: 'cave_exit', path: 'images/cave_exit.png' },
         { id: 'caverns_of_araneae', path: 'images/caverns_of_araneae.jpg' },
         { id: 'cellar_of_the_damned', path: 'images/cellar_of_the_damned.jpg' },
         { id: 'chamber_of_queen_araneae', path: 'images/chamber_of_queen_araneae.jpg' },
@@ -28,6 +26,7 @@ var manifest = [
         { id: 'wortham', path: 'images/wortham.jpg' },
         { id: 'wortham_chapel_cellar', path: 'images/wortham_chapel_cellar.jpg' },
 
+        { id: 'elements', path: 'images/elements.png' },
         { id: 'info', path: 'map_info/info.json' }
     ];
 
