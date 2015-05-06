@@ -48,7 +48,7 @@ preload.addEventListener( 'complete', function()
     loadingMessage.clear();
 
     Main.init();
-    Main.load( 'act_1', 'damp_cellar' );
+    Main.load( 'act_1', 'new_tristram' );
     });
 preload.loadManifest( manifest );
 };

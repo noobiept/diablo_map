@@ -19,12 +19,15 @@ var image = new Game.Sprite({
 image.setFrame( Label.SPRITE_POSITION[ info.imageId ] );
 image.addEventListener( 'click', function( data )
     {
-        // since Main.load() will remove elements, can't call this directly in the event handler (since its still processing the elements)
-        // add to the loop to be called later
-    Game.addToGameLoop( function()
+    if ( info.destination )
         {
-        Main.load( info.destination, info.destinationLabel );
-        }, 0, false );
+            // since Main.load() will remove elements, can't call this directly in the event handler (since its still processing the elements)
+            // add to the loop to be called later
+        Game.addToGameLoop( function()
+            {
+            Main.load( info.destination, info.destinationLabel );
+            }, 0, false );
+        }
     });
 image.addEventListener( 'mouseover', function( data )
     {
