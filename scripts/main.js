@@ -2,7 +2,6 @@ window.onload = function()
 {
 Game.init( document.body, 1000, 600 );
 
-
 var manifest = [
         { id: 'act_1', path: 'images/act_1.jpg' },
         { id: 'cathedral_level_1', path: 'images/cathedral_level_1.jpg' },
@@ -12,17 +11,29 @@ var manifest = [
         { id: 'caverns_of_araneae', path: 'images/caverns_of_araneae.jpg' },
         { id: 'cellar_of_the_damned', path: 'images/cellar_of_the_damned.jpg' },
         { id: 'chamber_of_queen_araneae', path: 'images/chamber_of_queen_araneae.jpg' },
+        { id: 'chancellors_tomb', path: 'images/chancellors_tomb.jpg' },
         { id: 'crypt_of_the_skeleton_king', path: 'images/crypt_of_the_skeleton_king.jpg' },
         { id: 'damp_cellar', path: 'images/damp_cellar.jpg' },
         { id: 'dank_cellar', path: 'images/dank_cellar.jpg' },
         { id: 'dark_cellar', path: 'images/dark_cellar.jpg' },
+        { id: 'defiled_crypt_1', path: 'images/defiled_crypt.jpg' },
+        { id: 'defiled_crypt_2_level_1', path: 'images/defiled_crypt_2_level_1.jpg' },
+        { id: 'defiled_crypt_2_level_2', path: 'images/defiled_crypt_2_level_2.jpg' },
+        { id: 'defiled_crypt_3', path: 'images/defiled_crypt_3.jpg' },
+        { id: 'den_of_the_fallen_level_1', path: 'images/den_of_the_fallen_level_1.jpg' },
+        { id: 'den_of_the_fallen_level_2', path: 'images/den_of_the_fallen_level_2.jpg' },
         { id: 'desolate_chamber', path: 'images/desolate_chamber.jpg' },
+        { id: 'heretics_abode', path: 'images/heretics_abode.jpg' },
+        { id: 'leahs_room', path: 'images/leahs_room.jpg' },
         { id: 'leorics_passage', path: 'images/leorics_passage.jpg' },
         { id: 'mass_grave', path: 'images/mass_grave.jpg' },
         { id: 'musty_cellar', path: 'images/musty_cellar.jpg' },
+        { id: 'scavengers_den_level_1', path: 'images/scavengers_den_level_1.jpg' },
+        { id: 'scavengers_den_level_2', path: 'images/scavengers_den_level_2.jpg' },
         { id: 'the_cave_under_the_well', path: 'images/the_cave_under_the_well.jpg' },
         { id: 'the_hidden_cellar', path: 'images/the_hidden_cellar.jpg' },
         { id: 'the_royal_crypts', path: 'images/the_royal_crypts.jpg' },
+        { id: 'the_slaughtered_calf_inn', path: 'images/the_slaughtered_calf_inn.jpg' },
         { id: 'wortham', path: 'images/wortham.jpg' },
         { id: 'wortham_chapel_cellar', path: 'images/wortham_chapel_cellar.jpg' },
 
