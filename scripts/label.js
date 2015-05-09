@@ -57,11 +57,12 @@ Label.SPRITE_POSITION = {
         book_of_cain: 4,
         nephalem_obelisk: 5,
         kadala: 6,
-        cave_entrance: 7,
-        merchant: 8,
-        stash: 9,
-        door: 10,
-        healer: 11,
-        jeweler: 12,
-        blacksmith: 13
+        cave_teleport: 7,
+        cave_entrance: 8,
+        merchant: 9,
+        stash: 10,
+        door: 11,
+        healer: 12,
+        jeweler: 13,
+        blacksmith: 14
     };

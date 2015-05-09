@@ -109,7 +109,7 @@ var x = (canvas.getWidth() / 2 - topLevelContainer.x) / scale;
 var y = (canvas.getHeight() / 2 - topLevelContainer.y) / scale;
 
 var type = new Game.Html.MultipleOptions({
-        options: [ 'cave_exit', 'waypoint', 'wardrobe', 'mystic', 'book_of_cain', 'nephalem_obelisk', 'kadala', 'cave_entrance', 'merchant', 'stash', 'door', 'healer', 'jeweler', 'blacksmith' ]
+        options: [ 'cave_exit', 'waypoint', 'wardrobe', 'mystic', 'book_of_cain', 'nephalem_obelisk', 'kadala', 'cave_teleport', 'cave_entrance', 'merchant', 'stash', 'door', 'healer', 'jeweler', 'blacksmith' ]
     });
 var id = new Game.Html.Text({
         preText: 'Id:'
