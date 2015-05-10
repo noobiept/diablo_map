@@ -227,6 +227,11 @@ canvasContainer.addEventListener( 'mouseup', function( event )
     {
     mouseDown = false;
     });
+canvasContainer.addEventListener( 'mouseleave', function( event )
+    {
+        // don't move the camera when the mouse goes out of the canvas (for example when going for the menu)
+    mouseDown = false;
+    });
 
 
     // add the menu
