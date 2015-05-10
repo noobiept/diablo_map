@@ -4,6 +4,7 @@ Game.init( document.body, 1000, 600 );
 
 var manifest = [
         { id: 'act_1', path: 'images/act_1.jpg' },
+        { id: 'act_1_map', path: 'images/act_1_map.jpg' },
         { id: 'cathedral_level_1', path: 'images/cathedral_level_1.jpg' },
         { id: 'cathedral_level_2', path: 'images/cathedral_level_2.jpg' },
         { id: 'cathedral_level_3', path: 'images/cathedral_level_3.jpg' },
@@ -89,6 +90,7 @@ var SCALE_STEP = 0.2;
 var SELECTED_ELEMENT = null;
 var BASIC_INFO = {};
 var LABELS = [];    // all the label elements
+var INVISIBLE_LABELS = [];  // all the invisible label elements
 var AREAS = [];     // all the area elements
 var MAPS_INFO;      // has all the maps info (labels/areas position, names, etc)
 var CURRENT_MAP_ID = '';  // id of the current map that is loaded
@@ -301,6 +303,7 @@ MapEditor.saveMapName( mapId, mapPosition );
 
     // add all the labels
 var a;
+var info;
 
 if ( typeof mapInfo.labels !== 'undefined' )
     {
@@ -309,9 +312,21 @@ if ( typeof mapInfo.labels !== 'undefined' )
     for (a = labelsIds.length - 1 ; a >= 0 ; a--)
         {
         var id = labelsIds[ a ];
-        var labelInfo = mapInfo.labels[ id ];
+        info = mapInfo.labels[ id ];
 
-        MapEditor.addLabel( labelInfo.x, labelInfo.y, labelInfo.imageId, id, labelInfo.text, labelInfo.destination, labelInfo.destinationLabel );
+        MapEditor.addLabel( info.x, info.y, info.imageId, id, info.text, info.destination, info.destinationLabel );
+        }
+    }
+
+
+    // add all the invisible labels
+if ( typeof mapInfo.invisible_labels !== 'undefined' )
+    {
+    for (a = mapInfo.invisible_labels.length - 1 ; a >= 0 ; a--)
+        {
+        info = mapInfo.invisible_labels[ a ];
+
+        MapEditor.addInvisibleLabel( info.x, info.y, info.width, info.height, info.destination, info.destinationLabel );
         }
     }
 
@@ -321,9 +336,9 @@ if ( typeof mapInfo.areas !== 'undefined' )
     {
     for (a = mapInfo.areas.length - 1 ; a >= 0 ; a--)
         {
-        var areaInfo = mapInfo.areas[ a ];
+        info = mapInfo.areas[ a ];
 
-        MapEditor.addArea( areaInfo.x, areaInfo.y, areaInfo.width, areaInfo.height, areaInfo.name );
+        MapEditor.addArea( info.x, info.y, info.width, info.height, info.name );
         }
     }
 };
@@ -350,6 +365,24 @@ for (a = LABELS.length - 1 ; a >= 0 ; a--)
             destination: label.destination,
             destinationLabel: label.destinationLabel
         };
+    }
+
+
+    // add the invisible labels
+mapInfo.invisible_labels = [];
+
+for (a = INVISIBLE_LABELS.length - 1 ; a >= 0 ; a--)
+    {
+    var invisibleLabel = INVISIBLE_LABELS[ a ];
+
+    mapInfo.invisible_labels.push({
+            x: invisibleLabel.x,
+            y: invisibleLabel.y,
+            width: invisibleLabel.getWidth(),
+            height: invisibleLabel.getHeight(),
+            destination: invisibleLabel.destination,
+            destinationLabel: invisibleLabel.destinationLabel
+        });
     }
 
 
@@ -396,6 +429,7 @@ function clear()
 CONTAINER.removeAllChildren();
 
 LABELS.length = 0;
+INVISIBLE_LABELS.length = 0;
 AREAS.length = 0;
 }
 
@@ -432,6 +466,25 @@ LABELS.push( label );
 };
 
 
+MapEditor.addInvisibleLabel = function( x, y, width, height, destinationId, destinationLabel )
+{
+var invisibleLabel = new InvisibleLabel({
+        x: x,
+        y: y,
+        width: width,
+        height: height,
+        destination: destinationId,
+        destinationLabel: destinationLabel
+    });
+CONTAINER.addChild( invisibleLabel );
+
+INVISIBLE_LABELS.push( invisibleLabel );
+};
+
+
+/**
+ * Remove an element from the current map.
+ */
 MapEditor.removeElement = function( element )
 {
 var position;
@@ -440,6 +493,11 @@ var array;
 if ( element instanceof Label )
     {
     array = LABELS;
+    }
+
+else if ( element instanceof InvisibleLabel )
+    {
+    array = INVISIBLE_LABELS;
     }
 
 else
@@ -456,39 +514,47 @@ element.remove();
 };
 
 
+/**
+ * Remove an element, given a x/y position. It searches in all the element types (labels/invisible labels/areas).
+ */
 MapEditor.removeElement2 = function( x, y )
 {
-var a;
-var elements;
+var arrays = [ LABELS, INVISIBLE_LABELS, AREAS ];
 
-for (a = LABELS.length - 1 ; a >= 0 ; a--)
+for (var a = 0 ; a < arrays.length ; a++)
     {
-    var label = LABELS[ a ];
-    elements = label.intersect( x, y );
-
-    if ( elements.length > 0 )
+    if ( MapEditor.removeElement3( x, y, arrays[ a ] ) )
         {
-        LABELS.splice( a, 1 );
-
-        label.remove();
-        return;
+        return true;
         }
     }
 
-for (a = AREAS.length - 1 ; a >= 0 ; a--)
-    {
-    var area = AREAS[ a ];
-    elements = area.intersect( x, y );
-
-    if ( elements.length > 0 )
-        {
-        AREAS.splice( a, 1 );
-
-        area.remove();
-        return;
-        }
-    }
+return false;
 };
+
+
+/**
+ * Remove an element, from a given x/y position and an array of the elements to search in.
+ */
+MapEditor.removeElement3 = function( x, y, array )
+{
+for (var a = array.length - 1 ; a >= 0 ; a--)
+    {
+    var element = array[ a ];
+    var elements = element.intersect( x, y );
+
+    if ( elements.length > 0 )
+        {
+        array.splice( a, 1 );
+
+        element.remove();
+        return true;
+        }
+    }
+
+return false;
+};
+
 
 
 MapEditor.addArea = function( x, y, width, height, name )

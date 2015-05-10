@@ -4,6 +4,7 @@ Game.init( document.body, 1000, 600 );
 
 var manifest = [
         { id: 'act_1', path: 'images/act_1.jpg' },
+        { id: 'act_1_map', path: 'images/act_1_map.jpg' },
         { id: 'cathedral_level_1', path: 'images/cathedral_level_1.jpg' },
         { id: 'cathedral_level_2', path: 'images/cathedral_level_2.jpg' },
         { id: 'cathedral_level_3', path: 'images/cathedral_level_3.jpg' },
@@ -82,7 +83,7 @@ preload.addEventListener( 'complete', function()
     loadingMessage.clear();
 
     Main.init();
-    Main.load( 'act_1', 'new_tristram' );
+    Main.load( 'act_1_map' );
     });
 preload.loadManifest( manifest );
 };
@@ -192,7 +193,8 @@ document.body.addEventListener( 'keydown', function( event )
             // other shortcuts
             // go back to the top level
         case Utilities.KEY_CODE.esc:
-            Main.load( 'act_1' );
+        case Utilities.KEY_CODE.m:
+            Main.load( 'act_1_map' );
             break;
         }
     });
@@ -298,33 +300,50 @@ else
     }
 
 
-    // add the labels
-var labelsIds = Object.keys( mapInfo.labels );
 var a;
+var info;
+var element;
 
-for (a = labelsIds.length - 1 ; a >= 0 ; a--)
+    // add the labels
+if ( typeof mapInfo.labels !== 'undefined' )
     {
-    var id = labelsIds[ a ];
+    var labelsIds = Object.keys( mapInfo.labels );
 
-    var labelInfo = mapInfo.labels[ id ];
-    var label = new Label( labelInfo );
+    for (a = labelsIds.length - 1 ; a >= 0 ; a--)
+        {
+        var id = labelsIds[ a ];
 
-    CONTAINER.addChild( label );
+        info = mapInfo.labels[ id ];
+        element = new Label( info );
+
+        CONTAINER.addChild( element );
+        }
     }
 
-    // and the area elements
-for (a = mapInfo.areas.length - 1 ; a >= 0 ; a--)
-    {
-    var areaInfo = mapInfo.areas[ a ];
 
-    var area = new Area({
-            x: areaInfo.x,
-            y: areaInfo.y,
-            width: areaInfo.width,
-            height: areaInfo.height,
-            name: areaInfo.name
-        });
-    CONTAINER.addChild( area );
+    // add all the invisible labels
+if ( typeof mapInfo.invisible_labels !== 'undefined' )
+    {
+    for (a = mapInfo.invisible_labels.length - 1 ; a >= 0 ; a--)
+        {
+        info = mapInfo.invisible_labels[ a ];
+        element = new InvisibleLabel( info );
+
+        CONTAINER.addChild( element );
+        }
+    }
+
+
+    // and the area elements
+if ( typeof mapInfo.areas !== 'undefined' )
+    {
+    for (a = mapInfo.areas.length - 1 ; a >= 0 ; a--)
+        {
+        info = mapInfo.areas[ a ];
+        element = new Area( info );
+
+        CONTAINER.addChild( element );
+        }
     }
 };
 

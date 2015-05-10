@@ -42,6 +42,11 @@ var addLabel = new Game.Html.Button({
         callback: MapEditor.openAddLabel
     });
 
+var addInvisibleLabel = new Game.Html.Button({
+        value: 'Add Invisible Label',
+        callback: MapEditor.openAddInvisibleLabel
+    });
+
 var addArea = new Game.Html.Button({
         value: 'Add Area',
         callback: MapEditor.openAddArea
@@ -75,7 +80,7 @@ var load = new Game.Html.Button({
         callback: MapEditor.openLoadMessage
     });
 
-menu.addChild( scale, recenter, addLabel, addArea, ACTIVE_MODE_MENU, newMap, save, load );
+menu.addChild( scale, recenter, addLabel, addInvisibleLabel, addArea, ACTIVE_MODE_MENU, newMap, save, load );
 
 
 document.body.appendChild( menu.container );
@@ -96,6 +101,7 @@ ACTIVE_MODE_MENU.select( modeId );
 
 MapEditor.clearSelectedElement();
 };
+
 
 
 MapEditor.openAddLabel = function()
@@ -150,6 +156,68 @@ var close = new Game.Html.Button({
 
 var message = new Game.Message({
         body: [ 'New Label', type, id, text, destinationId, destinationLabel ],
+        container: container,
+        background: true,
+        buttons: [ add, close ]
+    });
+};
+
+
+MapEditor.openAddInvisibleLabel = function()
+{
+var container = Game.getCanvasContainer();
+var canvas = Game.getCanvas();
+var topLevelContainer = MapEditor.getTopLevelContainer();
+var scale = MapEditor.getScale();
+
+var x = (canvas.getWidth() / 2 - topLevelContainer.x) / scale;
+var y = (canvas.getHeight() / 2 - topLevelContainer.y) / scale;
+
+var width = new Game.Html.Range({
+        min: 1,
+        max: 100,
+        step: 1,
+        value: 20
+    });
+var height = new Game.Html.Range({
+        min: 1,
+        max: 100,
+        step: 1,
+        value: 20
+    });
+var destination = new Game.Html.Text({
+        preText: 'Destination Id:'
+    });
+var destinationLabel = new Game.Html.Text({
+        preText: 'Destination Label:'
+    });
+
+var add = new Game.Html.Button({
+        value: 'Add',
+        callback: function()
+            {
+            MapEditor.addInvisibleLabel(
+                Math.round( x ),
+                Math.round( y ),
+                width.getValue(),
+                height.getValue(),
+                destination.getValue(),
+                destinationLabel.getValue()
+                );
+
+            message.clear();
+            }
+    });
+var close = new Game.Html.Button({
+        value: 'Close',
+        callback: function()
+            {
+            message.clear();
+            }
+    });
+
+var message = new Game.Message({
+        body: [ 'New Invisible Label', width, height, destination, destinationLabel ],
         container: container,
         background: true,
         buttons: [ add, close ]
