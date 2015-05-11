@@ -76,7 +76,7 @@ var loadingMessage = new Game.Message({
 
 preload.addEventListener( 'progress', function( progress )
     {
-    loadingMessage.setBody( 'Loadding.. ' + progress + '%' );
+    loadingMessage.setBody( 'Loading.. ' + progress + '%' );
     });
 preload.addEventListener( 'complete', function()
     {
@@ -206,11 +206,16 @@ var referenceX;
 var referenceY;
 var canvasContainer = Game.getCanvasContainer();
 
+    // disable the context menu (when right-clicking)
+canvasContainer.oncontextmenu = function( event ) { return false; };
 canvasContainer.addEventListener( 'mousedown', function( event )
     {
-    mouseDown = true;
-    referenceX = event.clientX;
-    referenceY = event.clientY;
+    if ( event.button === Utilities.MOUSE_CODE.left )
+        {
+        mouseDown = true;
+        referenceX = event.clientX;
+        referenceY = event.clientY;
+        }
     });
 canvasContainer.addEventListener( 'mousemove', function( event )
     {
@@ -228,6 +233,11 @@ canvasContainer.addEventListener( 'mousemove', function( event )
 canvasContainer.addEventListener( 'mouseup', function( event )
     {
     mouseDown = false;
+
+    if ( event.button === Utilities.MOUSE_CODE.right )
+        {
+        Main.load( 'act_1_map' );
+        }
     });
 canvasContainer.addEventListener( 'mouseleave', function( event )
     {
