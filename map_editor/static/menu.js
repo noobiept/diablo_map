@@ -173,18 +173,6 @@ var scale = MapEditor.getScale();
 var x = (canvas.getWidth() / 2 - topLevelContainer.x) / scale;
 var y = (canvas.getHeight() / 2 - topLevelContainer.y) / scale;
 
-var width = new Game.Html.Range({
-        min: 1,
-        max: 100,
-        step: 1,
-        value: 20
-    });
-var height = new Game.Html.Range({
-        min: 1,
-        max: 100,
-        step: 1,
-        value: 20
-    });
 var destination = new Game.Html.Text({
         preText: 'Destination Id:'
     });
@@ -199,8 +187,8 @@ var add = new Game.Html.Button({
             MapEditor.addInvisibleLabel(
                 Math.round( x ),
                 Math.round( y ),
-                width.getValue(),
-                height.getValue(),
+                50,
+                50,
                 destination.getValue(),
                 destinationLabel.getValue()
                 );
@@ -217,7 +205,7 @@ var close = new Game.Html.Button({
     });
 
 var message = new Game.Message({
-        body: [ 'New Invisible Label', width, height, destination, destinationLabel ],
+        body: [ 'New Invisible Label', destination, destinationLabel ],
         container: container,
         background: true,
         buttons: [ add, close ]
