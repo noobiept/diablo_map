@@ -1,6 +1,39 @@
 window.onload = function()
 {
+Main.initialInit();
+Main.loadAssets( '', function() { Main.load( 'act_1_map' ); } );
+};
+
+
+
+var Main;
+(function(Main) {
+
+
+var CONTAINER;      // top-level container
+var MAP_NAME;       // text element, which identifies the current map image
+var AREA_NAME;      // text element, that has the name of the current are under the mouse pointer
+var MAPS_INFO;      // has all the maps info (labels/areas position, names, etc)
+var SCALE = 1;      // current scale of the map
+var MIN_SCALE = 0.4;
+var MAX_SCALE = 2;
+var SCALE_STEP = 0.2;
+var SCALE_MENU_ELEMENT;
+
+
+Main.initialInit = function()
+{
 Game.init( document.body, 1000, 600 );
+};
+
+
+Main.loadAssets = function( basePath, onComplete )
+{
+if ( typeof basePath === 'undefined' )
+    {
+    basePath = '';
+    }
+
 
 var manifest = [
         { id: 'act_1', path: 'images/act_1.jpg' },
@@ -71,6 +104,7 @@ var preload = new Game.Preload({ save_global: true });
 var container = Game.getCanvasContainer();
 var loadingMessage = new Game.Message({
         container: container,
+        cssId: 'LoadingMessage',
         body: 'Loading..'
     });
 
@@ -81,35 +115,24 @@ preload.addEventListener( 'progress', function( progress )
 preload.addEventListener( 'complete', function()
     {
     loadingMessage.clear();
+    Main.finalInit();
 
-    Main.init();
-    Main.load( 'act_1_map' );
+    if ( onComplete )
+        {
+        onComplete();
+        }
     });
-preload.loadManifest( manifest );
+preload.loadManifest( manifest, basePath );
 };
 
 
-
-
-(function(window)
+Main.loadMapsInfo = function()
 {
-function Main()
-{
-
-}
-
-var CONTAINER;      // top-level container
-var MAP_NAME;       // text element, which identifies the current map image
-var AREA_NAME;      // text element, that has the name of the current are under the mouse pointer
-var MAPS_INFO;      // has all the maps info (labels/areas position, names, etc)
-var SCALE = 1;      // current scale of the map
-var MIN_SCALE = 0.4;
-var MAX_SCALE = 2;
-var SCALE_STEP = 0.2;
-var SCALE_MENU_ELEMENT;
+MAPS_INFO = Game.Preload.get( 'info' );
+};
 
 
-Main.init = function()
+Main.finalInit = function()
 {
 Game.activateMouseMoveEvents( 100 );
 
@@ -120,7 +143,7 @@ Game.addElement( CONTAINER );
 
 
     // get the maps info
-MAPS_INFO = Game.Preload.get( 'info' );
+Main.loadMapsInfo();
 
 
     // add the map name element
@@ -159,35 +182,35 @@ document.body.addEventListener( 'keydown', function( event )
             // key movement
         case Utilities.KEY_CODE.leftArrow:
         case Utilities.KEY_CODE.a:
-            moveCamera( step, 0 );
+            Main.moveCamera( step, 0 );
             break;
 
         case Utilities.KEY_CODE.rightArrow:
         case Utilities.KEY_CODE.d:
-            moveCamera( -step, 0 );
+            Main.moveCamera( -step, 0 );
             break;
 
         case Utilities.KEY_CODE.upArrow:
         case Utilities.KEY_CODE.w:
-            moveCamera( 0, step );
+            Main.moveCamera( 0, step );
             break;
 
         case Utilities.KEY_CODE.downArrow:
         case Utilities.KEY_CODE.s:
-            moveCamera( 0, -step );
+            Main.moveCamera( 0, -step );
             break;
 
             // menu shortcuts
         case Utilities.KEY_CODE[ '1' ]:
-            reCenterCamera();
+            Main.reCenterCamera();
             break;
 
         case Utilities.KEY_CODE[ '2' ]:
-            changeScale( SCALE - SCALE_STEP );
+            Main.changeScale( SCALE - SCALE_STEP );
             break;
 
         case Utilities.KEY_CODE[ '3' ]:
-            changeScale( SCALE + SCALE_STEP );
+            Main.changeScale( SCALE + SCALE_STEP );
             break;
 
             // other shortcuts
@@ -224,7 +247,7 @@ canvasContainer.addEventListener( 'mousemove', function( event )
         var currentX = event.clientX;
         var currentY = event.clientY;
 
-        moveCamera( currentX - referenceX, currentY - referenceY );
+        Main.moveCamera( currentX - referenceX, currentY - referenceY );
 
         referenceX = currentX;
         referenceY = currentY;
@@ -257,7 +280,7 @@ SCALE_MENU_ELEMENT = new Game.Html.Range({
         preText: 'Scale',
         onChange: function( button )
             {
-            changeScale( button.getValue() );
+            Main.changeScale( button.getValue() );
             }
     });
 
@@ -265,7 +288,7 @@ var recenter = new Game.Html.Button({
         value: 'Recenter',
         callback: function( button )
             {
-            reCenterCamera();
+            Main.reCenterCamera();
             }
     });
 
@@ -282,7 +305,7 @@ document.body.appendChild( menu.container );
  */
 Main.load = function( mapId, mapPosition )
 {
-clear();
+Main.clear();
 var mapInfo = MAPS_INFO[ mapId ];
 
 
@@ -298,7 +321,7 @@ MAP_NAME.text = mapInfo.mapName;
     // center the container in the middle of the canvas
 if ( typeof mapPosition === 'undefined' || mapPosition === '' )
     {
-    reCenterCamera();
+    Main.reCenterCamera();
     }
 
     // center in the middle of the given x/y position
@@ -306,13 +329,12 @@ else
     {
     var positionInfo = mapInfo.labels[ mapPosition ];
 
-    reCenterCamera( positionInfo.x, positionInfo.y );
+    Main.reCenterCamera( positionInfo.x, positionInfo.y );
     }
 
 
 var a;
 var info;
-var element;
 
     // add the labels
 if ( typeof mapInfo.labels !== 'undefined' )
@@ -324,9 +346,9 @@ if ( typeof mapInfo.labels !== 'undefined' )
         var id = labelsIds[ a ];
 
         info = mapInfo.labels[ id ];
-        element = new Label( info );
+        info.id = id;
 
-        CONTAINER.addChild( element );
+        Main.addLabel( info );
         }
     }
 
@@ -337,9 +359,8 @@ if ( typeof mapInfo.invisible_labels !== 'undefined' )
     for (a = mapInfo.invisible_labels.length - 1 ; a >= 0 ; a--)
         {
         info = mapInfo.invisible_labels[ a ];
-        element = new InvisibleLabel( info );
 
-        CONTAINER.addChild( element );
+        Main.addInvisibleLabel( info );
         }
     }
 
@@ -350,12 +371,45 @@ if ( typeof mapInfo.areas !== 'undefined' )
     for (a = mapInfo.areas.length - 1 ; a >= 0 ; a--)
         {
         info = mapInfo.areas[ a ];
-        element = new Area( info );
 
-        CONTAINER.addChild( element );
+        Main.addArea( info );
         }
     }
 };
+
+
+Main.addLabel = function( args )
+{
+var label = new Label( args );
+
+CONTAINER.addChild( label );
+
+return label;
+};
+
+
+
+Main.addInvisibleLabel = function( args )
+{
+var label = new InvisibleLabel( args );
+
+CONTAINER.addChild( label );
+
+return label;
+};
+
+
+Main.addArea = function( args )
+{
+var area = new Area( args );
+
+CONTAINER.addChild( area );
+
+return area;
+};
+
+
+
 
 
 Main.changeCursor = function( mouseOver )
@@ -373,17 +427,17 @@ else
 
 
 
-function clear()
+Main.clear = function()
 {
 AREA_NAME.text = '';
 CONTAINER.removeAllChildren();
-}
+};
 
 
 /**
  * Center the camera around a given point (or (0, 0) if there's no arguments).
  */
-function reCenterCamera( refX, refY )
+Main.reCenterCamera = function( refX, refY )
 {
 if ( typeof refX === 'undefined' )
     {
@@ -394,18 +448,18 @@ var canvas = Game.getCanvas();
 
 CONTAINER.x = canvas.getWidth() / 2 - refX * SCALE;
 CONTAINER.y = canvas.getHeight() / 2 - refY * SCALE;
-}
+};
 
 
 
-function moveCamera( xMov, yMov )
+Main.moveCamera = function( xMov, yMov )
 {
 CONTAINER.x += xMov;
 CONTAINER.y += yMov;
-}
+};
 
 
-function changeScale( scale )
+Main.changeScale = function( scale )
 {
 if ( scale < MIN_SCALE ||
      scale > MAX_SCALE )
@@ -417,7 +471,14 @@ CONTAINER.scaleX = CONTAINER.scaleY = scale;
 SCALE = scale;
 
 SCALE_MENU_ELEMENT.setValue( scale );
-}
+};
+
+
+Main.getScale = function()
+{
+return SCALE;
+};
+
 
 
 Main.setAreaName = function( name )
@@ -426,6 +487,22 @@ AREA_NAME.text = name;
 };
 
 
-window.Main = Main;
+Main.getMapsInfo = function()
+{
+return MAPS_INFO;
+};
 
-})(window);
+
+Main.setMapsInfo = function( info )
+{
+MAPS_INFO = info;
+};
+
+
+Main.getTopLevelContainer = function()
+{
+return CONTAINER;
+};
+
+
+})(Main || (Main = {}));

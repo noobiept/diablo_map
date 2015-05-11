@@ -101,8 +101,21 @@ body
     top: 50%;
     transform: translate(-50%, -50%);
     padding: 10px;
+    background-color: aliceblue;
+    color: black;
     }
 
+#LoadingMessage
+    {
+    background-color: transparent;
+    color: white;
+    }
+
+.Game-Message-container:not(#LoadingMessage) .Game-Container,
+.Game-Message-container .Game-preText
+    {
+    color: black;
+    }
     
 .Game-Message-container .Game-Button
     {

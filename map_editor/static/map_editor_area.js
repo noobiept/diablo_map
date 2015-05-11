@@ -10,11 +10,11 @@ this.name = args.name;
 
 this.addEventListener( 'mouseover', function()
     {
-    MapEditor.setAreaName( args.name );
+    Main.setAreaName( args.name );
     });
 this.addEventListener( 'mouseout', function()
     {
-    MapEditor.setAreaName( '' );
+    Main.setAreaName( '' );
     });
 this.addEventListener( 'click', function( data )
     {
@@ -22,12 +22,12 @@ this.addEventListener( 'click', function( data )
 
     if ( code === Utilities.MOUSE_CODE.middle )
         {
-        MapEditor.removeElement( _this );
+        Main.removeElement( _this );
         }
 
     else if ( code === Utilities.MOUSE_CODE.left )
         {
-        MapEditor.selectElement( _this );
+        Main.selectElement( _this );
         }
     });
 }

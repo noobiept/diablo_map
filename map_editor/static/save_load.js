@@ -1,8 +1,8 @@
-var MapEditor;
-(function(MapEditor) {
+var Main;
+(function(Main) {
 
 
-MapEditor.loadMapsInfo = function()
+Main.loadMapsInfo = function()
 {
 var container = Game.getCanvasContainer();
 var formData = new FormData();
@@ -21,7 +21,7 @@ request.onload = function()
                 timeout: 2
             });
 
-        MapEditor.clearSavedMapName();
+        Main.clearSavedMapName();
 
         console.log( this.status );
         console.log( this.responseText );
@@ -31,14 +31,14 @@ request.onload = function()
         {
         var info = JSON.parse( this.responseText );
 
-        MapEditor.setMapsInfo( info );
+        Main.setMapsInfo( info );
 
-        var mapName = MapEditor.getSavedMapName();
-        var mapPosition = MapEditor.getSavedMapPosition();
+        var mapName = Main.getSavedMapName();
+        var mapPosition = Main.getSavedMapPosition();
 
         if ( mapName )
             {
-            MapEditor.load( mapName, mapPosition );
+            Main.load( mapName, mapPosition );
             }
         }
     };
@@ -46,7 +46,7 @@ request.send( formData );
 };
 
 
-MapEditor.saveMap = function( mapInfo )
+Main.saveMap = function( mapInfo )
 {
     // name of the map
 var container = Game.getCanvasContainer();
@@ -90,7 +90,7 @@ request.send( formData );
 /**
  * Save the previously saved file name, so that the next time the program is run, we can load it.
  */
-MapEditor.saveMapName = function( mapName, mapPosition )
+Main.saveMapName = function( mapName, mapPosition )
 {
 if ( typeof mapPosition === 'undefined' )
     {
@@ -102,23 +102,23 @@ localStorage.setItem( 'diablo_map_previous_map_position', mapPosition );
 };
 
 
-MapEditor.getSavedMapName = function()
+Main.getSavedMapName = function()
 {
 return localStorage.getItem( 'diablo_map_previous_map' );
 };
 
 
-MapEditor.getSavedMapPosition = function()
+Main.getSavedMapPosition = function()
 {
 return localStorage.getItem( 'diablo_map_previous_map_position' );
 };
 
 
-MapEditor.clearSavedMapName = function()
+Main.clearSavedMapName = function()
 {
 localStorage.removeItem( 'diablo_map_previous_map' );
 localStorage.removeItem( 'diablo_map_previous_map_position' );
 };
 
 
-})(MapEditor || (MapEditor = {}));
+})(Main || (Main = {}));

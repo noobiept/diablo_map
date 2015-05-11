@@ -1,239 +1,99 @@
 window.onload = function()
 {
-Game.init( document.body, 1000, 600 );
-
-var manifest = [
-        { id: 'act_1', path: 'images/act_1.jpg' },
-        { id: 'act_1_map', path: 'images/act_1_map.jpg' },
-        { id: 'cathedral_level_1', path: 'images/cathedral_level_1.jpg' },
-        { id: 'cathedral_level_2', path: 'images/cathedral_level_2.jpg' },
-        { id: 'cathedral_level_3', path: 'images/cathedral_level_3.jpg' },
-        { id: 'cathedral_level_4', path: 'images/cathedral_level_4.jpg' },
-        { id: 'cave_of_the_moon_clan_level_1', path: 'images/cave_of_the_moon_clan_level_1.jpg' },
-        { id: 'cave_of_the_moon_clan_level_2', path: 'images/cave_of_the_moon_clan_level_2.jpg' },
-        { id: 'caverns_of_araneae', path: 'images/caverns_of_araneae.jpg' },
-        { id: 'cellar_of_the_damned', path: 'images/cellar_of_the_damned.jpg' },
-        { id: 'cells_of_the_condemned', path: 'images/cells_of_the_condemned.jpg' },
-        { id: 'chamber_of_queen_araneae', path: 'images/chamber_of_queen_araneae.jpg' },
-        { id: 'chamber_of_suffering', path: 'images/chamber_of_suffering.jpg' },
-        { id: 'chancellors_tomb', path: 'images/chancellors_tomb.jpg' },
-        { id: 'crypt_of_the_ancients', path: 'images/crypt_of_the_ancients.jpg' },
-        { id: 'crypt_of_the_skeleton_king', path: 'images/crypt_of_the_skeleton_king.jpg' },
-        { id: 'damp_cellar', path: 'images/damp_cellar.jpg' },
-        { id: 'dank_cellar', path: 'images/dank_cellar.jpg' },
-        { id: 'dark_cellar', path: 'images/dark_cellar.jpg' },
-        { id: 'decaying_crypt_level_1', path: 'images/decaying_crypt_level_1.jpg' },
-        { id: 'decaying_crypt_level_2', path: 'images/decaying_crypt_level_2.jpg' },
-        { id: 'defiled_crypt_1', path: 'images/defiled_crypt_1.jpg' },
-        { id: 'defiled_crypt_2_level_1', path: 'images/defiled_crypt_2_level_1.jpg' },
-        { id: 'defiled_crypt_2_level_2', path: 'images/defiled_crypt_2_level_2.jpg' },
-        { id: 'defiled_crypt_3', path: 'images/defiled_crypt_3.jpg' },
-        { id: 'den_of_the_fallen_level_1', path: 'images/den_of_the_fallen_level_1.jpg' },
-        { id: 'den_of_the_fallen_level_2', path: 'images/den_of_the_fallen_level_2.jpg' },
-        { id: 'desolate_chamber', path: 'images/desolate_chamber.jpg' },
-        { id: 'drowned_temple', path: 'images/drowned_temple.jpg' },
-        { id: 'halls_of_agony_level_1', path: 'images/halls_of_agony_level_1.jpg' },
-        { id: 'halls_of_agony_level_2', path: 'images/halls_of_agony_level_2.jpg' },
-        { id: 'halls_of_agony_level_3', path: 'images/halls_of_agony_level_3.jpg' },
-        { id: 'heretics_abode', path: 'images/heretics_abode.jpg' },
-        { id: 'highlands_cave', path: 'images/highlands_cave.jpg' },
-        { id: 'highlands_passage', path: 'images/highlands_passage.jpg' },
-        { id: 'khazra_den', path: 'images/khazra_den.jpg' },
-        { id: 'leahs_room', path: 'images/leahs_room.jpg' },
-        { id: 'leorics_manor', path: 'images/leorics_manor.jpg' },
-        { id: 'leorics_passage', path: 'images/leorics_passage.jpg' },
-        { id: 'lost_mine_level_1', path: 'images/lost_mine_level_1.jpg' },
-        { id: 'lost_mine_level_2', path: 'images/lost_mine_level_2.jpg' },
-        { id: 'mass_grave', path: 'images/mass_grave.jpg' },
-        { id: 'musty_cellar', path: 'images/musty_cellar.jpg' },
-        { id: 'scavengers_den_level_1', path: 'images/scavengers_den_level_1.jpg' },
-        { id: 'scavengers_den_level_2', path: 'images/scavengers_den_level_2.jpg' },
-        { id: 'the_cave_under_the_well', path: 'images/the_cave_under_the_well.jpg' },
-        { id: 'the_cursed_hold', path: 'images/the_cursed_hold.jpg' },
-        { id: 'the_hidden_cellar', path: 'images/the_hidden_cellar.jpg' },
-        { id: 'the_lyceum', path: 'images/the_lyceum.jpg' },
-        { id: 'the_royal_crypts', path: 'images/the_royal_crypts.jpg' },
-        { id: 'the_slaughtered_calf_inn', path: 'images/the_slaughtered_calf_inn.jpg' },
-        { id: 'tinkers_hovel', path: 'images/tinkers_hovel.jpg' },
-        { id: 'warriors_rest', path: 'images/warriors_rest.jpg' },
-        { id: 'watch_tower_level_1', path: 'images/watch_tower_level_1.jpg' },
-        { id: 'watch_tower_level_2', path: 'images/watch_tower_level_2.jpg' },
-        { id: 'wortham', path: 'images/wortham.jpg' },
-        { id: 'wortham_chapel_cellar', path: 'images/wortham_chapel_cellar.jpg' },
-
-        { id: 'elements', path: 'images/elements.png' },
-        { id: 'info', path: 'map_info/info.json' }
-    ];
-
-
-var preload = new Game.Preload({ save_global: true });
-
-preload.addEventListener( 'complete', function()
+Main.initialInit();
+Main.loadAssets( '/static/', function()
     {
-    MapEditor.init();
-    MapEditor.loadMapsInfo();
+    Main.mapEditorInit();
     });
-preload.loadManifest( manifest, '/static/' );
 };
 
 
-var MapEditor;
-(function(MapEditor) {
+
+var Main;
+(function(Main) {
 
 
-var CONTAINER;
-
-var MAP_NAME;       // located at the top left of the map, shows the map name
-var AREA_NAME;      // name of the area currently under the mouse
-var SCALE = 1;
-var SCALE_STEP = 0.2;
 var SELECTED_ELEMENT = null;
 var BASIC_INFO = {};
 var LABELS = [];    // all the label elements
 var INVISIBLE_LABELS = [];  // all the invisible label elements
 var AREAS = [];     // all the area elements
-var MAPS_INFO;      // has all the maps info (labels/areas position, names, etc)
 var CURRENT_MAP_ID = '';  // id of the current map that is loaded
 
 
-MapEditor.init = function()
+
+Main.mapEditorInit = function()
 {
-Game.activateMouseMoveEvents( 100 );
-
-    // top level container
-CONTAINER = new Game.Container();
-
-Game.addElement( CONTAINER );
-
-
-    // add the map name element
 var canvas = Game.getCanvas();
-var canvasWidth = canvas.getWidth();
 var canvasHtmlElement = canvas.getHtmlCanvasElement();
-
-MAP_NAME = new Game.Text({
-        textAlign: 'end',
-        color: 'white'
-    });
-MAP_NAME.x = canvasWidth;
-Game.addElement( MAP_NAME );
-
-
-    // add the area name element
-AREA_NAME = new Game.Text({
-        textAlign: 'end',
-        color: 'white'
-    });
-AREA_NAME.x = canvasWidth;
-AREA_NAME.y = 20;
-Game.addElement( AREA_NAME );
-
-
-    // set the mouse events for the movement
-var mouseDown = false;
-var referenceX;
-var referenceY;
+var container = Main.getTopLevelContainer();
 var canvasContainer = Game.getCanvasContainer();
 
-canvasContainer.addEventListener( 'mousedown', function( event )
-    {
-    mouseDown = true;
-    referenceX = event.clientX;
-    referenceY = event.clientY;
-    });
+
 canvasContainer.addEventListener( 'mousemove', function( event )
     {
     var currentX = event.clientX;
     var currentY = event.clientY;
-    var currentMode = MapEditor.getCurrentMode();
+    var currentMode = Main.getCurrentMode();
+    var scale = Main.getScale();
 
         // the drag of the elements
-    if ( currentMode === MapEditor.MODES.Drag )
+    if ( currentMode === Main.MODES.Drag )
         {
         if ( SELECTED_ELEMENT )
             {
             var rect = canvasHtmlElement.getBoundingClientRect();
 
-            var x = (currentX - rect.left - CONTAINER.x) / SCALE;
-            var y = (currentY - rect.top - CONTAINER.y) / SCALE;
+            var x = (currentX - rect.left - container.x) / scale;
+            var y = (currentY - rect.top - container.y) / scale;
 
             SELECTED_ELEMENT.x = Math.round( x );
             SELECTED_ELEMENT.y = Math.round( y );
             }
         }
-
-        // the movement of the camera
-    else if ( mouseDown )
-        {
-        MapEditor.moveCamera( currentX - referenceX, currentY - referenceY );
-
-        referenceX = currentX;
-        referenceY = currentY;
-        }
     });
 canvasContainer.addEventListener( 'mouseup', function( event )
     {
-    mouseDown = false;
-
         // remove a label on click (if its on remove mode)
-    if ( MapEditor.getCurrentMode() === MapEditor.MODES.Remove )
+    if ( Main.getCurrentMode() === Main.MODES.Remove )
         {
         var rect = canvasHtmlElement.getBoundingClientRect();
 
         var mouseX = event.clientX - rect.left;
         var mouseY = event.clientY - rect.top;
 
-        MapEditor.removeElement2( mouseX, mouseY );
+        Main.removeElement2( mouseX, mouseY );
         }
     });
 document.body.addEventListener( 'keyup', function( event )
     {
     var key = event.keyCode;
-    var currentMode = MapEditor.getCurrentMode();
+    var currentMode = Main.getCurrentMode();
 
         // global shortcuts
     switch( key )
         {
-            // menu shortcuts
-        case Utilities.KEY_CODE[ '1' ]:
-            MapEditor.reCenterCamera();
-            break;
-
-        case Utilities.KEY_CODE[ '2' ]:
-            MapEditor.changeScale( SCALE - SCALE_STEP );
-            break;
-
-        case Utilities.KEY_CODE[ '3' ]:
-            MapEditor.changeScale( SCALE + SCALE_STEP );
-            break;
-
             // map editor specific shortcuts
         case Utilities.KEY_CODE.q:
-            MapEditor.setCurrentMode( MapEditor.MODES.Move );
+            Main.setCurrentMode( Main.MODES.Move );
             break;
 
         case Utilities.KEY_CODE.w:
-            MapEditor.setCurrentMode( MapEditor.MODES.Drag );
+            Main.setCurrentMode( Main.MODES.Drag );
             break;
 
         case Utilities.KEY_CODE.e:
-            MapEditor.setCurrentMode( MapEditor.MODES.Remove );
+            Main.setCurrentMode( Main.MODES.Remove );
             break;
 
         case Utilities.KEY_CODE.r:
-            MapEditor.setCurrentMode( MapEditor.MODES.Resize );
-            break;
-
-            // other shortcuts
-            // go back to the top level
-        case Utilities.KEY_CODE.esc:
-            Main.load( 'act_1' );
+            Main.setCurrentMode( Main.MODES.Resize );
             break;
         }
 
 
         // resize mode specific shortcuts
-    if ( currentMode === MapEditor.MODES.Resize && SELECTED_ELEMENT )
+    if ( currentMode === Main.MODES.Resize && SELECTED_ELEMENT )
         {
         var step = 5;
         var width = SELECTED_ELEMENT.getWidth();
@@ -261,91 +121,29 @@ document.body.addEventListener( 'keyup', function( event )
     });
 
 
-MapEditor.initMenu();
+Main.initMenu();
 };
 
 
-MapEditor.load = function( mapId, mapPosition )
+Main.base_load = Main.load;
+Main.load = function( mapId, mapPosition )
 {
-clear();
+Main.base_load( mapId, mapPosition );
 
-var mapInfo = MAPS_INFO[ mapId ];
+var mapInfo = Main.getMapsInfo()[ mapId ];
 
-var image = Game.Preload.get( mapInfo.imageId );
-
-var map = new Game.Bitmap({
-        image: image
-    });
-CONTAINER.addChild( map );
-
-
-if ( typeof mapPosition === 'undefined' || mapPosition === '' )
-    {
-    MapEditor.reCenterCamera();
-    }
-
-else
-    {
-    var info = mapInfo.labels[ mapPosition ];
-
-    MapEditor.reCenterCamera( info.x, info.y );
-    }
-
-MAP_NAME.text = mapInfo.mapName;
 CURRENT_MAP_ID = mapId;
 BASIC_INFO = {
         imageId: mapInfo.imageId,
         mapName: mapInfo.mapName
     };
 
-MapEditor.saveMapName( mapId, mapPosition );
-
-
-    // add all the labels
-var a;
-var info;
-
-if ( typeof mapInfo.labels !== 'undefined' )
-    {
-    var labelsIds = Object.keys( mapInfo.labels );
-
-    for (a = labelsIds.length - 1 ; a >= 0 ; a--)
-        {
-        var id = labelsIds[ a ];
-        info = mapInfo.labels[ id ];
-
-        MapEditor.addLabel( info.x, info.y, info.imageId, id, info.text, info.destination, info.destinationLabel );
-        }
-    }
-
-
-    // add all the invisible labels
-if ( typeof mapInfo.invisible_labels !== 'undefined' )
-    {
-    for (a = mapInfo.invisible_labels.length - 1 ; a >= 0 ; a--)
-        {
-        info = mapInfo.invisible_labels[ a ];
-
-        MapEditor.addInvisibleLabel( info.x, info.y, info.width, info.height, info.destination, info.destinationLabel );
-        }
-    }
-
-
-    // add all the areas
-if ( typeof mapInfo.areas !== 'undefined' )
-    {
-    for (a = mapInfo.areas.length - 1 ; a >= 0 ; a--)
-        {
-        info = mapInfo.areas[ a ];
-
-        MapEditor.addArea( info.x, info.y, info.width, info.height, info.name );
-        }
-    }
+Main.saveMapName( mapId, mapPosition );
 };
 
 
 
-MapEditor.getUpdatedMapInfo = function()
+Main.getUpdatedMapInfo = function()
 {
 var mapInfo = Utilities.deepClone( BASIC_INFO );
 var a;
@@ -403,13 +201,15 @@ for (a = AREAS.length - 1 ; a >= 0 ; a--)
     }
 
 
-MAPS_INFO[ CURRENT_MAP_ID ] = mapInfo;
+var mapsInfo = Main.getMapsInfo();
 
-return MAPS_INFO;
+mapsInfo[ CURRENT_MAP_ID ] = mapInfo;
+
+return mapsInfo;
 };
 
 
-MapEditor.changeCursor = function( mouseOver )
+Main.changeCursor = function( mouseOver )
 {
 if ( mouseOver === true )
     {
@@ -423,69 +223,65 @@ else
 };
 
 
-
-function clear()
+Main.base_clear = Main.clear;
+Main.clear = function()
 {
-CONTAINER.removeAllChildren();
+Main.base_clear();
 
 LABELS.length = 0;
 INVISIBLE_LABELS.length = 0;
 AREAS.length = 0;
-}
-
-
-MapEditor.getTopLevelContainer = function()
-{
-return CONTAINER;
 };
 
 
-MapEditor.addNewMap = function( info )
+
+Main.addNewMap = function( info )
 {
-MAPS_INFO[ info.mapId ] = {
+var mapsInfo = Main.getMapsInfo();
+
+mapsInfo[ info.mapId ] = {
         imageId: info.imageId,
         mapName: info.mapName
     };
+
+Main.setMapsInfo( mapsInfo );
 };
 
 
-MapEditor.addLabel = function( x, y, imageId, id, text, destinationId, destinationLabel )
+Main.base_addLabel = Main.addLabel;
+Main.addLabel = function( args )
 {
-var label = new Label({
-        x: x,
-        y: y,
-        id: id,
-        text: text,
-        image: imageId,
-        destination: destinationId,
-        destinationLabel: destinationLabel
-    });
-CONTAINER.addChild( label );
+var label = Main.base_addLabel( args );
 
 LABELS.push( label );
 };
 
 
-MapEditor.addInvisibleLabel = function( x, y, width, height, destinationId, destinationLabel )
+Main.base_addInvisibleLabel = Main.addInvisibleLabel;
+Main.addInvisibleLabel = function( args )
 {
-var invisibleLabel = new InvisibleLabel({
-        x: x,
-        y: y,
-        width: width,
-        height: height,
-        destination: destinationId,
-        destinationLabel: destinationLabel
-    });
-CONTAINER.addChild( invisibleLabel );
+var invisibleLabel = Main.base_addInvisibleLabel( args );
 
 INVISIBLE_LABELS.push( invisibleLabel );
 };
 
 
+
+Main.base_addArea = Main.addArea;
+Main.addArea = function( args )
+{
+var area = Main.base_addArea( args );
+
+AREAS.push( area );
+};
+
+
+
+
 /**
  * Remove an element from the current map.
  */
-MapEditor.removeElement = function( element )
+Main.removeElement = function( element )
 {
 var position;
 var array;
@@ -517,13 +313,13 @@ element.remove();
 /**
  * Remove an element, given a x/y position. It searches in all the element types (labels/invisible labels/areas).
  */
-MapEditor.removeElement2 = function( x, y )
+Main.removeElement2 = function( x, y )
 {
 var arrays = [ LABELS, INVISIBLE_LABELS, AREAS ];
 
 for (var a = 0 ; a < arrays.length ; a++)
     {
-    if ( MapEditor.removeElement3( x, y, arrays[ a ] ) )
+    if ( Main.removeElement3( x, y, arrays[ a ] ) )
         {
         return true;
         }
@@ -536,7 +332,7 @@ return false;
 /**
  * Remove an element, from a given x/y position and an array of the elements to search in.
  */
-MapEditor.removeElement3 = function( x, y, array )
+Main.removeElement3 = function( x, y, array )
 {
 for (var a = array.length - 1 ; a >= 0 ; a--)
     {
@@ -556,72 +352,15 @@ return false;
 };
 
 
-
-MapEditor.addArea = function( x, y, width, height, name )
-{
-var area = new Area({
-        x: x,
-        y: y,
-        width: width,
-        height: height,
-        name: name
-    });
-CONTAINER.addChild( area );
-
-AREAS.push( area );
-};
-
-
-
-/**
- * Center the camera around a given point (or (0, 0) if there's no arguments).
- */
-MapEditor.reCenterCamera = function( refX, refY )
-{
-if ( typeof refX === 'undefined' )
-    {
-    refX = refY = 0;
-    }
-
-
-var canvas = Game.getCanvas();
-
-CONTAINER.x = canvas.getWidth() / 2 - refX * SCALE;
-CONTAINER.y = canvas.getHeight() / 2 - refY * SCALE;
-};
-
-
-
-MapEditor.moveCamera = function( xMov, yMov )
-{
-CONTAINER.x += xMov;
-CONTAINER.y += yMov;
-};
-
-
-MapEditor.changeScale = function( scale )
-{
-CONTAINER.scaleX = CONTAINER.scaleY = scale;
-
-SCALE = scale;
-};
-
-
-MapEditor.getScale = function()
-{
-return SCALE;
-};
-
-
 /**
  * Marks a label as selected. If the label given was already the one selected, and we deselect it.
  */
-MapEditor.selectElement = function( label )
+Main.selectElement = function( label )
 {
-var currentMode = MapEditor.getCurrentMode();
+var currentMode = Main.getCurrentMode();
 
-if ( currentMode === MapEditor.MODES.Drag ||
-     currentMode === MapEditor.MODES.Resize )
+if ( currentMode === Main.MODES.Drag ||
+     currentMode === Main.MODES.Resize )
     {
     if ( SELECTED_ELEMENT === label )
         {
@@ -636,22 +375,10 @@ if ( currentMode === MapEditor.MODES.Drag ||
 };
 
 
-MapEditor.clearSelectedElement = function()
+Main.clearSelectedElement = function()
 {
 SELECTED_ELEMENT = null;
 };
 
 
-MapEditor.setAreaName = function( name )
-{
-AREA_NAME.text = name;
-};
-
-
-MapEditor.setMapsInfo = function( info )
-{
-MAPS_INFO = info;
-};
-
-
-})(MapEditor || (MapEditor = {}));
+})(Main || (Main = {}));

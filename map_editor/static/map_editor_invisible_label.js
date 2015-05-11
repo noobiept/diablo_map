@@ -26,21 +26,21 @@ this.addEventListener( 'click', function( data )
         // this won't trigger if the whole page isn't visible (middle clicking will turn into a drag movement)
     if ( code === Utilities.MOUSE_CODE.middle )
         {
-        MapEditor.removeElement( _this );
+        Main.removeElement( _this );
         }
 
     else if ( code === Utilities.MOUSE_CODE.left )
         {
-        MapEditor.selectElement( _this );
+        Main.selectElement( _this );
         }
     });
 this.addEventListener( 'mouseover', function( data )
     {
-    MapEditor.changeCursor( true );
+    Main.changeCursor( true );
     });
 this.addEventListener( 'mouseout', function( data )
     {
-    MapEditor.changeCursor( false );
+    Main.changeCursor( false );
     });
 
 this.destination = args.destination;

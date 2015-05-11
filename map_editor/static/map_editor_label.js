@@ -17,7 +17,7 @@ var image = new Game.Sprite({
         frameWidth: 30,
         frameHeight: 42
     });
-image.setFrame( Label.SPRITE_POSITION[ info.image ] );
+image.setFrame( Label.SPRITE_POSITION[ info.imageId ] );
 image.addEventListener( 'click', function( data )
     {
     var code = data.event.button;
@@ -25,27 +25,27 @@ image.addEventListener( 'click', function( data )
         // this won't trigger if the whole page isn't visible (middle clicking will turn into a drag movement)
     if ( code === Utilities.MOUSE_CODE.middle )
         {
-        MapEditor.removeElement( _this );
+        Main.removeElement( _this );
         }
 
     else if ( code === Utilities.MOUSE_CODE.left )
         {
-        MapEditor.selectElement( _this );
+        Main.selectElement( _this );
         }
     });
 image.addEventListener( 'mouseover', function( data )
     {
-    MapEditor.changeCursor( true );
+    Main.changeCursor( true );
     text.visible = true;
     });
 image.addEventListener( 'mouseout', function( data )
     {
-    MapEditor.changeCursor( false );
+    Main.changeCursor( false );
     text.visible = false;
     });
 
 
-this.imageId = info.image;
+this.imageId = info.imageId;
 this.text = info.text;
 this.id = info.id;
 this.destination = info.destination;

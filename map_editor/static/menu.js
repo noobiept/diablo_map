@@ -1,5 +1,5 @@
-var MapEditor;
-(function(MapEditor) {
+var Main;
+(function(Main) {
 
 
     // 'move' -- move the camera mode
@@ -10,106 +10,82 @@ var POSSIBLE_MODES = [ 'Move', 'Drag', 'Remove', 'Resize' ];
 var CURRENT_MODE = -1;
 var ACTIVE_MODE_MENU;   // the element that selects the mode
 
-MapEditor.MODES = Utilities.createEnum( POSSIBLE_MODES );
+Main.MODES = Utilities.createEnum( POSSIBLE_MODES );
 
 
 /**
  * Create the map editor's menu
  */
-MapEditor.initMenu = function()
+Main.initMenu = function()
 {
 var menu = new Game.Html.HtmlContainer();
 
-var scale = new Game.Html.Range({
-        min: 0.4,
-        max: 2,
-        value: 1,
-        step: 0.2,
-        preText: 'Scale',
-        onChange: function( button )
-            {
-            MapEditor.changeScale( button.getValue() );
-            }
-    });
-
-var recenter = new Game.Html.Button({
-        value: 'Recenter',
-        callback: MapEditor.reCenterCamera
-    });
-
 var addLabel = new Game.Html.Button({
         value: 'Add Label',
-        callback: MapEditor.openAddLabel
+        callback: Main.openAddLabel
     });
-
 var addInvisibleLabel = new Game.Html.Button({
         value: 'Add Invisible Label',
-        callback: MapEditor.openAddInvisibleLabel
+        callback: Main.openAddInvisibleLabel
     });
-
 var addArea = new Game.Html.Button({
         value: 'Add Area',
-        callback: MapEditor.openAddArea
+        callback: Main.openAddArea
     });
-
 ACTIVE_MODE_MENU = new Game.Html.MultipleOptions({
         preText: 'Mode:',
         options: POSSIBLE_MODES,
         callback: function( button, position, htmlElement )
             {
-            MapEditor.setCurrentMode( position );
+            Main.setCurrentMode( position );
             }
     });
-
 var newMap = new Game.Html.Button({
         value: 'New Map',
-        callback: MapEditor.startNewMap
+        callback: Main.startNewMap
     });
-
 var save = new Game.Html.Button({
         value: 'Save',
         callback: function()
             {
-            var info = MapEditor.getUpdatedMapInfo();
-            MapEditor.saveMap( info );
+            var info = Main.getUpdatedMapInfo();
+            Main.saveMap( info );
             }
     });
-
 var load = new Game.Html.Button({
         value: 'Load',
-        callback: MapEditor.openLoadMessage
+        callback: Main.openLoadMessage
     });
 
-menu.addChild( scale, recenter, addLabel, addInvisibleLabel, addArea, ACTIVE_MODE_MENU, newMap, save, load );
-
+menu.addChild( addLabel, addInvisibleLabel, addArea, ACTIVE_MODE_MENU, newMap, save, load );
 
 document.body.appendChild( menu.container );
 };
 
 
 
-MapEditor.getCurrentMode = function()
+Main.getCurrentMode = function()
 {
 return CURRENT_MODE;
 };
 
 
-MapEditor.setCurrentMode = function( modeId )
+Main.setCurrentMode = function( modeId )
 {
 CURRENT_MODE = modeId;
 ACTIVE_MODE_MENU.select( modeId );
 
-MapEditor.clearSelectedElement();
+Main.clearSelectedElement();
 };
 
 
 
-MapEditor.openAddLabel = function()
+Main.openAddLabel = function()
 {
 var container = Game.getCanvasContainer();
 var canvas = Game.getCanvas();
-var topLevelContainer = MapEditor.getTopLevelContainer();
-var scale = MapEditor.getScale();
+var topLevelContainer = Main.getTopLevelContainer();
+var scale = Main.getScale();
 
 var x = (canvas.getWidth() / 2 - topLevelContainer.x) / scale;
 var y = (canvas.getHeight() / 2 - topLevelContainer.y) / scale;
@@ -133,15 +109,15 @@ var add = new Game.Html.Button({
         value: 'Add',
         callback: function()
             {
-            MapEditor.addLabel(
-                Math.round( x ),
-                Math.round( y ),
-                type.getValue(),
-                id.getValue(),
-                text.getValue(),
-                destinationId.getValue(),
-                destinationLabel.getValue()
-            );
+            Main.addLabel({
+                id: id.getValue(),
+                x: Math.round( x ),
+                y: Math.round( y ),
+                imageId: type.getValue(),
+                text: text.getValue(),
+                destination: destinationId.getValue(),
+                destinationLabel: destinationLabel.getValue()
+            });
 
             message.clear();
             }
@@ -163,12 +139,12 @@ var message = new Game.Message({
 };
 
 
-MapEditor.openAddInvisibleLabel = function()
+Main.openAddInvisibleLabel = function()
 {
 var container = Game.getCanvasContainer();
 var canvas = Game.getCanvas();
-var topLevelContainer = MapEditor.getTopLevelContainer();
-var scale = MapEditor.getScale();
+var topLevelContainer = Main.getTopLevelContainer();
+var scale = Main.getScale();
 
 var x = (canvas.getWidth() / 2 - topLevelContainer.x) / scale;
 var y = (canvas.getHeight() / 2 - topLevelContainer.y) / scale;
@@ -184,14 +160,14 @@ var add = new Game.Html.Button({
         value: 'Add',
         callback: function()
             {
-            MapEditor.addInvisibleLabel(
-                Math.round( x ),
-                Math.round( y ),
-                50,
-                50,
-                destination.getValue(),
-                destinationLabel.getValue()
-                );
+            Main.addInvisibleLabel({
+                x: Math.round( x ),
+                y: Math.round( y ),
+                width: 50,
+                height: 50,
+                destination: destination.getValue(),
+                destinationLabel: destinationLabel.getValue()
+            });
 
             message.clear();
             }
@@ -213,12 +189,12 @@ var message = new Game.Message({
 };
 
 
-MapEditor.openAddArea = function()
+Main.openAddArea = function()
 {
 var container = Game.getCanvasContainer();
 var canvas = Game.getCanvas();
-var topLevelContainer = MapEditor.getTopLevelContainer();
-var scale = MapEditor.getScale();
+var topLevelContainer = Main.getTopLevelContainer();
+var scale = Main.getScale();
 
 var x = (canvas.getWidth() / 2 - topLevelContainer.x) / scale;
 var y = (canvas.getHeight() / 2 - topLevelContainer.y) / scale;
@@ -231,13 +207,13 @@ var add = new Game.Html.Button({
         value: 'Add',
         callback: function()
             {
-            MapEditor.addArea(
-                Math.round( x ),
-                Math.round( y ),
-                50,
-                50,
-                name.getValue()
-            );
+            Main.addArea({
+                x: Math.round( x ),
+                y: Math.round( y ),
+                width: 50,
+                height: 50,
+                name: name.getValue()
+            });
 
             message.clear();
             }
@@ -259,7 +235,7 @@ var message = new Game.Message({
 };
 
 
-MapEditor.startNewMap = function()
+Main.startNewMap = function()
 {
 var container = Game.getCanvasContainer();
 
@@ -283,8 +259,8 @@ var start = new Game.Html.Button({
                 imageId: imageId.getValue()
             };
 
-            MapEditor.addNewMap( info );
-            MapEditor.load( id );
+            Main.addNewMap( info );
+            Main.load( id );
             message.clear();
             }
     });
@@ -306,7 +282,7 @@ var message = new Game.Message({
 };
 
 
-MapEditor.openLoadMessage = function()
+Main.openLoadMessage = function()
 {
 var container = Game.getCanvasContainer();
 
@@ -320,7 +296,7 @@ var load = new Game.Html.Button({
         value: 'Load',
         callback: function()
             {
-            MapEditor.load( mapName.getValue(), mapPosition.getValue() );
+            Main.load( mapName.getValue(), mapPosition.getValue() );
             message.clear();
             }
     });
@@ -342,4 +318,4 @@ var message = new Game.Message({
 };
 
 
-})(MapEditor || (MapEditor = {}));
+})(Main || (Main = {}));
