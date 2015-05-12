@@ -12,7 +12,7 @@
  */
 function InvisibleLabel( args )
 {
-args.color = 'rgba(150, 150, 150, 0.5)';
+args.color = 'rgba(255, 0, 0, 0.4)';
 
 Game.Rectangle.call( this, args );
 

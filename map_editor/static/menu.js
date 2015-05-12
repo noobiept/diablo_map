@@ -8,7 +8,10 @@ var Main;
     // 'resize' -- resize an area element mode
 var POSSIBLE_MODES = [ 'Move', 'Drag', 'Remove', 'Resize' ];
 var CURRENT_MODE = -1;
-var ACTIVE_MODE_MENU;   // the element that selects the mode
+var ACTIVE_MODE_MENU;       // the menu element that selects the mode
+
+var POSSIBLE_SELECT_TYPE = [ 'label', 'area' ];
+var SELECT_ELEMENT_TYPE;    // the type of element that left clicking works on (if label, or area elements)
 
 Main.MODES = Utilities.createEnum( POSSIBLE_MODES );
 
@@ -40,6 +43,10 @@ ACTIVE_MODE_MENU = new Game.Html.MultipleOptions({
             Main.setCurrentMode( position );
             }
     });
+SELECT_ELEMENT_TYPE = new Game.Html.MultipleOptions({
+        preText: 'Select:',
+        options: POSSIBLE_SELECT_TYPE
+    });
 var newMap = new Game.Html.Button({
         value: 'New Map',
         callback: Main.startNewMap
@@ -57,7 +64,7 @@ var load = new Game.Html.Button({
         callback: Main.openLoadMessage
     });
 
-menu.addChild( addLabel, addInvisibleLabel, addArea, ACTIVE_MODE_MENU, newMap, save, load );
+menu.addChild( addLabel, addInvisibleLabel, addArea, ACTIVE_MODE_MENU, SELECT_ELEMENT_TYPE, newMap, save, load );
 
 document.body.appendChild( menu.container );
 };
@@ -78,6 +85,22 @@ ACTIVE_MODE_MENU.select( modeId );
 Main.clearSelectedElement();
 };
 
+
+Main.getCurrentSelectType = function()
+{
+return SELECT_ELEMENT_TYPE.getValue();
+};
+
+
+Main.setCurrentSelectType = function( type )
+{
+var position = POSSIBLE_SELECT_TYPE.indexOf( type );
+
+if ( position >= 0 )
+    {
+    SELECT_ELEMENT_TYPE.select( position );
+    }
+};
 
 
 Main.openAddLabel = function()
@@ -109,8 +132,20 @@ var add = new Game.Html.Button({
         value: 'Add',
         callback: function()
             {
+            var idValue = id.getValue();
+            if ( Main.labelAlreadyExists( idValue ) )
+                {
+                new Game.Message({
+                        body: "The 'id' given already exists.",
+                        container: container,
+                        background: true,
+                        timeout: 2
+                    });
+                return;
+                }
+
             Main.addLabel({
-                id: id.getValue(),
+                id: idValue,
                 x: Math.round( x ),
                 y: Math.round( y ),
                 imageId: type.getValue(),

@@ -74,20 +74,28 @@ document.body.addEventListener( 'keyup', function( event )
     switch( key )
         {
             // map editor specific shortcuts
-        case Utilities.KEY_CODE.q:
+        case Utilities.KEY_CODE.z:
             Main.setCurrentMode( Main.MODES.Move );
             break;
 
-        case Utilities.KEY_CODE.w:
+        case Utilities.KEY_CODE.x:
             Main.setCurrentMode( Main.MODES.Drag );
             break;
 
-        case Utilities.KEY_CODE.e:
+        case Utilities.KEY_CODE.c:
             Main.setCurrentMode( Main.MODES.Remove );
             break;
 
-        case Utilities.KEY_CODE.r:
+        case Utilities.KEY_CODE.v:
             Main.setCurrentMode( Main.MODES.Resize );
+            break;
+
+        case Utilities.KEY_CODE.b:
+            Main.setCurrentSelectType( 'label' );
+            break;
+
+        case Utilities.KEY_CODE.n:
+            Main.setCurrentSelectType( 'area' );
             break;
         }
 
@@ -283,6 +291,11 @@ AREAS.push( area );
  */
 Main.removeElement = function( element )
 {
+if ( !Main.isOffSelectType( element ) )
+    {
+    return;
+    }
+
 var position;
 var array;
 
@@ -339,6 +352,12 @@ for (var a = array.length - 1 ; a >= 0 ; a--)
     var element = array[ a ];
     var elements = element.intersect( x, y );
 
+    if ( !Main.isOffSelectType( element ) )
+        {
+        return;
+        }
+
+
     if ( elements.length > 0 )
         {
         array.splice( a, 1 );
@@ -355,21 +374,27 @@ return false;
 /**
  * Marks a label as selected. If the label given was already the one selected, and we deselect it.
  */
-Main.selectElement = function( label )
+Main.selectElement = function( element )
 {
+if ( !Main.isOffSelectType( element ) )
+    {
+    return;
+    }
+
+
 var currentMode = Main.getCurrentMode();
 
 if ( currentMode === Main.MODES.Drag ||
      currentMode === Main.MODES.Resize )
     {
-    if ( SELECTED_ELEMENT === label )
+    if ( SELECTED_ELEMENT === element )
         {
         SELECTED_ELEMENT = null;
         }
 
     else
         {
-        SELECTED_ELEMENT = label;
+        SELECTED_ELEMENT = element;
         }
     }
 };
@@ -378,6 +403,35 @@ if ( currentMode === Main.MODES.Drag ||
 Main.clearSelectedElement = function()
 {
 SELECTED_ELEMENT = null;
+};
+
+
+Main.isOffSelectType = function( element )
+{
+var currentSelectableType = Main.getCurrentSelectType();
+
+    // not off the current selected type
+if ( currentSelectableType === 'area' && !(element instanceof Area) ||
+     currentSelectableType === 'label' && (element instanceof Area) )
+    {
+    return false;
+    }
+
+return true;
+};
+
+
+Main.labelAlreadyExists = function( id )
+{
+for (var a = LABELS.length - 1 ; a >= 0 ; a--)
+    {
+    if ( LABELS[ a ].id === id )
+        {
+        return true;
+        }
+    }
+
+return false;
 };
 
 
