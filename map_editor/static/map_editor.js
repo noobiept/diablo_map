@@ -259,6 +259,8 @@ Main.setMapsInfo( mapsInfo );
 Main.base_addLabel = Main.addLabel;
 Main.addLabel = function( args )
 {
+args.is_map_editor = true;
+
 var label = Main.base_addLabel( args );
 
 LABELS.push( label );
@@ -268,6 +270,8 @@ LABELS.push( label );
 Main.base_addInvisibleLabel = Main.addInvisibleLabel;
 Main.addInvisibleLabel = function( args )
 {
+args.is_map_editor = true;
+
 var invisibleLabel = Main.base_addInvisibleLabel( args );
 
 INVISIBLE_LABELS.push( invisibleLabel );
@@ -278,6 +282,8 @@ INVISIBLE_LABELS.push( invisibleLabel );
 Main.base_addArea = Main.addArea;
 Main.addArea = function( args )
 {
+args.is_map_editor = true;
+
 var area = Main.base_addArea( args );
 
 AREAS.push( area );
