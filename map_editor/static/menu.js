@@ -15,6 +15,8 @@ var SELECT_ELEMENT_TYPE;    // the type of element that left clicking works on (
 
 Main.MODES = Utilities.createEnum( POSSIBLE_MODES );
 
+var IS_MESSAGE_OPENED = false;
+
 
 /**
  * Create the map editor's menu
@@ -47,6 +49,10 @@ SELECT_ELEMENT_TYPE = new Game.Html.MultipleOptions({
         preText: 'Select:',
         options: POSSIBLE_SELECT_TYPE
     });
+var info = new Game.Html.Button({
+        value: 'Info',
+        callback: Main.showSelectedElementInfo
+    });
 var newMap = new Game.Html.Button({
         value: 'New Map',
         callback: Main.startNewMap
@@ -64,7 +70,7 @@ var load = new Game.Html.Button({
         callback: Main.openLoadMessage
     });
 
-menu.addChild( addLabel, addInvisibleLabel, addArea, ACTIVE_MODE_MENU, SELECT_ELEMENT_TYPE, newMap, save, load );
+menu.addChild( addLabel, addInvisibleLabel, addArea, ACTIVE_MODE_MENU, SELECT_ELEMENT_TYPE, info, newMap, save, load );
 
 document.body.appendChild( menu.container );
 };
@@ -79,6 +85,11 @@ return CURRENT_MODE;
 
 Main.setCurrentMode = function( modeId )
 {
+if ( IS_MESSAGE_OPENED )
+    {
+    return;
+    }
+
 CURRENT_MODE = modeId;
 ACTIVE_MODE_MENU.select( modeId );
 
@@ -94,6 +105,11 @@ return SELECT_ELEMENT_TYPE.getValue();
 
 Main.setCurrentSelectType = function( type )
 {
+if ( IS_MESSAGE_OPENED )
+    {
+    return;
+    }
+
 var position = POSSIBLE_SELECT_TYPE.indexOf( type );
 
 if ( position >= 0 )
@@ -154,6 +170,7 @@ var add = new Game.Html.Button({
                 destinationLabel: destinationLabel.getValue()
             });
 
+            IS_MESSAGE_OPENED = false;
             message.clear();
             }
     });
@@ -161,6 +178,7 @@ var close = new Game.Html.Button({
         value: 'Close',
         callback: function()
             {
+            IS_MESSAGE_OPENED = false;
             message.clear();
             }
     });
@@ -171,6 +189,7 @@ var message = new Game.Message({
         background: true,
         buttons: [ add, close ]
     });
+IS_MESSAGE_OPENED = true;
 };
 
 
@@ -204,6 +223,7 @@ var add = new Game.Html.Button({
                 destinationLabel: destinationLabel.getValue()
             });
 
+            IS_MESSAGE_OPENED = false;
             message.clear();
             }
     });
@@ -211,6 +231,7 @@ var close = new Game.Html.Button({
         value: 'Close',
         callback: function()
             {
+            IS_MESSAGE_OPENED = false;
             message.clear();
             }
     });
@@ -221,6 +242,7 @@ var message = new Game.Message({
         background: true,
         buttons: [ add, close ]
     });
+IS_MESSAGE_OPENED = true;
 };
 
 
@@ -250,6 +272,7 @@ var add = new Game.Html.Button({
                 name: name.getValue()
             });
 
+            IS_MESSAGE_OPENED = false;
             message.clear();
             }
     });
@@ -257,6 +280,7 @@ var close = new Game.Html.Button({
         value: 'Close',
         callback: function()
             {
+            IS_MESSAGE_OPENED = false;
             message.clear();
             }
     });
@@ -267,6 +291,8 @@ var message = new Game.Message({
         background: true,
         buttons: [ add, close ]
     });
+
+IS_MESSAGE_OPENED = true;
 };
 
 
@@ -296,6 +322,8 @@ var start = new Game.Html.Button({
 
             Main.addNewMap( info );
             Main.load( id );
+
+            IS_MESSAGE_OPENED = false;
             message.clear();
             }
     });
@@ -303,6 +331,7 @@ var close = new Game.Html.Button({
         value: 'Close',
         callback: function()
             {
+            IS_MESSAGE_OPENED = false;
             message.clear();
             }
     });
@@ -314,6 +343,7 @@ var message = new Game.Message({
         background: true,
         buttons: [ start, close ]
     });
+IS_MESSAGE_OPENED = true;
 };
 
 
@@ -332,6 +362,8 @@ var load = new Game.Html.Button({
         callback: function()
             {
             Main.load( mapName.getValue(), mapPosition.getValue() );
+
+            IS_MESSAGE_OPENED = false;
             message.clear();
             }
     });
@@ -339,10 +371,10 @@ var close = new Game.Html.Button({
         value: 'Close',
         callback: function()
             {
+            IS_MESSAGE_OPENED = false;
             message.clear();
             }
     });
-
 
 var message = new Game.Message({
         body: [ 'Load Map', mapName, mapPosition ],
@@ -350,6 +382,79 @@ var message = new Game.Message({
         background: true,
         buttons: [ load, close ]
     });
+IS_MESSAGE_OPENED = true;
+};
+
+
+Main.isMessageOpened = function()
+{
+return IS_MESSAGE_OPENED;
+};
+
+
+Main.showSelectedElementInfo = function()
+{
+if ( IS_MESSAGE_OPENED )
+    {
+    return;
+    }
+
+var text = [];
+var container = Game.getCanvasContainer();
+var selected = Main.getSelectedElement();
+
+if ( selected )
+    {
+    if ( selected instanceof Label )
+        {
+        text[ 0 ] = 'type: Label';
+        text[ 1 ] = 'id: ' + selected.id;
+        text[ 2 ] = 'image id: ' + selected.imageId;
+        text[ 3 ] = 'text: ' + selected.text;
+        text[ 4 ] = 'destination: ' + selected.destination;
+        text[ 5 ] = 'destination label: ' + selected.destinationLabel;
+        }
+
+    else if ( selected instanceof InvisibleLabel )
+        {
+        text[ 0 ] = 'type: Invisible Label';
+        text[ 1 ] = 'destination: ' + selected.destination;
+        text[ 2 ] = 'destination label: ' + selected.destinationLabel;
+        }
+
+    else if ( selected instanceof Area )
+        {
+        text[ 0 ] = 'type: Area';
+        text[ 1 ] = 'name: ' + selected.name;
+        }
+
+    else
+        {
+        text[ 0 ] = 'Error.';
+        }
+    }
+
+else
+    {
+    text = 'No element selected.'
+    }
+
+var close = new Game.Html.Button({
+        value: 'Close',
+        callback: function()
+            {
+            IS_MESSAGE_OPENED = false;
+            message.clear();
+            }
+    });
+
+var message = new Game.Message({
+        body: text,
+        container: container,
+        background: true,
+        buttons: close
+    });
+IS_MESSAGE_OPENED = true;
 };
 
 

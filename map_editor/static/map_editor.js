@@ -21,7 +21,6 @@ var AREAS = [];     // all the area elements
 var CURRENT_MAP_ID = '';  // id of the current map that is loaded
 
 
-
 Main.mapEditorInit = function()
 {
 var canvas = Game.getCanvas();
@@ -96,6 +95,10 @@ document.body.addEventListener( 'keyup', function( event )
 
         case Utilities.KEY_CODE.n:
             Main.setCurrentSelectType( 'area' );
+            break;
+
+        case Utilities.KEY_CODE.i:
+            Main.showSelectedElementInfo();
             break;
         }
 
@@ -297,7 +300,8 @@ AREAS.push( area );
  */
 Main.removeElement = function( element )
 {
-if ( !Main.isOffSelectType( element ) )
+if ( !Main.isOffSelectType( element ) ||
+     Main.isMessageOpened() )
     {
     return;
     }
@@ -334,6 +338,11 @@ element.remove();
  */
 Main.removeElement2 = function( x, y )
 {
+if ( Main.isMessageOpened() )
+    {
+    return;
+    }
+
 var arrays = [ LABELS, INVISIBLE_LABELS, AREAS ];
 
 for (var a = 0 ; a < arrays.length ; a++)
@@ -382,26 +391,21 @@ return false;
  */
 Main.selectElement = function( element )
 {
-if ( !Main.isOffSelectType( element ) )
+if ( !Main.isOffSelectType( element ) ||
+     Main.isMessageOpened() )
     {
     return;
     }
 
 
-var currentMode = Main.getCurrentMode();
-
-if ( currentMode === Main.MODES.Drag ||
-     currentMode === Main.MODES.Resize )
+if ( SELECTED_ELEMENT === element )
     {
-    if ( SELECTED_ELEMENT === element )
-        {
-        SELECTED_ELEMENT = null;
-        }
+    SELECTED_ELEMENT = null;
+    }
 
-    else
-        {
-        SELECTED_ELEMENT = element;
-        }
+else
+    {
+    SELECTED_ELEMENT = element;
     }
 };
 
@@ -438,6 +442,12 @@ for (var a = LABELS.length - 1 ; a >= 0 ; a--)
     }
 
 return false;
+};
+
+
+Main.getSelectedElement = function()
+{
+return SELECTED_ELEMENT;
 };
 
 
