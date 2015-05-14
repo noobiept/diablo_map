@@ -130,9 +130,6 @@ document.body.addEventListener( 'keyup', function( event )
             }
         }
     });
-
-
-Main.initMenu();
 };
 
 

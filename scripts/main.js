@@ -23,7 +23,34 @@ var SCALE_MENU_ELEMENT;
 
 Main.initialInit = function()
 {
-Game.init( document.body, 1000, 600 );
+var min = 400;
+var max = 1000; // if the canvas is too big, it will have performance problems
+
+var width = window.innerWidth - 10;
+var height = window.innerHeight - 75;
+
+    // make sure the canvas dimensions are within the limits
+if ( width < min )
+    {
+    width = min;
+    }
+
+else if ( width > max )
+    {
+    width = max;
+    }
+
+if ( height < min )
+    {
+    height = min;
+    }
+
+else if ( height > max )
+    {
+    height = max;
+    }
+
+Game.init( document.body, width, height );
 };
 
 
@@ -268,8 +295,12 @@ canvasContainer.addEventListener( 'mouseleave', function( event )
     mouseDown = false;
     });
 
+Main.initMenu();
+};
 
-    // add the menu
+
+Main.initMenu = function()
+{
 var menu = new Game.Html.HtmlContainer();
 
 SCALE_MENU_ELEMENT = new Game.Html.Range({
@@ -294,9 +325,11 @@ var recenter = new Game.Html.Button({
 
 menu.addChild( SCALE_MENU_ELEMENT, recenter );
 
-
 document.body.appendChild( menu.container );
+
+return menu;
 };
+
 
 
 /**
@@ -467,8 +500,16 @@ if ( scale < MIN_SCALE ||
     return;
     }
 
+var canvas = Game.getCanvas();
+var scaleDiff = scale - SCALE;
+
 CONTAINER.scaleX = CONTAINER.scaleY = scale;
 SCALE = scale;
+
+    // try to counter the movement resulting from the scaling
+CONTAINER.x -= (canvas.getWidth() / 2 - CONTAINER.x) * scaleDiff;
+CONTAINER.y -= (canvas.getHeight() / 2 - CONTAINER.y) * scaleDiff;
+
 
 SCALE_MENU_ELEMENT.setValue( scale );
 };

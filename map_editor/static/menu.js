@@ -21,8 +21,11 @@ var IS_MESSAGE_OPENED = false;
 /**
  * Create the map editor's menu
  */
+Main.base_initMenu = Main.initMenu;
 Main.initMenu = function()
 {
+Main.base_initMenu();
+
 var menu = new Game.Html.HtmlContainer();
 
 var addLabel = new Game.Html.Button({
