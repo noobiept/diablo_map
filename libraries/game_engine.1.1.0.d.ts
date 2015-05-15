@@ -1385,7 +1385,7 @@ declare module Game {
      *
      * Events:
      *
-     * - `complete` -- `listener();`
+     * - `complete` -- `listener( data: { failed_ids: string[]; loaded_ids: string[]; } );`
      * - `error` -- `listener( data: { id: string; event; } );`
      * - `abort` -- `listener( data: { id: string; event; } );`
      * - `progress` -- `listener( progress: number );`
@@ -1398,6 +1398,8 @@ declare module Game {
         save_global: boolean;
         _total_items: number;
         _loaded_items: number;
+        _failed_ids: string[];
+        _loaded_ids: string[];
         constructor(args?: PreloadArgs);
         /**
          * An element just finished being loaded, add it to the `data` object (either the global or the object) and dispatch the relevant events.
@@ -1406,6 +1408,14 @@ declare module Game {
          * @param data Its data.
          */
         _loaded(id: string, data: any): void;
+        /**
+         * An element failed to load. We'll keep track of its id, to send it later on the 'complete' event.
+         */
+        _failed_to_load(id: string): void;
+        /**
+         * All the elements were dealt with. Dispatch the `complete` event with a list of the loaded ids, and another list with the ids that failed to load as well.
+         */
+        _loading_complete(): void;
         /**
          * Dispatch the `error` event.
          *
