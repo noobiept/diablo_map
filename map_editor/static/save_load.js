@@ -51,7 +51,7 @@ Main.saveMap = function( mapInfo )
     // name of the map
 var container = Game.getCanvasContainer();
 
-var dataStr = JSON.stringify( mapInfo, null, 4 );
+var dataStr = JSON.stringify( mapInfo );
 
 var formData = new FormData();
 formData.append( 'data', dataStr );

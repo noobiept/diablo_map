@@ -199,56 +199,7 @@ Game.addElement( AREA_NAME );
 
     // set up the key events for navigating the map
     // and for shortcuts to the menu
-document.body.addEventListener( 'keydown', function( event )
-    {
-    var key = event.keyCode;
-    var step = 20;  // movement step
-
-    switch( key )
-        {
-            // key movement
-        case Utilities.KEY_CODE.leftArrow:
-        case Utilities.KEY_CODE.a:
-            Main.moveCamera( step, 0 );
-            break;
-
-        case Utilities.KEY_CODE.rightArrow:
-        case Utilities.KEY_CODE.d:
-            Main.moveCamera( -step, 0 );
-            break;
-
-        case Utilities.KEY_CODE.upArrow:
-        case Utilities.KEY_CODE.w:
-            Main.moveCamera( 0, step );
-            break;
-
-        case Utilities.KEY_CODE.downArrow:
-        case Utilities.KEY_CODE.s:
-            Main.moveCamera( 0, -step );
-            break;
-
-            // menu shortcuts
-        case Utilities.KEY_CODE[ '1' ]:
-            Main.reCenterCamera();
-            break;
-
-        case Utilities.KEY_CODE[ '2' ]:
-            Main.changeScale( SCALE - SCALE_STEP );
-            break;
-
-        case Utilities.KEY_CODE[ '3' ]:
-            Main.changeScale( SCALE + SCALE_STEP );
-            break;
-
-            // other shortcuts
-            // go back to the top level
-        case Utilities.KEY_CODE.esc:
-        case Utilities.KEY_CODE.m:
-            Main.load( 'act_1_map' );
-            break;
-        }
-    });
-
+document.body.addEventListener( 'keydown', Main.keyDownListener );
 
     // and the mouse events for the movement as well
 var mouseDown = false;
@@ -543,6 +494,60 @@ MAPS_INFO = info;
 Main.getTopLevelContainer = function()
 {
 return CONTAINER;
+};
+
+
+/**
+ * Deals with the program's keyboard shortcuts.
+ */
+Main.keyDownListener = function( event )
+{
+var key = event.keyCode;
+var step = 20;  // movement step
+
+switch( key )
+    {
+        // key movement
+    case Utilities.KEY_CODE.leftArrow:
+    case Utilities.KEY_CODE.a:
+        Main.moveCamera( step, 0 );
+        break;
+
+    case Utilities.KEY_CODE.rightArrow:
+    case Utilities.KEY_CODE.d:
+        Main.moveCamera( -step, 0 );
+        break;
+
+    case Utilities.KEY_CODE.upArrow:
+    case Utilities.KEY_CODE.w:
+        Main.moveCamera( 0, step );
+        break;
+
+    case Utilities.KEY_CODE.downArrow:
+    case Utilities.KEY_CODE.s:
+        Main.moveCamera( 0, -step );
+        break;
+
+        // menu shortcuts
+    case Utilities.KEY_CODE[ '1' ]:
+        Main.reCenterCamera();
+        break;
+
+    case Utilities.KEY_CODE[ '2' ]:
+        Main.changeScale( SCALE - SCALE_STEP );
+        break;
+
+    case Utilities.KEY_CODE[ '3' ]:
+        Main.changeScale( SCALE + SCALE_STEP );
+        break;
+
+        // other shortcuts
+        // go back to the top level
+    case Utilities.KEY_CODE.esc:
+    case Utilities.KEY_CODE.m:
+        Main.load( 'act_1_map' );
+        break;
+    }
 };
 
 

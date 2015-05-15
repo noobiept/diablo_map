@@ -448,4 +448,10 @@ return SELECTED_ELEMENT;
 };
 
 
+Main.keyDownListener = function( event )
+{
+    // empty or purpose, to remove the main program's shortcuts
+};
+
+
 })(Main || (Main = {}));
