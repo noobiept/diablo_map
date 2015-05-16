@@ -13,6 +13,7 @@ var Main;
 var CONTAINER;      // top-level container
 var MAP_NAME;       // text element, which identifies the current map image
 var AREA_NAME;      // text element, that has the name of the current are under the mouse pointer
+var CURRENT_AREA_NAMES = [];    // there may be more than 1 area under the mouse at any given time, the names are saved here
 var MAPS_INFO;      // has all the maps info (labels/areas position, names, etc)
 var SCALE = 1;      // current scale of the map
 var MIN_SCALE = 0.4;
@@ -413,6 +414,7 @@ else
 
 Main.clear = function()
 {
+CURRENT_AREA_NAMES.length = 0;
 AREA_NAME.text = '';
 CONTAINER.removeAllChildren();
 };
@@ -473,9 +475,31 @@ return SCALE;
 
 
 
-Main.setAreaName = function( name )
+Main.addAreaName = function( name )
 {
+CURRENT_AREA_NAMES.push( name );
+
 AREA_NAME.text = name;
+};
+
+
+Main.removeAreaName = function( name )
+{
+var position = CURRENT_AREA_NAMES.indexOf( name );
+
+CURRENT_AREA_NAMES.splice( position, 1 );
+
+var length = CURRENT_AREA_NAMES.length;
+
+if ( length > 0 )
+    {
+    AREA_NAME.text = CURRENT_AREA_NAMES[ length - 1 ];
+    }
+
+else
+    {
+    AREA_NAME.text = '';
+    }
 };
 
 

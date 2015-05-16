@@ -33,11 +33,11 @@ else
 this.name = args.name;
 this.addEventListener( 'mouseover', function()
     {
-    Main.setAreaName( args.name );
+    Main.addAreaName( args.name );
     });
 this.addEventListener( 'mouseout', function()
     {
-    Main.setAreaName( '' );
+    Main.removeAreaName( args.name );
     });
 }
 
