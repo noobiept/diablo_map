@@ -5,6 +5,15 @@ var dest = '../release/<%= pkg.name %>_<%= pkg.version %>/';
 grunt.initConfig({
         pkg: grunt.file.readJSON( 'package.json' ),
 
+        clean: {
+            options: {
+                force: true
+            },
+            release: [
+                dest
+            ]
+        },
+
         copy: {
             release: {
                 expand: true,
@@ -13,6 +22,7 @@ grunt.initConfig({
                     'images/*.{png,jpg}',
                     'libraries/*.{woff,js}',
                     'map_info/**',
+                    'background.js',
                     'manifest.json'
                 ],
                 dest: dest
@@ -54,8 +64,9 @@ grunt.initConfig({
 grunt.loadNpmTasks( 'grunt-contrib-copy' );
 grunt.loadNpmTasks( 'grunt-contrib-uglify' );
 grunt.loadNpmTasks( 'grunt-contrib-cssmin' );
+grunt.loadNpmTasks( 'grunt-contrib-clean' );
 grunt.loadNpmTasks( 'grunt-processhtml' );
 
     // tasks
-grunt.registerTask( 'default', [ 'copy', 'uglify', 'cssmin', 'processhtml' ] );
+grunt.registerTask( 'default', [ 'clean', 'copy', 'uglify', 'cssmin', 'processhtml' ] );
 };
