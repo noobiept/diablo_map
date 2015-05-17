@@ -11,8 +11,9 @@ grunt.initConfig({
                 cwd: '../',
                 src: [
                     'images/*.{png,jpg}',
-                    'libraries/**',
-                    'map_info/**'
+                    'libraries/*.{woff,js}',
+                    'map_info/**',
+                    'manifest.json'
                 ],
                 dest: dest
             }
