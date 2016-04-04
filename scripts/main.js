@@ -274,8 +274,15 @@ var recenter = new Game.Html.Button({
             Main.reCenterCamera();
             }
     });
+var donate = new Game.Html.Button({
+        value: 'Donate',
+        callback: function( button )
+            {
+            window.open( 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UQ6ZF2JKUC626', '_blank' );
+            }
+    });
 
-menu.addChild( SCALE_MENU_ELEMENT, recenter );
+menu.addChild( SCALE_MENU_ELEMENT, recenter, donate );
 
 document.body.appendChild( menu.container );
 
