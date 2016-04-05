@@ -4,6 +4,7 @@ chrome.app.window.create( 'index.html', {
     'bounds': {
         'width': 1000,
         'height': 1000
-        }
+        },
+    'id': 'default'
     });
 });
