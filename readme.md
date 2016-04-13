@@ -1,7 +1,4 @@
-Try it out here -> [http://diablo-map.herokuapp.com/](http://diablo-map.herokuapp.com/)
-
-
-There's also a chrome app here -> [chrome app](https://chrome.google.com/webstore/detail/diablo-map/gbbbifggillaknhdcfmnafjibbmfajja)
+Try it out here -> [http://nbpt.eu/games/diablo_map/](http://nbpt.eu/games/diablo_map/)
 
 Keyboard Shortcuts
 ==================
@@ -10,7 +7,6 @@ Keyboard Shortcuts
 - `2`: Scale back.
 - `3`: Scale forward.
 - `esc`, `m` or `right click`: Go back to the top level.
-
 
 Font and Images
 ===============
