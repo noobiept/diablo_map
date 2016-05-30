@@ -1,8 +1,8 @@
 {
     "name": "diablo_map",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "devDependencies": {
-        "grunt": "~0.4.5",
+        "grunt": "~1.0.1",
         "grunt-contrib-copy": "~1.0.0",
         "grunt-contrib-uglify": "~1.0.1",
         "grunt-contrib-cssmin": "~1.0.1",
